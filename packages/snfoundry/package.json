@@ -5,6 +5,7 @@
     "chain": "starknet-devnet --seed 0 --account-class cairo1",
     "compile": "cd contracts && scarb build",
     "deploy": "ts-node scripts-ts/helpers/deploy-wrapper.ts",
+    "deploy:boring-game": "ts-node scripts-ts/deploy-boring-game.ts",
     "deploy:clear": "cd deployments && node clear.mjs $* && cd .. && ts-node scripts-ts/helpers/deploy-wrapper.ts $*",
     "deploy:no-reset": "yarn workspace @ss-2/snfoundry deploy --no-reset",
     "format": "prettier --write 'scripts-ts/**/*.{ts,tsx}' && cd contracts && scarb fmt",

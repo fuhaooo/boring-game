@@ -3,6 +3,10 @@
  * You should not edit it manually or your changes might be overwritten.
  */
 
-const configExternalContracts = {} as const;
+import externalContracts from './externalContracts';
+
+const configExternalContracts = {
+  ...externalContracts
+}
 
 export default configExternalContracts;
