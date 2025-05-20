@@ -21,6 +21,14 @@ import { events as starknetEvents, CallData } from "starknet";
 import { parseEventData } from "~~/utils/scaffold-stark/eventsData";
 import { composeEventFilterKeys } from "~~/utils/scaffold-stark/eventKeyFilter";
 
+// 自定义Event类型定义
+interface CustomAbiEvent {
+  type: string;
+  name: string;
+  members: any[];
+  [key: string]: any;
+}
+
 const MAX_KEYS_COUNT = 16;
 /**
  * Reads events from a deployed contract
@@ -37,7 +45,7 @@ const MAX_KEYS_COUNT = 16;
  */
 export const useScaffoldEventHistory = <
   TContractName extends ContractName,
-  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TEventName extends string,
   TBlockData extends boolean = false,
   TTransactionData extends boolean = false,
   TReceiptData extends boolean = false,
@@ -91,9 +99,15 @@ export const useScaffoldEventHistory = <
         throw new Error("Contract not found");
       }
 
-      const event = (deployedContractData.abi as Abi).find(
+      // 使用自定义类型和类型断言
+      const rawAbi = deployedContractData.abi as unknown as Abi;
+      const event = rawAbi.find(
         (part) => part.type === "event" && part.name === eventName,
-      ) as ExtractAbiEvent<ContractAbi<TContractName>, TEventName>;
+      ) as unknown as CustomAbiEvent;
+
+      if (!event) {
+        throw new Error(`Event ${eventName} not found in contract ABI`);
+      }
 
       const blockNumber = (await publicClient.getBlockLatestAccepted())
         .block_number;
@@ -106,8 +120,9 @@ export const useScaffoldEventHistory = <
           [hash.getSelectorFromName(event.name.split("::").slice(-1)[0])],
         ];
         if (filters) {
+          // 使用类型断言处理类型不兼容问题
           keys = keys.concat(
-            composeEventFilterKeys(filters, event, deployedContractData.abi),
+            composeEventFilterKeys(filters, event as any, deployedContractData.abi as any),
           );
         }
         keys = keys.slice(0, MAX_KEYS_COUNT);
@@ -213,9 +228,9 @@ export const useScaffoldEventHistory = <
         const logs = [JSON.parse(JSON.stringify(event.log))];
         const parsed = starknetEvents.parseEvents(
           logs,
-          starknetEvents.getAbiEvents(deployedContractData.abi),
-          CallData.getAbiStruct(deployedContractData.abi),
-          CallData.getAbiEnum(deployedContractData.abi),
+          starknetEvents.getAbiEvents(deployedContractData.abi as any),
+          CallData.getAbiStruct(deployedContractData.abi as any),
+          CallData.getAbiEnum(deployedContractData.abi as any),
         );
         const args = parsed.length ? parsed[0][eventName] : {};
         const { event: rawEvent, ...rest } = event;

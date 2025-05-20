@@ -362,13 +362,13 @@ export type EventFilters<
 
 export type UseScaffoldEventHistoryConfig<
   TContractName extends ContractName,
-  TEventName extends ExtractAbiEventNames<ContractAbi<TContractName>>,
+  TEventName extends string,
   TBlockData extends boolean = false,
   TTransactionData extends boolean = false,
   TReceiptData extends boolean = false,
 > = {
   contractName: TContractName;
-  eventName: IsContractDeclarationMissing<string, TEventName>;
+  eventName: TEventName;
   fromBlock: bigint;
   filters?: { [key: string]: any };
   blockData?: TBlockData;

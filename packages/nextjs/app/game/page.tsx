@@ -124,31 +124,37 @@ const BoringGame = () => {
 
   // 检查解锁组件 - 一旦解锁就永久解锁
   useEffect(() => {
-    // 更新已解锁的功能
-    setUnlockedFeatures(prev => ({
-      movingIcon: prev.movingIcon || score >= UNLOCK_THRESHOLDS.movingIcon,
-      lofiPlayer: prev.lofiPlayer || score >= UNLOCK_THRESHOLDS.lofiPlayer,
-      newsScroller: prev.newsScroller || score >= UNLOCK_THRESHOLDS.newsScroller,
-      rainEffect: prev.rainEffect || score >= UNLOCK_THRESHOLDS.rainEffect,
-      thunderstorm: prev.thunderstorm || score >= UNLOCK_THRESHOLDS.thunderstorm
-    }));
+    // 只在分数改变时检查一次，避免不必要的状态更新
+    const newUnlockedFeatures = {
+      movingIcon: unlockedFeatures.movingIcon || score >= UNLOCK_THRESHOLDS.movingIcon,
+      lofiPlayer: unlockedFeatures.lofiPlayer || score >= UNLOCK_THRESHOLDS.lofiPlayer,
+      newsScroller: unlockedFeatures.newsScroller || score >= UNLOCK_THRESHOLDS.newsScroller,
+      rainEffect: unlockedFeatures.rainEffect || score >= UNLOCK_THRESHOLDS.rainEffect,
+      thunderstorm: unlockedFeatures.thunderstorm || score >= UNLOCK_THRESHOLDS.thunderstorm
+    };
     
-    // 检查成就解锁
-    ACHIEVEMENTS.forEach(achievement => {
-      if (score >= achievement.requirement && 
-          !unlockedAchievements.some(a => a.id === achievement.id)) {
-        // 成就解锁
-        setUnlockedAchievements(prev => [...prev, achievement]);
-        setCurrentAchievement(achievement);
-        setShowNotification(true);
-        
-        // 自动关闭通知
-        setTimeout(() => {
-          setShowNotification(false);
-        }, 5000);
-      }
-    });
-  }, [score, unlockedAchievements]);
+    // 只有当真正有变化时才更新状态
+    if (JSON.stringify(newUnlockedFeatures) !== JSON.stringify(unlockedFeatures)) {
+      setUnlockedFeatures(newUnlockedFeatures);
+    }
+    
+    // 检查成就解锁 - 同样只在有变化时更新
+    const newAchievements = ACHIEVEMENTS.filter(achievement => 
+      score >= achievement.requirement && 
+      !unlockedAchievements.some(a => a.id === achievement.id)
+    );
+    
+    if (newAchievements.length > 0) {
+      setUnlockedAchievements(prev => [...prev, ...newAchievements]);
+      setCurrentAchievement(newAchievements[newAchievements.length - 1]);
+      setShowNotification(true);
+      
+      // 自动关闭通知
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 5000);
+    }
+  }, [score, unlockedAchievements, unlockedFeatures]);
 
   // 开始游戏处理
   const handleStartGame = async () => {
@@ -219,11 +225,12 @@ const BoringGame = () => {
 
   // 图标碰撞边界时增加积分
   const handleIconCollide = () => {
-    // 使用setTimeout将状态更新推迟到下一个事件循环
-    setTimeout(() => {
+    // 限制更新频率，避免过快触发状态更新
+    if (Date.now() - lastClickTime > 100) {  // 至少间隔100ms
+      setLastClickTime(Date.now());
       setScore(prev => prev + 1);
       setTotalClicks(prev => prev + 1);
-    }, 0);
+    }
   };
 
   // 铸造NFT
@@ -248,12 +255,7 @@ const BoringGame = () => {
           
           {/* 移动图标 - 在整个页面上移动，仅当已购买时才显示 */}
           {movingIconCount > 0 && (
-            <div className="fixed top-0 left-0 w-full h-full pointer-events-none">
-              <MovingIcon 
-                onCollide={handleIconCollide} 
-                iconCount={movingIconCount}
-              />
-            </div>
+            <MovingIcon onCollide={handleIconCollide} iconCount={movingIconCount} />
           )}
           
           {/* Lofi播放器 - 融入右下角 */}
@@ -281,8 +283,8 @@ const BoringGame = () => {
           <div className="mt-8 max-w-2xl bg-white p-6 rounded-lg shadow">
             <h3 className="text-xl font-semibold mb-3">游戏指南</h3>
             <ul className="list-disc pl-6 space-y-2">
-              <li>点击"开始游戏"按钮需要支付1 STRK代币</li>
-              <li>每次点击"Click Me!"按钮获得1积分</li>
+              <li>点击&quot;开始游戏&quot;按钮需要支付1 STRK代币</li>
+              <li>每次点击&quot;Click Me!&quot;按钮获得1积分</li>
               <li>积分达到特定门槛时会解锁购买选项：
                 <ul className="list-circle pl-6 mt-1">
                   <li><strong>50分</strong>：移动图标 - 每次碰到浏览器边界增加1积分（可购买多个）</li>

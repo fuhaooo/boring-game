@@ -7,14 +7,15 @@ export const RainEffect = () => {
   
   // 组件挂载时自动播放雨声
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.3; // 设置适当的音量
-      audioRef.current.play().catch(err => console.error("播放雨声失败:", err));
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = 0.3; // 设置适当的音量
+      audio.play().catch(err => console.error("播放雨声失败:", err));
     }
     
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
+      if (audio) {
+        audio.pause();
       }
     };
   }, []);
@@ -24,7 +25,7 @@ export const RainEffect = () => {
       {/* 背景音频 */}
       <audio
         ref={audioRef}
-        src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c1c2b3e74c.mp3"
+        src="https://cdn.pixabay.com/download/audio/2025/05/05/audio_f58cb40be0.mp3"
         loop
       />
       

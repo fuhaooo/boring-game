@@ -8,14 +8,15 @@ export const ThunderstormEffect = () => {
   
   // 组件挂载时自动播放雷雨声
   useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.4; // 设置适当的音量
-      audioRef.current.play().catch(err => console.error("播放雷雨声失败:", err));
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = 0.4; // 设置适当的音量
+      audio.play().catch(err => console.error("播放雷雨声失败:", err));
     }
     
     return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
+      if (audio) {
+        audio.pause();
       }
     };
   }, []);
@@ -61,7 +62,7 @@ export const ThunderstormEffect = () => {
       {/* 背景音频 */}
       <audio
         ref={audioRef}
-        src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_d0a13f69d2.mp3"
+        src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_72640b931f.mp3"
         loop
       />
       

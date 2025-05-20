@@ -38,7 +38,7 @@ export const ContractWriteMethods = ({
           key={`${fn.name}-${idx}}`}
           abiFunction={fn}
           onChange={onChange}
-          contractAddress={deployedContractData.address}
+          contractAddress={deployedContractData.address as `0x${string}`}
           //   inheritedFrom={inheritedFrom}
         />
       ))}

@@ -1,7 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
+
+// 声明HTMLAudioElement上的自定义属性类型
+declare global {
+  interface HTMLAudioElement {
+    __canPlayHandler?: EventListener;
+  }
+}
 
 // Lofi音乐列表 - 使用可靠的免费音乐源
 const LOFI_TRACKS = [
@@ -16,24 +23,64 @@ const LOFI_TRACKS = [
     url: "https://cdn.pixabay.com/download/audio/2025/04/26/audio_5281b3676b.mp3",
   },
   {
-    title: "Relaxing Beats",
-    artist: "Lofi Study",
-    url: "https://storage.googleapis.com/chord-public/lofi/chillhop-2.mp3",
+    title: "Spring Lofi Vibes",
+    artist: "lofidreams99",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/11/audio_657d2395b7.mp3",
   },
   {
-    title: "Rainy Day",
-    artist: "Lofi Dreams",
-    url: "https://storage.googleapis.com/chord-public/lofi/chillhop-3.mp3",
+    title: "Ocean Lofi Vibes",
+    artist: "lofidreams99",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/11/audio_1c073cca6c.mp3",
   },
   {
-    title: "Study Session",
-    artist: "Beats & Coffee",
-    url: "https://storage.googleapis.com/chord-public/lofi/chillhop-4.mp3",
+    title: "Ambient Lofi",
+    artist: "lofidreams99",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/11/audio_30beef48e1.mp3",
   },
   {
-    title: "Late Night Coding",
-    artist: "Lofi Code",
-    url: "https://storage.googleapis.com/chord-public/lofi/chillhop-5.mp3",
+    title: "Cloud Nine Whispers",
+    artist: "lofidreams99",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/11/audio_15f5c3cee3.mp3",
+  },
+  {
+    title: "Pink Ocean",
+    artist: "lofidreams99",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/11/audio_0aca95df0d.mp3",
+  },
+  {
+    title: "No Copyright Music Lofi",
+    artist: "lkoliks",
+    url: "https://cdn.pixabay.com/download/audio/2025/04/20/audio_d17e0004d5.mp3",
+  },
+  {
+    title: "Lazy Sunbeams",
+    artist: "lofidreams99",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/11/audio_f2972b7a82.mp3",
+  },
+  {
+    title: "Coastal city vibes",
+    artist: "lofidreams99",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/09/audio_12e45f8e55.mp3",
+  },
+  {
+    title: "Chill Lofi Background Music",
+    artist: "MFCC",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/05/audio_4a5c8e690e.mp3",
+  },
+  {
+    title: "Tokyo Cafe",
+    artist: "TVARI",
+    url: "https://cdn.pixabay.com/download/audio/2023/07/22/audio_720626056a.mp3",
+  },
+  {
+    title: "Love Me Not",
+    artist: "prazkhanal",
+    url: "https://cdn.pixabay.com/download/audio/2025/05/10/audio_6e505ba709.mp3",
+  },
+  {
+    title: "Whispering Vinyl Loops",
+    artist: "RibhavAgrawal",
+    url: "https://cdn.pixabay.com/download/audio/2024/12/27/audio_3ee67607bb.mp3",
   }
 ];
 
@@ -46,70 +93,26 @@ export const LofiPlayer = () => {
   const [isMinimized, setIsMinimized] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const [autoPlay, setAutoPlay] = useState(true);
   
-  // 组件挂载时自动播放
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.volume = 0.4;
-      audioRef.current.play()
+  // 播放音频的统一处理函数
+  const playAudio = useCallback(() => {
+    if (!audioRef.current) return;
+    
+    setIsLoading(true);
+    const playPromise = audioRef.current.play();
+    
+    if (playPromise !== undefined) {
+      playPromise
         .then(() => {
           setIsPlaying(true);
           setLoadError(false);
         })
         .catch(err => {
-          console.error("播放失败:", err);
-          setLoadError(true);
-        });
-    }
-  }, []);
-  
-  const togglePlay = () => {
-    if (audioRef.current) {
-      setIsLoading(true);
-      if (isPlaying) {
-        audioRef.current.pause();
-        setIsPlaying(false);
-        setIsLoading(false);
-      } else {
-        audioRef.current.play()
-          .then(() => {
-            setIsPlaying(true);
-            setLoadError(false);
-          })
-          .catch(err => {
-            console.error("播放失败:", err);
-            setLoadError(true);
-          })
-          .finally(() => {
-            setIsLoading(false);
-          });
-      }
-    }
-  };
-  
-  const changeTrack = (direction: 'next' | 'prev') => {
-    setIsLoading(true);
-    setLoadError(false);
-    
-    let nextIndex = currentTrack;
-    if (direction === 'next') {
-      nextIndex = (currentTrack + 1) % LOFI_TRACKS.length;
-    } else {
-      nextIndex = (currentTrack - 1 + LOFI_TRACKS.length) % LOFI_TRACKS.length;
-    }
-    
-    setCurrentTrack(nextIndex);
-    
-    if (isPlaying && audioRef.current) {
-      audioRef.current.load();
-      audioRef.current.play()
-        .then(() => {
-          setLoadError(false);
-        })
-        .catch(err => {
-          console.error(`播放 ${LOFI_TRACKS[nextIndex].title} 失败:`, err);
-          setLoadError(true);
+          console.error(`播放失败: ${err}`);
           setIsPlaying(false);
+          setLoadError(true);
+          setAutoPlay(false);
         })
         .finally(() => {
           setIsLoading(false);
@@ -117,12 +120,106 @@ export const LofiPlayer = () => {
     } else {
       setIsLoading(false);
     }
+  }, []);
+  
+  // 组件挂载时设置音量
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.4;
+    }
+  }, []);
+  
+  // 处理自动播放
+  useEffect(() => {
+    if (autoPlay && audioRef.current) {
+      const audio = audioRef.current;
+      // 添加canplay事件监听器
+      const handleCanPlay = () => {
+        playAudio();
+        // 播放后移除监听器
+        audio.removeEventListener('canplay', handleCanPlay);
+      };
+      
+      audio.addEventListener('canplay', handleCanPlay);
+      
+      // 清理函数
+      return () => {
+        audio.removeEventListener('canplay', handleCanPlay);
+      };
+    }
+  }, [autoPlay, playAudio]);
+  
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    
+    if (isPlaying) {
+      audioRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      playAudio();
+    }
   };
   
-  const nextTrack = () => changeTrack('next');
+  const changeTrack = useCallback((direction: 'next' | 'prev') => {
+    if (!audioRef.current) return;
+    
+    setIsLoading(true);
+    setLoadError(false);
+    
+    // 计算下一首歌的索引
+    let nextIndex = currentTrack;
+    if (direction === 'next') {
+      nextIndex = (currentTrack + 1) % LOFI_TRACKS.length;
+    } else {
+      nextIndex = (currentTrack - 1 + LOFI_TRACKS.length) % LOFI_TRACKS.length;
+    }
+    
+    // 暂停当前播放
+    audioRef.current.pause();
+    
+    // 更新当前歌曲
+    setCurrentTrack(nextIndex);
+    
+    // 重置播放状态
+    audioRef.current.currentTime = 0;
+    
+    // 优化播放逻辑 - 使用一个标志来判断是否应该播放
+    // 如果是从ended事件触发的，或者当前正在播放，则应该播放下一首
+    const shouldPlay = isPlaying;
+    
+    // 先清除旧的事件监听器
+    const oldCanPlayHandler = audioRef.current.__canPlayHandler;
+    if (oldCanPlayHandler) {
+      audioRef.current.removeEventListener('canplay', oldCanPlayHandler);
+    }
+    
+    // 设置新的canplay事件处理
+    const handleCanPlay = () => {
+      if (shouldPlay && audioRef.current) {
+        console.log(`准备播放下一首: ${LOFI_TRACKS[nextIndex].title}`);
+        playAudio();
+      }
+      audioRef.current?.removeEventListener('canplay', handleCanPlay);
+    };
+    
+    // 保存引用以便后续清理
+    audioRef.current.__canPlayHandler = handleCanPlay;
+    audioRef.current.addEventListener('canplay', handleCanPlay);
+    
+    // 设置新的音频源并加载
+    audioRef.current.src = LOFI_TRACKS[nextIndex].url;
+    audioRef.current.load();
+    
+    // 如果不需要播放，直接结束加载状态
+    if (!shouldPlay) {
+      setIsLoading(false);
+    }
+  }, [currentTrack, isPlaying, playAudio]);
+  
+  const nextTrack = useCallback(() => changeTrack('next'), [changeTrack]);
   const prevTrack = () => changeTrack('prev');
   
-  // 更新音频当前时间
+  // 更新音频当前时间和处理结束事件
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
@@ -132,22 +229,38 @@ export const LofiPlayer = () => {
       setDuration(audio.duration || 0);
     };
     
-    const handleError = () => {
+    const handleError = (e: Event) => {
+      console.error("音频加载错误", e);
       setLoadError(true);
       setIsPlaying(false);
-      console.error("音频加载错误");
+      setIsLoading(false);
+    };
+    
+    const handleEnded = () => {
+      console.log("歌曲播放结束，切换到下一首");
+      // 播放结束时自动切换到下一首，强制设置为正在播放状态
+      setIsPlaying(true); // 确保下一首歌曲会自动播放
+      changeTrack('next');
+    };
+    
+    // 当加载新的元数据时立即更新进度条
+    const handleLoadedMetadata = () => {
+      updateTime();
+      console.log("元数据已加载，更新进度条");
     };
     
     audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateTime);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
     audio.addEventListener('error', handleError);
+    audio.addEventListener('ended', handleEnded);
     
     return () => {
       audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateTime);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('error', handleError);
+      audio.removeEventListener('ended', handleEnded);
     };
-  }, []);
+  }, [changeTrack]);
   
   // 格式化时间
   const formatTime = (time: number) => {
@@ -162,7 +275,6 @@ export const LofiPlayer = () => {
       <audio
         ref={audioRef}
         src={LOFI_TRACKS[currentTrack].url}
-        onEnded={nextTrack}
       />
       
       {isMinimized ? (

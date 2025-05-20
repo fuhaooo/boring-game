@@ -4,6 +4,7 @@ import {
   ContractName,
   getFunctionsByStateMutability,
 } from "~~/utils/scaffold-stark/contract";
+import { Address } from "@starknet-react/chains";
 import { ReadOnlyFunctionForm } from "./ReadOnlyFunctionForm";
 
 export const ContractReadMethods = ({
@@ -36,7 +37,7 @@ export const ContractReadMethods = ({
       {functionsToDisplay.map(({ fn }) => (
         <ReadOnlyFunctionForm
           abi={deployedContractData.abi as Abi}
-          contractAddress={deployedContractData.address}
+          contractAddress={deployedContractData.address as unknown as Address}
           abiFunction={fn}
           key={fn.name}
         />
