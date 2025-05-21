@@ -10,9 +10,9 @@ import {
   ExtractAbiFunctionNamesScaffold,
   UseScaffoldWriteConfig,
 } from "~~/utils/scaffold-stark/contract";
-import { useSendTransaction, useNetwork, Abi } from "@starknet-react/core";
+import { useSendTransaction, useNetwork } from "@starknet-react/core";
 import { notification } from "~~/utils/scaffold-stark";
-import { Contract as StarknetJsContract } from "starknet";
+import { Contract as StarknetJsContract, Abi } from "starknet";
 
 export const useScaffoldWriteContract = <
   TAbi extends Abi,

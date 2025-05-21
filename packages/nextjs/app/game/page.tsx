@@ -11,6 +11,8 @@ import { NewsScroller } from "~~/components/game/NewsScroller";
 import { RainEffect } from "~~/components/game/RainEffect";
 import { ThunderstormEffect } from "~~/components/game/ThunderstormEffect";
 import { AchievementNotification } from "~~/components/game/AchievementNotification";
+import { DragonBall } from "~~/components/game/DragonBall";
+import { Toothless } from "~~/components/game/Toothless";
 import Image from "next/image";
 
 // 定义Achievement接口
@@ -27,14 +29,13 @@ const UNLOCK_THRESHOLDS = {
   lofiPlayer: 150,
   newsScroller: 300,
   rainEffect: 500,
-  thunderstorm: 800
+  thunderstorm: 800,
+  dragonBall: 1000 // 添加龙珠解锁门槛
 };
 
 // 成就定义
 const ACHIEVEMENTS: Achievement[] = [
-  { id: 1, name: "初学者", description: "达到100积分", requirement: 100 },
-  { id: 2, name: "进阶者", description: "达到500积分", requirement: 500 },
-  { id: 3, name: "达人", description: "达到1000积分", requirement: 1000 }
+  { id: 4, name: "我见过龙", description: "集齐7颗龙珠", requirement: 0 }
 ];
 
 const BoringGame = () => {
@@ -50,13 +51,21 @@ const BoringGame = () => {
   const [totalClicks, setTotalClicks] = useState(0); // 总点击次数
   const [lastClickTime, setLastClickTime] = useState(Date.now());
   
+  // 龙珠相关状态
+  const [dragonBalls, setDragonBalls] = useState<number[]>([]); // 已收集的龙珠
+  const [showDragonBall, setShowDragonBall] = useState(false); // 是否显示龙珠
+  const [currentDragonBall, setCurrentDragonBall] = useState(1); // 当前显示的龙珠编号
+  const [dragonBallCost, setDragonBallCost] = useState(1000); // 龙珠基础价格
+  const [showToothless, setShowToothless] = useState(false); // 是否显示Toothless
+  
   // 保存已解锁的组件状态
   const [unlockedFeatures, setUnlockedFeatures] = useState({
     movingIcon: false,
     lofiPlayer: false,
     newsScroller: false,
     rainEffect: false,
-    thunderstorm: false
+    thunderstorm: false,
+    dragonBall: false // 添加龙珠解锁状态
   });
   
   // 实时根据分数显示可用组件
@@ -65,7 +74,8 @@ const BoringGame = () => {
     lofiPlayer: unlockedFeatures.lofiPlayer || score >= UNLOCK_THRESHOLDS.lofiPlayer,
     newsScroller: unlockedFeatures.newsScroller || score >= UNLOCK_THRESHOLDS.newsScroller,
     rainEffect: unlockedFeatures.rainEffect || score >= UNLOCK_THRESHOLDS.rainEffect,
-    thunderstorm: unlockedFeatures.thunderstorm || score >= UNLOCK_THRESHOLDS.thunderstorm
+    thunderstorm: unlockedFeatures.thunderstorm || score >= UNLOCK_THRESHOLDS.thunderstorm,
+    dragonBall: unlockedFeatures.dragonBall || score >= UNLOCK_THRESHOLDS.dragonBall // 添加龙珠可用状态
   };
   const [unlockedAchievements, setUnlockedAchievements] = useState<Achievement[]>([]);
   const [showNotification, setShowNotification] = useState(false);
@@ -130,7 +140,8 @@ const BoringGame = () => {
       lofiPlayer: unlockedFeatures.lofiPlayer || score >= UNLOCK_THRESHOLDS.lofiPlayer,
       newsScroller: unlockedFeatures.newsScroller || score >= UNLOCK_THRESHOLDS.newsScroller,
       rainEffect: unlockedFeatures.rainEffect || score >= UNLOCK_THRESHOLDS.rainEffect,
-      thunderstorm: unlockedFeatures.thunderstorm || score >= UNLOCK_THRESHOLDS.thunderstorm
+      thunderstorm: unlockedFeatures.thunderstorm || score >= UNLOCK_THRESHOLDS.thunderstorm,
+      dragonBall: unlockedFeatures.dragonBall || score >= UNLOCK_THRESHOLDS.dragonBall
     };
     
     // 只有当真正有变化时才更新状态
@@ -138,23 +149,81 @@ const BoringGame = () => {
       setUnlockedFeatures(newUnlockedFeatures);
     }
     
-    // 检查成就解锁 - 同样只在有变化时更新
-    const newAchievements = ACHIEVEMENTS.filter(achievement => 
-      score >= achievement.requirement && 
-      !unlockedAchievements.some(a => a.id === achievement.id)
-    );
-    
-    if (newAchievements.length > 0) {
-      setUnlockedAchievements(prev => [...prev, ...newAchievements]);
-      setCurrentAchievement(newAchievements[newAchievements.length - 1]);
-      setShowNotification(true);
+    // 由于已移除基于分数的成就，不再需要这部分逻辑
+    // 龙珠成就(4)在集齐七颗龙珠的效果里处理
+  }, [score, unlockedFeatures]);
+
+  // 龙珠碰撞边界增加积分
+  const handleDragonBallCollide = () => {
+    // 每次碰撞增加100积分
+    setScore(prev => prev + 100);
+    setTotalClicks(prev => prev + 100);
+  };
+  
+  // 检查是否集齐七颗龙珠并触发无牙出现
+  useEffect(() => {
+    // 当龙珠数量变化时检查，确保只在达到7颗时执行一次
+    if (dragonBalls.length === 7 && !showToothless) {
+      console.log("集齐七颗龙珠，开始召唤！");
       
-      // 自动关闭通知
+      // 龙珠闪光动画，然后消失，最后出现无牙
       setTimeout(() => {
-        setShowNotification(false);
-      }, 5000);
+        // 清空龙珠列表，使所有龙珠消失
+        setDragonBalls([]);
+        
+        // 龙珠消失后短暂延迟，然后显示无牙
+        setTimeout(() => {
+          console.log("无牙出现了！");
+          // 显示Toothless
+          setShowToothless(true);
+          
+          // 解锁"我见过龙"成就 - 避免重复添加
+          const hasSeenDragonAchievement = unlockedAchievements.some(a => a.id === 4);
+          if (!hasSeenDragonAchievement) {
+            const dragonAchievement = ACHIEVEMENTS.find(a => a.id === 4);
+            if (dragonAchievement) {
+              // 单独添加这个成就，避免与其他成就混合
+              setUnlockedAchievements(prev => [...prev, dragonAchievement]);
+              setCurrentAchievement(dragonAchievement);
+              setShowNotification(true);
+              
+              // 自动关闭通知
+              setTimeout(() => {
+                setShowNotification(false);
+              }, 5000);
+            }
+          }
+        }, 1000); // 1秒后显示无牙
+      }, 2000); // 2秒后龙珠消失
     }
-  }, [score, unlockedAchievements, unlockedFeatures]);
+  }, [dragonBalls.length, showToothless, unlockedAchievements]);
+  
+  // 购买龙珠
+  const purchaseDragonBall = () => {
+    // 如果已经有7颗龙珠，不能再购买
+    if (dragonBalls.length >= 7) return;
+    
+    // 计算当前要购买的龙珠编号和价格
+    const nextBallNumber = dragonBalls.length + 1;
+    const currentCost = dragonBallCost + (dragonBalls.length * 500);
+    
+    // 检查分数是否足够
+    if (score >= currentCost) {
+      // 扣除分数
+      setScore(prev => prev - currentCost);
+      
+      // 添加到已收集列表
+      setDragonBalls(prev => [...prev, nextBallNumber]);
+      
+      // 如果是第一次购买，同时解锁该功能
+      if (!unlockedFeatures.dragonBall) {
+        setUnlockedFeatures(prev => ({
+          ...prev,
+          dragonBall: true
+        }));
+      }
+    }
+  };
 
   // 开始游戏处理
   const handleStartGame = async () => {
@@ -258,6 +327,15 @@ const BoringGame = () => {
             <MovingIcon onCollide={handleIconCollide} iconCount={movingIconCount} />
           )}
           
+          {/* 龙珠 - 在整个页面上移动，每颗龙珠单独显示 */}
+          {dragonBalls.map((ballNumber) => (
+            <DragonBall 
+              key={ballNumber}
+              ballNumber={ballNumber} 
+              onCollide={handleDragonBallCollide}
+            />
+          ))}
+          
           {/* Lofi播放器 - 融入右下角 */}
           {hasLofiPlayer && <LofiPlayer />}
           
@@ -265,6 +343,13 @@ const BoringGame = () => {
           {hasNewsScroller && (
             <div className="fixed top-16 left-0 right-0 z-20">
               <NewsScroller />
+            </div>
+          )}
+          
+          {/* Toothless - 集齐七龙珠后显示在左下角 */}
+          {showToothless && (
+            <div className="fixed bottom-20 left-20 z-40">
+              <Toothless />
             </div>
           )}
         </>
@@ -292,6 +377,13 @@ const BoringGame = () => {
                   <li><strong>300分</strong>：新闻滚动 - 显示最新StarkNet生态新闻</li>
                   <li><strong>500分</strong>：雨声ASMR - 享受放松的雨声</li>
                   <li><strong>800分</strong>：雷雨特效 - 带有闪电的雷雨氛围</li>
+                </ul>
+              </li>
+              <li>可收集七龙珠：
+                <ul className="list-circle pl-6 mt-1">
+                  <li>每颗龙珠需要购买，第一颗1000分，之后每颗价格增加500分</li>
+                  <li>龙珠会在屏幕上移动，每次碰到边界增加100积分</li>
+                  <li>集齐全部七颗可以召唤无牙(Toothless)在左下角跳舞！</li>
                 </ul>
               </li>
               <li>达到特定积分会解锁成就：100, 500和1000分</li>
@@ -444,6 +536,36 @@ const BoringGame = () => {
                 <span className="text-xs text-gray-500">{UNLOCK_THRESHOLDS.thunderstorm}分</span>
               </button>
             </div>
+            
+            {/* 龙珠购买选项 */}
+            <div className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
+              availableComponents.dragonBall ? 'border-gray-200 bg-white' : 'border-gray-200 bg-gray-50 opacity-60'
+            }`}>
+              {dragonBalls.length > 0 && (
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs z-10">
+                  {dragonBalls.length}
+                </div>
+              )}
+              <button 
+                onClick={purchaseDragonBall}
+                disabled={!availableComponents.dragonBall || score < dragonBallCost + (dragonBalls.length * 500) || dragonBalls.length >= 7}
+                className="w-full h-full flex flex-col items-center justify-center p-2"
+              >
+                <div className="w-10 h-10 flex items-center justify-center bg-orange-100 rounded-full mb-1">
+                  <Image 
+                    src="/dragon-ball/1.png" 
+                    alt="龙珠" 
+                    width={32} 
+                    height={32}
+                    className="object-contain"
+                  />
+                </div>
+                <span className="text-xs text-center">龙珠</span>
+                <span className="text-xs text-gray-500">
+                  {dragonBalls.length < 7 ? `${dragonBallCost + (dragonBalls.length * 500)}分` : '已满'}
+                </span>
+              </button>
+            </div>
           </div>
           
           {/* 解锁的成就区域 */}
@@ -455,7 +577,9 @@ const BoringGame = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {unlockedAchievements.map((achievement) => (
                   <div key={achievement.id} className="border-2 border-gray-200 rounded-lg p-4 bg-white flex flex-col items-center">
-                    <div className="text-2xl mb-2">🏆</div>
+                    <div className="text-2xl mb-2">
+                      {achievement.id === 4 ? '🐉' : '🏆'}
+                    </div>
                     <h3 className="font-semibold text-sm">{achievement.name}</h3>
                     <p className="text-xs text-gray-600 mb-2">{achievement.description}</p>
                     <button
@@ -469,11 +593,43 @@ const BoringGame = () => {
               </div>
             </div>
           )}
-
-          <div className="mt-8 mb-4 text-sm text-gray-500 flex gap-4">
-            <a href="#" className="hover:underline">Fork me</a>
-            <a href="#" className="hover:underline">Support</a>
-          </div>
+          
+          {/* 龙珠收集进度 */}
+          {dragonBalls.length > 0 && (
+            <div className="mt-8 w-full max-w-lg">
+              <div className="flex justify-between items-center mb-2">
+                <h2 className="text-lg font-bold">龙珠收集</h2>
+                <span className="text-sm text-gray-600">{dragonBalls.length}/7</span>
+              </div>
+              <div className="flex gap-2 bg-gray-100 p-3 rounded-lg justify-center">
+                {Array.from({length: 7}, (_, i) => i + 1).map(ball => {
+                  const collected = dragonBalls.includes(ball);
+                  const ballColors: {[key: number]: string} = {
+                    1: 'bg-red-500',
+                    2: 'bg-orange-500',
+                    3: 'bg-yellow-500',
+                    4: 'bg-green-500',
+                    5: 'bg-blue-500',
+                    6: 'bg-indigo-500',
+                    7: 'bg-purple-500'
+                  };
+                  
+                  return (
+                    <div 
+                      key={ball}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                        collected ? ballColors[ball] : 'bg-gray-300'
+                      } ${collected ? 'animate-pulse' : ''}`}
+                    >
+                      <span className={`font-bold text-sm ${collected ? 'text-white' : 'text-gray-500'}`}>
+                        {ball}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       )}
       

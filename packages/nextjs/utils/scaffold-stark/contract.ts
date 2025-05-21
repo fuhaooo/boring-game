@@ -3,10 +3,9 @@ import deployedContractsData from "~~/contracts/deployedContracts";
 import predeployedContracts from "~~/contracts/predeployedContracts";
 import configExternalContracts from "~~/contracts/configExternalContracts";
 import type {
-  Abi,
   ExtractAbiEventNames,
   ExtractAbiInterfaces,
-  ExtractArgs,
+  ExtractArgs
 } from "abi-wan-kanabi/dist/kanabi";
 import {
   UseReadContractProps,
@@ -22,6 +21,7 @@ import {
   getChecksumAddress,
   uint256,
   validateAndParseAddress,
+  Abi
 } from "starknet";
 import { byteArray } from "starknet";
 import type { MergeDeepRecord } from "type-fest/source/merge-deep";
@@ -208,7 +208,7 @@ type InferContractAbi<TContract> = TContract extends { abi: infer TAbi }
   : never;
 
 export type ContractAbi<TContractName extends ContractName = ContractName> =
-  InferContractAbi<Contract<TContractName>>;
+  InferContractAbi<Contract<TContractName>> extends Abi ? InferContractAbi<Contract<TContractName>> : Abi;
 
 export type FunctionNamesWithInputs<TContractName extends ContractName> =
   Exclude<
@@ -390,7 +390,7 @@ export function getFunctionsByStateMutability(
       if (part.type === "function") {
         acc.push(part);
       } else if (part.type === "interface" && Array.isArray(part.items)) {
-        part.items.forEach((item) => {
+        part.items.forEach((item: any) => {
           if (item.type === "function") {
             acc.push(item);
           }
@@ -398,7 +398,7 @@ export function getFunctionsByStateMutability(
       }
       return acc;
     }, [] as AbiFunction[])
-    .filter((fn) => {
+    .filter((fn: AbiFunction) => {
       return fn.state_mutability == stateMutability;
     });
 }
@@ -406,7 +406,7 @@ export function getFunctionsByStateMutability(
 // TODO: in the future when param decoding is standardized in wallets argent and braavos we can return the object
 // new starknet react hooks (v3) doesn't use raw parse
 function tryParsingParamReturnValues(
-  fn: (x: any) => {},
+  fn: (x: any) => any,
   param: any,
   isReadArgsParsing: boolean,
 ) {
@@ -430,7 +430,7 @@ function tryParsingParamReturnValues(
   }
 }
 
-function tryParsingParamReturnObject(fn: (x: any) => {}, param: any) {
+function tryParsingParamReturnObject(fn: (x: any) => any, param: any) {
   try {
     return fn(param);
   } catch (e) {

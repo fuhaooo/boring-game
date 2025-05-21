@@ -153,17 +153,6 @@ body {
 }
 
 /* 游戏相关的动画 */
-@keyframes marquee {
-  0% { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
-}
-
-.animate-marquee {
-  display: inline-block;
-  white-space: nowrap;
-  animation: marquee 30s linear infinite;
-}
-
 @keyframes rain {
   0% {
     transform: translateY(-100%);

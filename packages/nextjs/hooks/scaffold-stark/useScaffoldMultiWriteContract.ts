@@ -8,11 +8,12 @@ import {
   UseScaffoldArgsParam,
   UseScaffoldWriteConfig,
 } from "~~/utils/scaffold-stark/contract";
-import { useSendTransaction, useNetwork, Abi } from "@starknet-react/core";
+import { useSendTransaction, useNetwork } from "@starknet-react/core";
 import {
   Contract as StarknetJsContract,
   InvocationsDetails,
   Call,
+  Abi,
 } from "starknet";
 import { notification } from "~~/utils/scaffold-stark";
 import { useTransactor } from "./useTransactor";
@@ -22,7 +23,6 @@ function isRawCall(value: Call | any): value is Call {
 }
 
 export const useScaffoldMultiWriteContract = <
-  TAbi extends Abi,
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNamesScaffold<
     ContractAbi<TContractName>,
@@ -33,7 +33,7 @@ export const useScaffoldMultiWriteContract = <
   options,
 }: {
   calls: Array<
-    UseScaffoldWriteConfig<TAbi, TContractName, TFunctionName> | Call
+    UseScaffoldWriteConfig<Abi, TContractName, TFunctionName> | Call
   >;
   options?: InvocationsDetails;
 }) => {
@@ -96,7 +96,6 @@ export const useScaffoldMultiWriteContract = <
 };
 
 export function createContractCall<
-  TAbi extends Abi,
   TContractName extends ContractName,
   TFunctionName extends ExtractAbiFunctionNamesScaffold<
     ContractAbi<TContractName>,
@@ -105,7 +104,7 @@ export function createContractCall<
 >(
   contractName: TContractName,
   functionName: TFunctionName,
-  args: UseScaffoldArgsParam<TAbi, TContractName, TFunctionName>["args"],
+  args: UseScaffoldArgsParam<Abi, TContractName, TFunctionName>["args"],
 ) {
   return { contractName, functionName, args };
 }

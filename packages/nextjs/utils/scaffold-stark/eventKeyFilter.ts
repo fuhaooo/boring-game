@@ -89,8 +89,8 @@ const certainLengthTypeMap: { [key: string]: string[][] } = {
 export const composeEventFilterKeys = (
   input: { [key: string]: any },
   event: ExtractAbiEvent<
-    ContractAbi<ContractName>,
-    ExtractAbiEventNames<ContractAbi<ContractName>>
+    ContractAbi<ContractName> extends Abi ? ContractAbi<ContractName> : Abi,
+    ExtractAbiEventNames<ContractAbi<ContractName> extends Abi ? ContractAbi<ContractName> : Abi>
   >,
   abi: Abi,
 ): string[][] => {
