@@ -1,18 +1,20 @@
 "use client";
 
-import React from 'react';
-import { useLanguage } from '~~/hooks/useLanguage';
-import { Language } from '~~/utils/i18n';
+import React from "react";
+import { useLanguage } from "~~/hooks/useLanguage";
+import { Language } from "~~/utils/i18n";
 
 interface LanguageSwitchProps {
   className?: string;
 }
 
-export const LanguageSwitch: React.FC<LanguageSwitchProps> = ({ className = "" }) => {
+export const LanguageSwitch: React.FC<LanguageSwitchProps> = ({
+  className = "",
+}) => {
   const { language, setLanguage } = useLanguage();
 
   const toggleLanguage = () => {
-    const newLanguage: Language = language === 'en' ? 'zh' : 'en';
+    const newLanguage: Language = language === "en" ? "zh" : "en";
     setLanguage(newLanguage);
   };
 
@@ -20,10 +22,10 @@ export const LanguageSwitch: React.FC<LanguageSwitchProps> = ({ className = "" }
     <button
       onClick={toggleLanguage}
       className={`btn btn-ghost btn-sm text-sm font-medium hover:bg-gradient-nav hover:text-white transition-all duration-200 ${className}`}
-      title={`Current: ${language === 'en' ? 'English' : '中文'}, Click to switch`}
+      title={`Current: ${language === "en" ? "English" : "中文"}, Click to switch`}
     >
       <span className="flex items-center gap-1">
-        {language === 'en' ? (
+        {language === "en" ? (
           <>
             🇺🇸 <span className="hidden sm:inline">EN</span>
           </>
@@ -35,4 +37,4 @@ export const LanguageSwitch: React.FC<LanguageSwitchProps> = ({ className = "" }
       </span>
     </button>
   );
-}; 
+};

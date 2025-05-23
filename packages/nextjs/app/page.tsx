@@ -13,7 +13,9 @@ const Home = () => {
       <div className="px-5">
         <h1 className="text-center">
           <span className="block text-2xl mb-2">{t("Welcome to")}</span>
-          <span className="block text-4xl font-bold">{t("Boring Game Title")}</span>
+          <span className="block text-4xl font-bold">
+            {t("Boring Game Title")}
+          </span>
         </h1>
         <ConnectedAddress />
         <p className="text-center text-lg">
@@ -56,7 +58,9 @@ const Home = () => {
               height={32}
             ></Image>
             <p>
-              {t("Start your blockchain game journey, collect points, unlock achievements, and mint NFTs!")}
+              {t(
+                "Start your blockchain game journey, collect points, unlock achievements, and mint NFTs!",
+              )}
             </p>
           </div>
         </div>

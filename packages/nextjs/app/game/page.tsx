@@ -119,7 +119,12 @@ const BoringGame = () => {
 
   // 成就定义
   const ACHIEVEMENTS: Achievement[] = [
-    { id: 4, name: t("I have seen a dragon"), description: t("Collect all 7 dragon balls"), requirement: 0 },
+    {
+      id: 4,
+      name: t("I have seen a dragon"),
+      description: t("Collect all 7 dragon balls"),
+      requirement: 0,
+    },
   ];
 
   // 合约交互
@@ -219,7 +224,9 @@ const BoringGame = () => {
         },
       ];
 
-      notification.info("Please confirm the authorization transaction in your wallet");
+      notification.info(
+        "Please confirm the authorization transaction in your wallet",
+      );
 
       // 执行授权交易
       const result = await writeTransaction(approveTx);
@@ -257,7 +264,9 @@ const BoringGame = () => {
       }
 
       // 提示用户将支付1 STRK
-      notification.info("Initiating transaction, you will pay 1 STRK to start the game");
+      notification.info(
+        "Initiating transaction, you will pay 1 STRK to start the game",
+      );
 
       const result = await startGameTx();
 
@@ -269,7 +278,9 @@ const BoringGame = () => {
       return false;
     } catch (error) {
       console.error("Failed to start game:", error);
-      notification.error("Failed to start game, please ensure your wallet has authorized STRK tokens");
+      notification.error(
+        "Failed to start game, please ensure your wallet has authorized STRK tokens",
+      );
       return false;
     }
   };
@@ -344,9 +355,13 @@ const BoringGame = () => {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-6 rounded-lg shadow-xl w-96 max-w-full">
-          <h3 className="text-xl font-bold mb-4">{t("STRK Token Authorization Required")}</h3>
+          <h3 className="text-xl font-bold mb-4">
+            {t("STRK Token Authorization Required")}
+          </h3>
           <p className="mb-4">
-            {t("To start the game, you need to authorize the contract to use your STRK tokens.")}
+            {t(
+              "To start the game, you need to authorize the contract to use your STRK tokens.",
+            )}
           </p>
 
           <div className="mb-4">
@@ -410,7 +425,11 @@ const BoringGame = () => {
           </div>
 
           <div className="text-sm mb-4">
-            <p>{t("This is a preview of the NFT you will receive for this achievement.")}</p>
+            <p>
+              {t(
+                "This is a preview of the NFT you will receive for this achievement.",
+              )}
+            </p>
           </div>
 
           <div className="flex justify-end space-x-3">
@@ -784,41 +803,71 @@ const BoringGame = () => {
                 {t("Reaching specific thresholds unlocks purchase options:")}
                 <ul className="list-circle pl-6 mt-1">
                   <li>
-                    {t('50 points: Moving Icon - Gain 1 point each time it hits browser boundary (max 10)')}
+                    {t(
+                      "50 points: Moving Icon - Gain 1 point each time it hits browser boundary (max 10)",
+                    )}
                   </li>
                   <li>
-                    {t('After buying 10 icons, spend 2000 points to upgrade, upgraded icons give 5 points per collision with sound')}
+                    {t(
+                      "After buying 10 icons, spend 2000 points to upgrade, upgraded icons give 5 points per collision with sound",
+                    )}
+                  </li>
+                  <li>{t("150 points: Lofi Music - Play relaxing music")}</li>
+                  <li>
+                    {t(
+                      "300 points: News Scroll - Display latest StarkNet ecosystem news",
+                    )}
                   </li>
                   <li>
-                    {t('150 points: Lofi Music - Play relaxing music')}
+                    {t("500 points: Rain ASMR - Enjoy relaxing rain sounds")}
                   </li>
                   <li>
-                    {t('300 points: News Scroll - Display latest StarkNet ecosystem news')}
-                  </li>
-                  <li>
-                    {t('500 points: Rain ASMR - Enjoy relaxing rain sounds')}
-                  </li>
-                  <li>
-                    {t('800 points: Thunderstorm Effects - Lightning thunderstorm atmosphere')}
+                    {t(
+                      "800 points: Thunderstorm Effects - Lightning thunderstorm atmosphere",
+                    )}
                   </li>
                 </ul>
               </li>
               <li>
                 {t("Collect seven dragon balls:")}
                 <ul className="list-circle pl-6 mt-1">
-                  <li>{t('Each dragon ball requires purchase, first one costs 1000 points, each subsequent one costs 500 more')}</li>
-                  <li>{t('Dragon balls move around screen, gaining 100 points each boundary hit')}</li>
-                  <li>{t('Collect all seven to summon Toothless dancing in bottom left!')}</li>
                   <li>
-                    {t('After summoning Toothless, spend 5000 points to upgrade dragon balls with sound effects')}
+                    {t(
+                      "Each dragon ball requires purchase, first one costs 1000 points, each subsequent one costs 500 more",
+                    )}
                   </li>
                   <li>
-                    {t('After upgrade, new dragon ball prices start at 5000 points and double each purchase')}
+                    {t(
+                      "Dragon balls move around screen, gaining 100 points each boundary hit",
+                    )}
+                  </li>
+                  <li>
+                    {t(
+                      "Collect all seven to summon Toothless dancing in bottom left!",
+                    )}
+                  </li>
+                  <li>
+                    {t(
+                      "After summoning Toothless, spend 5000 points to upgrade dragon balls with sound effects",
+                    )}
+                  </li>
+                  <li>
+                    {t(
+                      "After upgrade, new dragon ball prices start at 5000 points and double each purchase",
+                    )}
                   </li>
                 </ul>
               </li>
-              <li>{t("Unlock achievements at specific points: 100, 500 and 1000 points")}</li>
-              <li>{t("After unlocking achievements, you can mint commemorative NFTs")}</li>
+              <li>
+                {t(
+                  "Unlock achievements at specific points: 100, 500 and 1000 points",
+                )}
+              </li>
+              <li>
+                {t(
+                  "After unlocking achievements, you can mint commemorative NFTs",
+                )}
+              </li>
             </ul>
           </div>
         </div>
@@ -838,7 +887,9 @@ const BoringGame = () => {
               {t("Click Me")}
             </button>
 
-            <div className="text-5xl font-bold mb-1">{score} {t("stimulation")}</div>
+            <div className="text-5xl font-bold mb-1">
+              {score} {t("stimulation")}
+            </div>
             <div className="text-xl text-gray-600">
               {clicksPerSecond} {t("stimulation per second")}
             </div>
@@ -935,7 +986,8 @@ const BoringGame = () => {
                 </div>
                 <span className="text-xs text-center">{t("Music Player")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.lofiPlayer}{t("points")}
+                  {UNLOCK_THRESHOLDS.lofiPlayer}
+                  {t("points")}
                 </span>
               </button>
             </div>
@@ -978,7 +1030,8 @@ const BoringGame = () => {
                 </div>
                 <span className="text-xs text-center">{t("News Scroll")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.newsScroller}{t("points")}
+                  {UNLOCK_THRESHOLDS.newsScroller}
+                  {t("points")}
                 </span>
               </button>
             </div>
@@ -1018,7 +1071,8 @@ const BoringGame = () => {
                 </div>
                 <span className="text-xs text-center">{t("Rain ASMR")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.rainEffect}{t("points")}
+                  {UNLOCK_THRESHOLDS.rainEffect}
+                  {t("points")}
                 </span>
               </button>
             </div>
@@ -1061,7 +1115,8 @@ const BoringGame = () => {
                 </div>
                 <span className="text-xs text-center">{t("Thunderstorm")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.thunderstorm}{t("points")}
+                  {UNLOCK_THRESHOLDS.thunderstorm}
+                  {t("points")}
                 </span>
               </button>
             </div>
@@ -1134,8 +1189,12 @@ const BoringGame = () => {
                       <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
                     </svg>
                   </div>
-                  <span className="text-xs text-center">{t("Upgrade Dragon Balls (5000 points)").split("(")[0]}</span>
-                  <span className="text-xs text-gray-500">5000{t("points")}</span>
+                  <span className="text-xs text-center">
+                    {t("Upgrade Dragon Balls (5000 points)").split("(")[0]}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    5000{t("points")}
+                  </span>
                 </button>
               </div>
             )}
@@ -1157,7 +1216,9 @@ const BoringGame = () => {
                     />
                   </div>
                   <span className="text-xs text-center">{t("Upgraded")}</span>
-                  <span className="text-xs text-green-500">{t("Sound Effect")}</span>
+                  <span className="text-xs text-green-500">
+                    {t("Sound Effect")}
+                  </span>
                 </div>
               </div>
             )}
@@ -1167,7 +1228,9 @@ const BoringGame = () => {
           {unlockedAchievements.length > 0 && (
             <div className="mt-16 w-full max-w-lg">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold">{t("Unlocked Achievements")}</h2>
+                <h2 className="text-lg font-bold">
+                  {t("Unlocked Achievements")}
+                </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {unlockedAchievements.map((achievement) => (
@@ -1250,4 +1313,4 @@ const BoringGame = () => {
   );
 };
 
-export default BoringGame; 
+export default BoringGame;
