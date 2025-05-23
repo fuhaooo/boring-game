@@ -122,7 +122,11 @@ export const useScaffoldEventHistory = <
         if (filters) {
           // 使用类型断言处理类型不兼容问题
           keys = keys.concat(
-            composeEventFilterKeys(filters, event as any, deployedContractData.abi as any),
+            composeEventFilterKeys(
+              filters,
+              event as any,
+              deployedContractData.abi as any,
+            ),
           );
         }
         keys = keys.slice(0, MAX_KEYS_COUNT);

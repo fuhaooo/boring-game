@@ -37,4 +37,4 @@ declare module "~~/components/game/AchievementNotification" {
   }
 
   export const AchievementNotification: React.FC<AchievementNotificationProps>;
-} 
+}

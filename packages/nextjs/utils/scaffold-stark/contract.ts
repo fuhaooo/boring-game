@@ -5,7 +5,7 @@ import configExternalContracts from "~~/contracts/configExternalContracts";
 import type {
   ExtractAbiEventNames,
   ExtractAbiInterfaces,
-  ExtractArgs
+  ExtractArgs,
 } from "abi-wan-kanabi/dist/kanabi";
 import {
   UseReadContractProps,
@@ -21,7 +21,7 @@ import {
   getChecksumAddress,
   uint256,
   validateAndParseAddress,
-  Abi
+  Abi,
 } from "starknet";
 import { byteArray } from "starknet";
 import type { MergeDeepRecord } from "type-fest/source/merge-deep";
@@ -208,7 +208,9 @@ type InferContractAbi<TContract> = TContract extends { abi: infer TAbi }
   : never;
 
 export type ContractAbi<TContractName extends ContractName = ContractName> =
-  InferContractAbi<Contract<TContractName>> extends Abi ? InferContractAbi<Contract<TContractName>> : Abi;
+  InferContractAbi<Contract<TContractName>> extends Abi
+    ? InferContractAbi<Contract<TContractName>>
+    : Abi;
 
 export type FunctionNamesWithInputs<TContractName extends ContractName> =
   Exclude<

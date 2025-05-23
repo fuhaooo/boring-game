@@ -10,7 +10,6 @@ import { useScaffoldMultiWriteContract } from "~~/hooks/scaffold-stark/useScaffo
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-stark/useScaffoldEventHistory";
 
 const Home = () => {
-
   const { data: currentGreeting } = useScaffoldReadContract({
     contractName: "YourContract",
     functionName: "greeting",
@@ -20,7 +19,7 @@ const Home = () => {
   const { sendAsync: setGreeting } = useScaffoldWriteContract({
     contractName: "YourContract",
     functionName: "set_greeting",
-    args: ["Hello, alfred!", new CairoOption<number>(CairoOptionVariant.None)], 
+    args: ["Hello, alfred!", new CairoOption<number>(CairoOptionVariant.None)],
   });
 
   const { sendAsync: sendStrk } = useScaffoldMultiWriteContract({
@@ -28,12 +27,18 @@ const Home = () => {
       {
         contractName: "YourContract",
         functionName: "set_greeting",
-        args: ["Hello, alfred1!", new CairoOption<number>(CairoOptionVariant.None)],
+        args: [
+          "Hello, alfred1!",
+          new CairoOption<number>(CairoOptionVariant.None),
+        ],
       },
       {
         contractName: "Strk",
         functionName: "transfer",
-        args: ["0x064b48806902a367c8598f4F95C305e8c1a1aCbA5f082D294a43793113115691", 100 * 10 ** 18,],
+        args: [
+          "0x064b48806902a367c8598f4F95C305e8c1a1aCbA5f082D294a43793113115691",
+          100 * 10 ** 18,
+        ],
       },
     ],
   });

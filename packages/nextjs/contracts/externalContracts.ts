@@ -147,7 +147,8 @@ const externalContracts = {
   },
   sepolia: {
     BoringGame: {
-      address: "0x3e4aa5993cc45e05bd5ffa6789d883e1632e4a5df73caec16d8e4010c517719",
+      address:
+        "0x3e4aa5993cc45e05bd5ffa6789d883e1632e4a5df73caec16d8e4010c517719",
       abi: [
         {
           type: "interface",
@@ -287,9 +288,10 @@ const externalContracts = {
           ],
         },
       ],
-      classHash: "0x1176a1bd84444c89232ec27754698e5d2e7e1a7f1539f12027f28b23ec9f3d8",
+      classHash:
+        "0x1176a1bd84444c89232ec27754698e5d2e7e1a7f1539f12027f28b23ec9f3d8",
     },
   },
 };
 
-export default externalContracts; 
+export default externalContracts;

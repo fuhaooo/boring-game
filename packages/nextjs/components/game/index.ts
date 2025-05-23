@@ -6,4 +6,4 @@ export { LofiPlayer } from "./LofiPlayer";
 export { NewsScroller } from "./NewsScroller";
 export { RainEffect } from "./RainEffect";
 export { ThunderstormEffect } from "./ThunderstormEffect";
-export { AchievementNotification } from "./AchievementNotification"; 
+export { AchievementNotification } from "./AchievementNotification";

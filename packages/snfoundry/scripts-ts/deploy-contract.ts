@@ -163,7 +163,10 @@ const deployContract = async (
     await provider.getClassHashAt(deployer.address);
     console.log(yellow("Deployer account found at: "), deployer.address);
   } catch (e) {
-    if (e.toString().includes("Contract not found") || e.toString().includes("Invalid contract address")) {
+    if (
+      e.toString().includes("Contract not found") ||
+      e.toString().includes("Invalid contract address")
+    ) {
       const errorMessage = `The wallet you're using to deploy the contract is not deployed in the ${networkName} network.`;
       console.error(red(errorMessage));
       throw new Error(errorMessage);

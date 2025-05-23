@@ -90,7 +90,9 @@ export const composeEventFilterKeys = (
   input: { [key: string]: any },
   event: ExtractAbiEvent<
     ContractAbi<ContractName> extends Abi ? ContractAbi<ContractName> : Abi,
-    ExtractAbiEventNames<ContractAbi<ContractName> extends Abi ? ContractAbi<ContractName> : Abi>
+    ExtractAbiEventNames<
+      ContractAbi<ContractName> extends Abi ? ContractAbi<ContractName> : Abi
+    >
   >,
   abi: Abi,
 ): string[][] => {

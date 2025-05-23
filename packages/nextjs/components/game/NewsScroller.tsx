@@ -29,23 +29,23 @@ const STARKNET_NEWS = [
 export const NewsScroller = () => {
   const [news, setNews] = useState<string[]>([]);
   const [isHovering, setIsHovering] = useState(false);
-  
+
   // 立即加载新闻
   useEffect(() => {
     setNews(STARKNET_NEWS);
-    
+
     // 新闻轮换
     const interval = setInterval(() => {
-      setNews(prev => {
+      setNews((prev) => {
         const rotated = [...prev];
         rotated.push(rotated.shift() as string);
         return rotated;
       });
     }, 10000);
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   // 如果新闻还没加载，显示加载中
   if (news.length === 0) {
     return (
@@ -54,22 +54,22 @@ export const NewsScroller = () => {
       </div>
     );
   }
-  
+
   // 准备显示的新闻内容 - 重复两次以确保平滑滚动
   const displayNews = [...news, ...news];
-  
+
   return (
-    <div 
+    <div
       className="w-full bg-gray-100 rounded-md p-2 overflow-hidden"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
       <div className="relative overflow-hidden whitespace-nowrap">
-        <div 
+        <div
           className={`inline-block transition-all duration-300`}
           style={{
-            animation: `scrollNews ${isHovering ? '120s' : '45s'} linear infinite`,
-            willChange: 'transform'
+            animation: `scrollNews ${isHovering ? "120s" : "45s"} linear infinite`,
+            willChange: "transform",
           }}
         >
           {displayNews.map((item, index) => (
@@ -78,14 +78,18 @@ export const NewsScroller = () => {
             </span>
           ))}
         </div>
-        
+
         <style jsx>{`
           @keyframes scrollNews {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-50%);
+            }
           }
         `}</style>
       </div>
     </div>
   );
-}; 
+};

@@ -66,9 +66,11 @@ export const useScaffoldWriteContract = <
         const call = {
           contractAddress: deployedContractData.address,
           entrypoint: functionName as string,
-          calldata: newArgs ? Object.values(newArgs).map((arg: any) => arg.toString()) : []
+          calldata: newArgs
+            ? Object.values(newArgs).map((arg: any) => arg.toString())
+            : [],
         };
-        
+
         console.log("Call:", call);
 
         return await sendTxnWrapper([call] as any[]);

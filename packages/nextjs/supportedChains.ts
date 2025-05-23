@@ -2,10 +2,11 @@ import * as chains from "@starknet-react/chains";
 
 const rpcUrlDevnet =
   process.env.NEXT_PUBLIC_DEVNET_PROVIDER_URL || "http://127.0.0.1:5050";
-  
+
 const rpcUrlSepolia =
-  process.env.NEXT_PUBLIC_SEPOLIA_PROVIDER_URL || "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_8/tWzknPDsIfVPktOLoaq5zFhjp5dRTKmF";
-  
+  process.env.NEXT_PUBLIC_SEPOLIA_PROVIDER_URL ||
+  "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_8/tWzknPDsIfVPktOLoaq5zFhjp5dRTKmF";
+
 // devnet with mainnet network ID
 const mainnetFork = {
   id: BigInt("0x534e5f4d41494e"),

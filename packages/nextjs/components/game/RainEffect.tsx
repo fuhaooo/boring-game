@@ -4,22 +4,22 @@ import { useEffect, useRef } from "react";
 
 export const RainEffect = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  
+
   // 组件挂载时自动播放雨声
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
       audio.volume = 0.3; // 设置适当的音量
-      audio.play().catch(err => console.error("播放雨声失败:", err));
+      audio.play().catch((err) => console.error("播放雨声失败:", err));
     }
-    
+
     return () => {
       if (audio) {
         audio.pause();
       }
     };
   }, []);
-  
+
   return (
     <div className="rain-container fixed inset-0 pointer-events-none z-0">
       {/* 背景音频 */}
@@ -28,12 +28,12 @@ export const RainEffect = () => {
         src="https://cdn.pixabay.com/download/audio/2025/05/05/audio_f58cb40be0.mp3"
         loop
       />
-      
+
       {/* 雨滴动画 - 覆盖整个屏幕 */}
       <div className="absolute inset-0 overflow-hidden">
         {/* 半透明蓝色覆盖层 */}
         <div className="absolute inset-0 bg-blue-500 opacity-5"></div>
-        
+
         {/* 生成多个雨滴 */}
         {[...Array(100)].map((_, i) => (
           <div
@@ -43,11 +43,11 @@ export const RainEffect = () => {
               left: `${Math.random() * 100}%`,
               opacity: 0.4 + Math.random() * 0.3,
               animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${0.7 + Math.random() * 0.9}s`
+              animationDuration: `${0.7 + Math.random() * 0.9}s`,
             }}
           ></div>
         ))}
       </div>
     </div>
   );
-}; 
+};

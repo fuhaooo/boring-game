@@ -5,31 +5,31 @@ import { useState, useRef, useEffect } from "react";
 export const ThunderstormEffect = () => {
   const [lightningActive, setLightningActive] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
-  
+
   // 组件挂载时自动播放雷雨声
   useEffect(() => {
     const audio = audioRef.current;
     if (audio) {
       audio.volume = 0.4; // 设置适当的音量
-      audio.play().catch(err => console.error("播放雷雨声失败:", err));
+      audio.play().catch((err) => console.error("播放雷雨声失败:", err));
     }
-    
+
     return () => {
       if (audio) {
         audio.pause();
       }
     };
   }, []);
-  
+
   // 闪电效果
   useEffect(() => {
     const createLightning = () => {
       setLightningActive(true);
-      
+
       // 闪电持续时间 (有时候闪两次)
       setTimeout(() => {
         setLightningActive(false);
-        
+
         // 有30%的几率在短时间内再次闪烁
         if (Math.random() < 0.3) {
           setTimeout(() => {
@@ -38,25 +38,25 @@ export const ThunderstormEffect = () => {
           }, 100);
         }
       }, 150);
-      
+
       // 随机安排下一次闪电
       const nextTime = 3000 + Math.random() * 10000; // 3-13秒随机
       timeoutRef.current = setTimeout(createLightning, nextTime);
     };
-    
+
     // 初始闪电延迟
     const initialDelay = 1000 + Math.random() * 3000;
     const timeoutRef = { current: null as NodeJS.Timeout | null };
-    
+
     timeoutRef.current = setTimeout(createLightning, initialDelay);
-    
+
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
     };
   }, []);
-  
+
   return (
     <div className="thunderstorm-container fixed inset-0 pointer-events-none z-0">
       {/* 背景音频 */}
@@ -65,12 +65,12 @@ export const ThunderstormEffect = () => {
         src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_72640b931f.mp3"
         loop
       />
-      
+
       {/* 雷雨动画 - 覆盖整个屏幕 */}
       <div className="absolute inset-0 overflow-hidden">
         {/* 暗色天空覆盖层 */}
         <div className="absolute inset-0 bg-gray-900 opacity-10"></div>
-        
+
         {/* 雨滴 */}
         {[...Array(150)].map((_, i) => (
           <div
@@ -80,18 +80,18 @@ export const ThunderstormEffect = () => {
               left: `${Math.random() * 100}%`,
               opacity: 0.3 + Math.random() * 0.3,
               animationDelay: `${Math.random() * 2}s`,
-              animationDuration: `${0.6 + Math.random() * 0.8}s`
+              animationDuration: `${0.6 + Math.random() * 0.8}s`,
             }}
           ></div>
         ))}
-        
+
         {/* 闪电效果覆盖层 */}
-        <div 
+        <div
           className={`absolute inset-0 bg-white transition-opacity duration-100 ${
             lightningActive ? "opacity-30" : "opacity-0"
           }`}
         ></div>
-        
+
         {/* 随机闪电形状 - 仅在闪电激活时显示 */}
         {lightningActive && (
           <svg
@@ -113,4 +113,4 @@ export const ThunderstormEffect = () => {
       </div>
     </div>
   );
-}; 
+};

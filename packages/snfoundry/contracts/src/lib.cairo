@@ -1,3 +1,3 @@
-pub mod YourContract;
 pub mod BoringGame;
+pub mod YourContract;
 

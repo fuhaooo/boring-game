@@ -183,72 +183,72 @@ export const AddressInfoDropdown = ({
             </li>
           ) : null}
 
-          {showBurnerAccounts ? (
-            createPortal(
-              <>
-                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                  <div className="relative w-auto my-6 mx-auto max-w-5xl">
-                    <div className="border border-[#4f4ab7] rounded-lg shadow-lg relative w-full mx-auto md:max-h-[30rem] md:max-w-[25rem] bg-base-100 outline-none focus:outline-none">
-                      <div className="flex items-start justify-between p-4 pt-8 rounded-t">
-                        <div className="flex justify-center items-center w-11/12">
-                          <h2 className="text-lg text-center text-neutral m-0">
-                            Choose Account
-                          </h2>
-                        </div>
-                        <button
-                          className="w-8 h-8 place-content-end rounded-full justify-center items-center flex"
-                          onClick={() => setShowBurnerAccounts(false)}
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
+          {showBurnerAccounts
+            ? (createPortal(
+                <>
+                  <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+                    <div className="relative w-auto my-6 mx-auto max-w-5xl">
+                      <div className="border border-[#4f4ab7] rounded-lg shadow-lg relative w-full mx-auto md:max-h-[30rem] md:max-w-[25rem] bg-base-100 outline-none focus:outline-none">
+                        <div className="flex items-start justify-between p-4 pt-8 rounded-t">
+                          <div className="flex justify-center items-center w-11/12">
+                            <h2 className="text-lg text-center text-neutral m-0">
+                              Choose Account
+                            </h2>
+                          </div>
+                          <button
+                            className="w-8 h-8 place-content-end rounded-full justify-center items-center flex"
+                            onClick={() => setShowBurnerAccounts(false)}
                           >
-                            <path
-                              fill="currentColor"
-                              d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                      <div className="flex flex-col items-center justify-center gap-3 mx-8 pb-10 pt-8">
-                        <div className="h-[300px] overflow-y-auto flex w-full flex-col gap-2">
-                          {burnerAccounts.map((burnerAcc, ix) => (
-                            // eslint-disable-next-line react/jsx-key
-                            <div
-                              key={burnerAcc.publicKey}
-                              className="w-full flex flex-col"
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
                             >
-                              <button
-                                className={`${
-                                  isDarkMode
-                                    ? "hover:bg-[#385183] border-[#385183]"
-                                    : "hover:bg-gradient-light "
-                                } border rounded-md text-neutral py-[8px] pl-[10px] pr-16 flex items-center gap-4`}
-                                onClick={(e) => handleConnectBurner(e, ix)}
+                              <path
+                                fill="currentColor"
+                                d="m6.4 18.308l-.708-.708l5.6-5.6l-5.6-5.6l.708-.708l5.6 5.6l5.6-5.6l.708.708l-5.6 5.6l5.6 5.6l-.708.708l-5.6-5.6z"
+                              />
+                            </svg>
+                          </button>
+                        </div>
+                        <div className="flex flex-col items-center justify-center gap-3 mx-8 pb-10 pt-8">
+                          <div className="h-[300px] overflow-y-auto flex w-full flex-col gap-2">
+                            {burnerAccounts.map((burnerAcc, ix) => (
+                              // eslint-disable-next-line react/jsx-key
+                              <div
+                                key={burnerAcc.publicKey}
+                                className="w-full flex flex-col"
                               >
-                                <BlockieAvatar
-                                  address={burnerAcc.accountAddress}
-                                  size={35}
-                                ></BlockieAvatar>
-                                {`${burnerAcc.accountAddress.slice(
-                                  0,
-                                  6,
-                                )}...${burnerAcc.accountAddress.slice(-4)}`}
-                              </button>
-                            </div>
-                          ))}
+                                <button
+                                  className={`${
+                                    isDarkMode
+                                      ? "hover:bg-[#385183] border-[#385183]"
+                                      : "hover:bg-gradient-light "
+                                  } border rounded-md text-neutral py-[8px] pl-[10px] pr-16 flex items-center gap-4`}
+                                  onClick={(e) => handleConnectBurner(e, ix)}
+                                >
+                                  <BlockieAvatar
+                                    address={burnerAcc.accountAddress}
+                                    size={35}
+                                  ></BlockieAvatar>
+                                  {`${burnerAcc.accountAddress.slice(
+                                    0,
+                                    6,
+                                  )}...${burnerAcc.accountAddress.slice(-4)}`}
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="backdrop-blur fixed inset-0 z-40"></div>
-              </>,
-              document.body,
-            ) as React.ReactNode
-          ) : null}
+                  <div className="backdrop-blur fixed inset-0 z-40"></div>
+                </>,
+                document.body,
+              ) as React.ReactNode)
+            : null}
 
           {/* TODO: reinstate if needed */}
           {/* {allowedNetworks.length > 1 ? (

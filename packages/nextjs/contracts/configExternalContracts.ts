@@ -3,10 +3,10 @@
  * You should not edit it manually or your changes might be overwritten.
  */
 
-import externalContracts from './externalContracts';
+import externalContracts from "./externalContracts";
 
 const configExternalContracts = {
-  ...externalContracts
-}
+  ...externalContracts,
+};
 
 export default configExternalContracts;

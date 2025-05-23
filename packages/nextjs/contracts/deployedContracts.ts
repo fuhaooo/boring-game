@@ -584,322 +584,323 @@ const deployedContracts = {
         "0x3e4aa5993cc45e05bd5ffa6789d883e1632e4a5df73caec16d8e4010c517719",
       abi: [
         {
-          "name": "BoringGameImpl",
-          "type": "impl",
-          "interface_name": "contracts::BoringGame::IBoringGame"
+          name: "BoringGameImpl",
+          type: "impl",
+          interface_name: "contracts::BoringGame::IBoringGame",
         },
         {
-          "name": "core::bool",
-          "type": "enum",
-          "variants": [
+          name: "core::bool",
+          type: "enum",
+          variants: [
             {
-              "name": "False",
-              "type": "()"
+              name: "False",
+              type: "()",
             },
             {
-              "name": "True",
-              "type": "()"
-            }
-          ]
+              name: "True",
+              type: "()",
+            },
+          ],
         },
         {
-          "name": "core::integer::u256",
-          "type": "struct",
-          "members": [
+          name: "core::integer::u256",
+          type: "struct",
+          members: [
             {
-              "name": "low",
-              "type": "core::integer::u128"
+              name: "low",
+              type: "core::integer::u128",
             },
             {
-              "name": "high",
-              "type": "core::integer::u128"
-            }
-          ]
+              name: "high",
+              type: "core::integer::u128",
+            },
+          ],
         },
         {
-          "name": "contracts::BoringGame::IBoringGame",
-          "type": "interface",
-          "items": [
+          name: "contracts::BoringGame::IBoringGame",
+          type: "interface",
+          items: [
             {
-              "name": "start_game",
-              "type": "function",
-              "inputs": [],
-              "outputs": [
+              name: "start_game",
+              type: "function",
+              inputs: [],
+              outputs: [
                 {
-                  "type": "core::bool"
-                }
+                  type: "core::bool",
+                },
               ],
-              "state_mutability": "external"
+              state_mutability: "external",
             },
             {
-              "name": "record_score",
-              "type": "function",
-              "inputs": [
+              name: "record_score",
+              type: "function",
+              inputs: [
                 {
-                  "name": "score",
-                  "type": "core::integer::u256"
-                }
+                  name: "score",
+                  type: "core::integer::u256",
+                },
               ],
-              "outputs": [],
-              "state_mutability": "external"
+              outputs: [],
+              state_mutability: "external",
             },
             {
-              "name": "mint_achievement_nft",
-              "type": "function",
-              "inputs": [
+              name: "mint_achievement_nft",
+              type: "function",
+              inputs: [
                 {
-                  "name": "achievement_id",
-                  "type": "core::integer::u8"
-                }
+                  name: "achievement_id",
+                  type: "core::integer::u8",
+                },
               ],
-              "outputs": [
+              outputs: [
                 {
-                  "type": "core::bool"
-                }
+                  type: "core::bool",
+                },
               ],
-              "state_mutability": "external"
+              state_mutability: "external",
             },
             {
-              "name": "get_player_info",
-              "type": "function",
-              "inputs": [
+              name: "get_player_info",
+              type: "function",
+              inputs: [
                 {
-                  "name": "player",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
+                  name: "player",
+                  type: "core::starknet::contract_address::ContractAddress",
+                },
               ],
-              "outputs": [
+              outputs: [
                 {
-                  "type": "(core::integer::u256, core::integer::u256, core::integer::u256)"
-                }
+                  type: "(core::integer::u256, core::integer::u256, core::integer::u256)",
+                },
               ],
-              "state_mutability": "view"
+              state_mutability: "view",
             },
             {
-              "name": "get_achievement",
-              "type": "function",
-              "inputs": [
+              name: "get_achievement",
+              type: "function",
+              inputs: [
                 {
-                  "name": "id",
-                  "type": "core::integer::u8"
-                }
+                  name: "id",
+                  type: "core::integer::u8",
+                },
               ],
-              "outputs": [
+              outputs: [
                 {
-                  "type": "(core::integer::u8, core::felt252, core::felt252, core::integer::u256)"
-                }
+                  type: "(core::integer::u8, core::felt252, core::felt252, core::integer::u256)",
+                },
               ],
-              "state_mutability": "view"
+              state_mutability: "view",
             },
             {
-              "name": "is_achievement_unlocked",
-              "type": "function",
-              "inputs": [
+              name: "is_achievement_unlocked",
+              type: "function",
+              inputs: [
                 {
-                  "name": "player",
-                  "type": "core::starknet::contract_address::ContractAddress"
+                  name: "player",
+                  type: "core::starknet::contract_address::ContractAddress",
                 },
                 {
-                  "name": "achievement_id",
-                  "type": "core::integer::u8"
-                }
+                  name: "achievement_id",
+                  type: "core::integer::u8",
+                },
               ],
-              "outputs": [
+              outputs: [
                 {
-                  "type": "core::bool"
-                }
+                  type: "core::bool",
+                },
               ],
-              "state_mutability": "view"
-            }
-          ]
+              state_mutability: "view",
+            },
+          ],
         },
         {
-          "name": "OwnableImpl",
-          "type": "impl",
-          "interface_name": "openzeppelin_access::ownable::interface::IOwnable"
+          name: "OwnableImpl",
+          type: "impl",
+          interface_name: "openzeppelin_access::ownable::interface::IOwnable",
         },
         {
-          "name": "openzeppelin_access::ownable::interface::IOwnable",
-          "type": "interface",
-          "items": [
+          name: "openzeppelin_access::ownable::interface::IOwnable",
+          type: "interface",
+          items: [
             {
-              "name": "owner",
-              "type": "function",
-              "inputs": [],
-              "outputs": [
+              name: "owner",
+              type: "function",
+              inputs: [],
+              outputs: [
                 {
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
+                  type: "core::starknet::contract_address::ContractAddress",
+                },
               ],
-              "state_mutability": "view"
+              state_mutability: "view",
             },
             {
-              "name": "transfer_ownership",
-              "type": "function",
-              "inputs": [
+              name: "transfer_ownership",
+              type: "function",
+              inputs: [
                 {
-                  "name": "new_owner",
-                  "type": "core::starknet::contract_address::ContractAddress"
-                }
+                  name: "new_owner",
+                  type: "core::starknet::contract_address::ContractAddress",
+                },
               ],
-              "outputs": [],
-              "state_mutability": "external"
+              outputs: [],
+              state_mutability: "external",
             },
             {
-              "name": "renounce_ownership",
-              "type": "function",
-              "inputs": [],
-              "outputs": [],
-              "state_mutability": "external"
-            }
-          ]
+              name: "renounce_ownership",
+              type: "function",
+              inputs: [],
+              outputs: [],
+              state_mutability: "external",
+            },
+          ],
         },
         {
-          "name": "constructor",
-          "type": "constructor",
-          "inputs": [
+          name: "constructor",
+          type: "constructor",
+          inputs: [
             {
-              "name": "owner",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
+              name: "owner",
+              type: "core::starknet::contract_address::ContractAddress",
+            },
+          ],
         },
         {
-          "kind": "struct",
-          "name": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred",
-          "type": "event",
-          "members": [
+          kind: "struct",
+          name: "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred",
+          type: "event",
+          members: [
             {
-              "kind": "key",
-              "name": "previous_owner",
-              "type": "core::starknet::contract_address::ContractAddress"
+              kind: "key",
+              name: "previous_owner",
+              type: "core::starknet::contract_address::ContractAddress",
             },
             {
-              "kind": "key",
-              "name": "new_owner",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
+              kind: "key",
+              name: "new_owner",
+              type: "core::starknet::contract_address::ContractAddress",
+            },
+          ],
         },
         {
-          "kind": "struct",
-          "name": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
-          "type": "event",
-          "members": [
+          kind: "struct",
+          name: "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
+          type: "event",
+          members: [
             {
-              "kind": "key",
-              "name": "previous_owner",
-              "type": "core::starknet::contract_address::ContractAddress"
+              kind: "key",
+              name: "previous_owner",
+              type: "core::starknet::contract_address::ContractAddress",
             },
             {
-              "kind": "key",
-              "name": "new_owner",
-              "type": "core::starknet::contract_address::ContractAddress"
-            }
-          ]
+              kind: "key",
+              name: "new_owner",
+              type: "core::starknet::contract_address::ContractAddress",
+            },
+          ],
         },
         {
-          "kind": "enum",
-          "name": "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
-          "type": "event",
-          "variants": [
+          kind: "enum",
+          name: "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
+          type: "event",
+          variants: [
             {
-              "kind": "nested",
-              "name": "OwnershipTransferred",
-              "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred"
+              kind: "nested",
+              name: "OwnershipTransferred",
+              type: "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferred",
             },
             {
-              "kind": "nested",
-              "name": "OwnershipTransferStarted",
-              "type": "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted"
-            }
-          ]
+              kind: "nested",
+              name: "OwnershipTransferStarted",
+              type: "openzeppelin_access::ownable::ownable::OwnableComponent::OwnershipTransferStarted",
+            },
+          ],
         },
         {
-          "kind": "struct",
-          "name": "contracts::BoringGame::BoringGame::GameStarted",
-          "type": "event",
-          "members": [
+          kind: "struct",
+          name: "contracts::BoringGame::BoringGame::GameStarted",
+          type: "event",
+          members: [
             {
-              "kind": "key",
-              "name": "player",
-              "type": "core::starknet::contract_address::ContractAddress"
+              kind: "key",
+              name: "player",
+              type: "core::starknet::contract_address::ContractAddress",
             },
             {
-              "kind": "data",
-              "name": "timestamp",
-              "type": "core::integer::u64"
-            }
-          ]
+              kind: "data",
+              name: "timestamp",
+              type: "core::integer::u64",
+            },
+          ],
         },
         {
-          "kind": "struct",
-          "name": "contracts::BoringGame::BoringGame::AchievementUnlocked",
-          "type": "event",
-          "members": [
+          kind: "struct",
+          name: "contracts::BoringGame::BoringGame::AchievementUnlocked",
+          type: "event",
+          members: [
             {
-              "kind": "key",
-              "name": "player",
-              "type": "core::starknet::contract_address::ContractAddress"
+              kind: "key",
+              name: "player",
+              type: "core::starknet::contract_address::ContractAddress",
             },
             {
-              "kind": "key",
-              "name": "achievement_id",
-              "type": "core::integer::u8"
-            }
-          ]
+              kind: "key",
+              name: "achievement_id",
+              type: "core::integer::u8",
+            },
+          ],
         },
         {
-          "kind": "struct",
-          "name": "contracts::BoringGame::BoringGame::NFTMinted",
-          "type": "event",
-          "members": [
+          kind: "struct",
+          name: "contracts::BoringGame::BoringGame::NFTMinted",
+          type: "event",
+          members: [
             {
-              "kind": "key",
-              "name": "player",
-              "type": "core::starknet::contract_address::ContractAddress"
+              kind: "key",
+              name: "player",
+              type: "core::starknet::contract_address::ContractAddress",
             },
             {
-              "kind": "key",
-              "name": "achievement_id",
-              "type": "core::integer::u8"
+              kind: "key",
+              name: "achievement_id",
+              type: "core::integer::u8",
             },
             {
-              "kind": "data",
-              "name": "nft_url",
-              "type": "core::felt252"
-            }
-          ]
+              kind: "data",
+              name: "nft_url",
+              type: "core::felt252",
+            },
+          ],
         },
         {
-          "kind": "enum",
-          "name": "contracts::BoringGame::BoringGame::Event",
-          "type": "event",
-          "variants": [
+          kind: "enum",
+          name: "contracts::BoringGame::BoringGame::Event",
+          type: "event",
+          variants: [
             {
-              "kind": "flat",
-              "name": "OwnableEvent",
-              "type": "openzeppelin_access::ownable::ownable::OwnableComponent::Event"
+              kind: "flat",
+              name: "OwnableEvent",
+              type: "openzeppelin_access::ownable::ownable::OwnableComponent::Event",
             },
             {
-              "kind": "nested",
-              "name": "GameStarted",
-              "type": "contracts::BoringGame::BoringGame::GameStarted"
+              kind: "nested",
+              name: "GameStarted",
+              type: "contracts::BoringGame::BoringGame::GameStarted",
             },
             {
-              "kind": "nested",
-              "name": "AchievementUnlocked",
-              "type": "contracts::BoringGame::BoringGame::AchievementUnlocked"
+              kind: "nested",
+              name: "AchievementUnlocked",
+              type: "contracts::BoringGame::BoringGame::AchievementUnlocked",
             },
             {
-              "kind": "nested",
-              "name": "NFTMinted",
-              "type": "contracts::BoringGame::BoringGame::NFTMinted"
-            }
-          ]
-        }
+              kind: "nested",
+              name: "NFTMinted",
+              type: "contracts::BoringGame::BoringGame::NFTMinted",
+            },
+          ],
+        },
       ],
-      classHash: "0x1176a1bd84444c89232ec27754698e5d2e7e1a7f1539f12027f28b23ec9f3d8",
+      classHash:
+        "0x1176a1bd84444c89232ec27754698e5d2e7e1a7f1539f12027f28b23ec9f3d8",
     },
   },
 } as const;
