@@ -11,8 +11,10 @@ import { useTheme } from "next-themes";
 import { useTargetNetwork } from "~~/hooks/scaffold-stark/useTargetNetwork";
 import { devnet } from "@starknet-react/chains";
 import { SwitchTheme } from "./SwitchTheme";
+import { LanguageSwitch } from "./LanguageSwitch";
 import { useAccount, useNetwork, useProvider } from "@starknet-react/core";
 import { BlockIdentifier } from "starknet";
+import { useLanguage } from "~~/hooks/useLanguage";
 
 type HeaderMenuLink = {
   label: string;
@@ -20,26 +22,27 @@ type HeaderMenuLink = {
   icon?: React.ReactNode;
 };
 
-export const menuLinks: HeaderMenuLink[] = [
-  {
-    label: "Boring Game",
-    href: "/game",
-  },
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "Debug Contracts",
-    href: "/debug",
-    icon: <BugAntIcon className="h-4 w-4" />,
-  },
-];
-
 export const HeaderMenuLinks = () => {
   const pathname = usePathname();
   const { theme } = useTheme();
+  const { t } = useLanguage();
   const [isDark, setIsDark] = useState(false);
+
+  const menuLinks: HeaderMenuLink[] = [
+    {
+      label: t("Boring Game"),
+      href: "/game",
+    },
+    {
+      label: t("Home"),
+      href: "/",
+    },
+    {
+      label: t("Debug Contracts"),
+      href: "/debug",
+      icon: <BugAntIcon className="h-4 w-4" />,
+    },
+  ];
 
   useEffect(() => {
     setIsDark(theme === "dark");
@@ -75,6 +78,7 @@ export const HeaderMenuLinks = () => {
 export const Header = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const burgerMenuRef = useRef<HTMLDivElement>(null);
+  const { t } = useLanguage();
 
   useOutsideClick(
     burgerMenuRef,
@@ -170,12 +174,13 @@ export const Header = () => {
           <HeaderMenuLinks />
         </ul>
       </div>
-      <div className="navbar-end flex-grow mr-2 gap-4">
+      <div className="navbar-end flex-grow mr-2 gap-2">
         {status === "connected" && !isDeployed ? (
           <span className="bg-[#8a45fc] text-[9px] p-1 text-white">
-            Wallet Not Deployed
+            {t("Wallet Not Deployed")}
           </span>
         ) : null}
+        <LanguageSwitch />
         <CustomConnectButton />
         {/* <FaucetButton /> */}
         <SwitchTheme

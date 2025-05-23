@@ -10,6 +10,7 @@ import { ProgressBar } from "~~/components/scaffold-stark/ProgressBar";
 import { appChains, connectors } from "~~/services/web3/connectors";
 import provider from "~~/services/web3/provider";
 import { useNativeCurrencyPrice } from "~~/hooks/scaffold-stark/useNativeCurrencyPrice";
+import { LanguageProvider } from "~~/hooks/useLanguage";
 
 const ScaffoldStarkApp = ({ children }: { children: React.ReactNode }) => {
   useNativeCurrencyPrice();
@@ -26,7 +27,7 @@ const ScaffoldStarkApp = ({ children }: { children: React.ReactNode }) => {
         ) : (
           <>
             <div className="circle-gradient w-[330px] h-[330px]"></div>
-            <div className="circle-gradient-blue w-[330px] h-[630px]"></div>
+            <div className="circle-gradient-blue w-[630px] h-[630px]"></div>
           </>
         )}
         <Header />
@@ -58,8 +59,10 @@ export const ScaffoldStarkAppWithProviders = ({
       connectors={connectors}
       explorer={starkscan}
     >
-      <ProgressBar />
-      <ScaffoldStarkApp>{children}</ScaffoldStarkApp>
+      <LanguageProvider>
+        <ProgressBar />
+        <ScaffoldStarkApp>{children}</ScaffoldStarkApp>
+      </LanguageProvider>
     </StarknetConfig>
   );
 };

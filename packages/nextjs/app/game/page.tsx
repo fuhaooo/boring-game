@@ -20,6 +20,7 @@ import { notification } from "~~/utils/scaffold-stark";
 import { Contract, cairo, RpcProvider } from "starknet";
 import { useTransactor } from "~~/hooks/scaffold-stark/useTransactor";
 import { universalErc20Abi } from "~~/utils/Constants";
+import { useLanguage } from "~~/hooks/useLanguage";
 
 // 定义Achievement接口
 interface Achievement {
@@ -39,11 +40,6 @@ const UNLOCK_THRESHOLDS = {
   dragonBall: 1000, // 添加龙珠解锁门槛
 };
 
-// 成就定义
-const ACHIEVEMENTS: Achievement[] = [
-  { id: 4, name: "我见过龙", description: "集齐7颗龙珠", requirement: 0 },
-];
-
 // 导入STRK代币常量
 const STRK_ADDRESS =
   "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d";
@@ -56,6 +52,7 @@ const NFT_IMAGE_URL =
 
 const BoringGame = () => {
   const { address } = useAccount();
+  const { t } = useLanguage();
   const [score, setScore] = useState(0);
   const [gameStarted, setGameStarted] = useState(false);
   const [movingIconCount, setMovingIconCount] = useState(0); // 移动图标计数
@@ -119,6 +116,11 @@ const BoringGame = () => {
   const [showNotification, setShowNotification] = useState(false);
   const [currentAchievement, setCurrentAchievement] =
     useState<Achievement | null>(null);
+
+  // 成就定义
+  const ACHIEVEMENTS: Achievement[] = [
+    { id: 4, name: t("I have seen a dragon"), description: t("Collect all 7 dragon balls"), requirement: 0 },
+  ];
 
   // 合约交互
   // @ts-ignore
@@ -185,7 +187,7 @@ const BoringGame = () => {
 
       return hasEnoughAllowance;
     } catch (error) {
-      console.error("检查授权失败:", error);
+      console.error("Failed to check allowance:", error);
       setCheckingAllowance(false);
       // 如果错误，假设已经授权 - 因为用户表示已经授权完毕
       setNeedsApproval(false);
@@ -196,7 +198,7 @@ const BoringGame = () => {
   // 授权STRK代币
   const approveSTRK = async () => {
     if (!address) {
-      notification.error("请先连接钱包");
+      notification.error("Please connect your wallet first");
       return false;
     }
 
@@ -217,21 +219,21 @@ const BoringGame = () => {
         },
       ];
 
-      notification.info("请在钱包中确认授权交易");
+      notification.info("Please confirm the authorization transaction in your wallet");
 
       // 执行授权交易
       const result = await writeTransaction(approveTx);
 
       if (result) {
-        notification.success("授权成功！");
+        notification.success("Authorization successful!");
         setNeedsApproval(false);
         setShowApprovalModal(false);
         return true;
       }
       return false;
     } catch (error) {
-      console.error("授权失败:", error);
-      notification.error("授权失败，请稍后再试");
+      console.error("Authorization failed:", error);
+      notification.error("Authorization failed, please try again later");
       return false;
     }
   };
@@ -240,7 +242,7 @@ const BoringGame = () => {
   const startGame = async () => {
     try {
       if (!address) {
-        notification.error("请先连接钱包");
+        notification.error("Please connect your wallet first");
         return false;
       }
 
@@ -255,19 +257,19 @@ const BoringGame = () => {
       }
 
       // 提示用户将支付1 STRK
-      notification.info("正在发起交易，您将支付1 STRK来开始游戏");
+      notification.info("Initiating transaction, you will pay 1 STRK to start the game");
 
       const result = await startGameTx();
 
       if (result) {
-        notification.success("游戏开始！交易已提交");
+        notification.success("Game started! Transaction submitted");
         setShowApprovalModal(false);
         return true;
       }
       return false;
     } catch (error) {
-      console.error("开始游戏失败:", error);
-      notification.error("启动游戏失败，请确保您的钱包已授权STRK代币");
+      console.error("Failed to start game:", error);
+      notification.error("Failed to start game, please ensure your wallet has authorized STRK tokens");
       return false;
     }
   };
@@ -277,7 +279,7 @@ const BoringGame = () => {
     async (args: { args: [number] }) => {
       try {
         if (!address) {
-          console.error("钱包未连接");
+          console.error("Wallet not connected");
           return false;
         }
 
@@ -291,7 +293,7 @@ const BoringGame = () => {
 
         return true;
       } catch (error) {
-        console.error("记录分数失败:", error);
+        console.error("Failed to record score:", error);
         return false;
       }
     },
@@ -302,24 +304,24 @@ const BoringGame = () => {
   const mintNFT = async (args: { args: [number] }) => {
     try {
       if (!address) {
-        notification.error("请先连接钱包");
+        notification.error("Please connect your wallet first");
         return false;
       }
 
-      notification.info("正在铸造NFT，请确认交易");
+      notification.info("Minting NFT, please confirm the transaction");
 
       // 使用类型断言解决TypeScript错误
       const result = await mintNFTTx(args as any);
 
       if (result) {
-        notification.success("NFT铸造成功！交易已提交");
+        notification.success("NFT minted successfully! Transaction submitted");
         setShowNFTPreview(false);
         return true;
       }
       return false;
     } catch (error) {
-      console.error("铸造NFT失败:", error);
-      notification.error("铸造NFT失败，请稍后再试");
+      console.error("Failed to mint NFT:", error);
+      notification.error("Failed to mint NFT, please try again later");
       return false;
     }
   };
@@ -342,15 +344,14 @@ const BoringGame = () => {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-6 rounded-lg shadow-xl w-96 max-w-full">
-          <h3 className="text-xl font-bold mb-4">授权STRK代币</h3>
+          <h3 className="text-xl font-bold mb-4">{t("STRK Token Authorization Required")}</h3>
           <p className="mb-4">
-            游戏需要使用您的STRK代币。请授权游戏合约使用您的代币。
-            推荐授权金额至少为5 STRK以保障游戏体验。
+            {t("To start the game, you need to authorize the contract to use your STRK tokens.")}
           </p>
 
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              授权金额 (STRK)
+              {t("Authorize Amount:")} ({t("STRK")})
             </label>
             <input
               type="number"
@@ -367,14 +368,14 @@ const BoringGame = () => {
               onClick={() => setShowApprovalModal(false)}
               className="px-4 py-2 bg-gray-200 rounded-md"
             >
-              取消
+              {t("Cancel")}
             </button>
             <button
               onClick={approveSTRK}
               className="px-4 py-2 bg-blue-500 text-white rounded-md"
               disabled={checkingAllowance}
             >
-              {checkingAllowance ? "处理中..." : "确认授权"}
+              {checkingAllowance ? t("Authorizing...") : t("Authorize")}
             </button>
           </div>
         </div>
@@ -392,14 +393,14 @@ const BoringGame = () => {
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white p-6 rounded-lg shadow-xl w-[600px] max-w-full">
           <h3 className="text-xl font-bold mb-4">
-            铸造NFT: {achievement?.name}
+            {t("Achievement NFT Preview")}: {achievement?.name}
           </h3>
 
           <div className="flex flex-col items-center mb-4">
             <div className="w-80 h-64 overflow-hidden rounded-lg shadow-md mb-4">
               <Image
                 src={NFT_IMAGE_URL}
-                alt={achievement?.name || "NFT Preview"}
+                alt={achievement?.name || t("NFT Preview")}
                 width={320}
                 height={256}
                 className="w-full h-full object-cover"
@@ -409,12 +410,7 @@ const BoringGame = () => {
           </div>
 
           <div className="text-sm mb-4">
-            <p>铸造这个NFT将会：</p>
-            <ul className="list-disc pl-5 mt-2">
-              <li>永久记录您的游戏成就</li>
-              <li>NFT将出现在您的钱包中</li>
-              <li>这是ERC721标准的NFT</li>
-            </ul>
+            <p>{t("This is a preview of the NFT you will receive for this achievement.")}</p>
           </div>
 
           <div className="flex justify-end space-x-3">
@@ -422,13 +418,13 @@ const BoringGame = () => {
               onClick={() => setShowNFTPreview(false)}
               className="px-4 py-2 bg-gray-200 rounded-md"
             >
-              取消
+              {t("Cancel")}
             </button>
             <button
               onClick={() => mintNFT({ args: [selectedNFTId as number] })}
               className="px-4 py-2 bg-blue-500 text-white rounded-md"
             >
-              确认铸造
+              {t("Mint NFT")}
             </button>
           </div>
         </div>
@@ -531,7 +527,7 @@ const BoringGame = () => {
       !showToothless &&
       !hasCompletedDragonBallQuest
     ) {
-      console.log("集齐七颗龙珠，开始召唤！");
+      console.log("Collected all seven dragon balls, starting summoning!");
 
       // 龙珠闪光动画，然后消失，最后出现无牙
       setTimeout(() => {
@@ -540,7 +536,7 @@ const BoringGame = () => {
 
         // 龙珠消失后短暂延迟，然后显示无牙
         setTimeout(() => {
-          console.log("无牙出现了！");
+          console.log("Toothless has appeared!");
           // 显示Toothless
           setShowToothless(true);
           // 标记已完成龙珠任务
@@ -776,57 +772,53 @@ const BoringGame = () => {
             onClick={handleStartGame}
             className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
           >
-            开始游戏 (1 STRK)
+            {t("Start Game")} (1 STRK)
           </button>
 
           <div className="mt-8 max-w-2xl bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-semibold mb-3">游戏指南</h3>
+            <h3 className="text-xl font-semibold mb-3">{t("Game Guide")}</h3>
             <ul className="list-disc pl-6 space-y-2">
-              <li>点击&quot;开始游戏&quot;按钮需要支付1 STRK代币</li>
-              <li>每次点击&quot;Click Me!&quot;按钮获得1积分</li>
+              <li>{t('Click "Start Game" button requires 1 STRK token')}</li>
+              <li>{t('Each click on "Click Me!" button earns 1 point')}</li>
               <li>
-                积分达到特定门槛时会解锁购买选项：
+                {t("Reaching specific thresholds unlocks purchase options:")}
                 <ul className="list-circle pl-6 mt-1">
                   <li>
-                    <strong>50分</strong>：移动图标 -
-                    每次碰到浏览器边界增加1积分（最多可购买10个）
+                    {t('50 points: Moving Icon - Gain 1 point each time it hits browser boundary (max 10)')}
                   </li>
                   <li>
-                    购买满10个图标后可以花费<strong>2000分</strong>
-                    升级，升级后每次碰撞增加5分并有音效
+                    {t('After buying 10 icons, spend 2000 points to upgrade, upgraded icons give 5 points per collision with sound')}
                   </li>
                   <li>
-                    <strong>150分</strong>：Lofi音乐 - 播放放松音乐
+                    {t('150 points: Lofi Music - Play relaxing music')}
                   </li>
                   <li>
-                    <strong>300分</strong>：新闻滚动 - 显示最新StarkNet生态新闻
+                    {t('300 points: News Scroll - Display latest StarkNet ecosystem news')}
                   </li>
                   <li>
-                    <strong>500分</strong>：雨声ASMR - 享受放松的雨声
+                    {t('500 points: Rain ASMR - Enjoy relaxing rain sounds')}
                   </li>
                   <li>
-                    <strong>800分</strong>：雷雨特效 - 带有闪电的雷雨氛围
+                    {t('800 points: Thunderstorm Effects - Lightning thunderstorm atmosphere')}
                   </li>
                 </ul>
               </li>
               <li>
-                可收集七龙珠：
+                {t("Collect seven dragon balls:")}
                 <ul className="list-circle pl-6 mt-1">
-                  <li>每颗龙珠需要购买，第一颗1000分，之后每颗价格增加500分</li>
-                  <li>龙珠会在屏幕上移动，每次碰到边界增加100积分</li>
-                  <li>集齐全部七颗可以召唤无牙(Toothless)在左下角跳舞！</li>
+                  <li>{t('Each dragon ball requires purchase, first one costs 1000 points, each subsequent one costs 500 more')}</li>
+                  <li>{t('Dragon balls move around screen, gaining 100 points each boundary hit')}</li>
+                  <li>{t('Collect all seven to summon Toothless dancing in bottom left!')}</li>
                   <li>
-                    召唤无牙后可以花费<strong>5000分</strong>
-                    升级龙珠，升级后碰撞有音效
+                    {t('After summoning Toothless, spend 5000 points to upgrade dragon balls with sound effects')}
                   </li>
                   <li>
-                    龙珠升级后，新购买的龙珠价格从<strong>5000分</strong>
-                    开始翻倍增长
+                    {t('After upgrade, new dragon ball prices start at 5000 points and double each purchase')}
                   </li>
                 </ul>
               </li>
-              <li>达到特定积分会解锁成就：100, 500和1000分</li>
-              <li>解锁成就后可以铸造NFT纪念</li>
+              <li>{t("Unlock achievements at specific points: 100, 500 and 1000 points")}</li>
+              <li>{t("After unlocking achievements, you can mint commemorative NFTs")}</li>
             </ul>
           </div>
         </div>
@@ -843,12 +835,12 @@ const BoringGame = () => {
               onClick={handleClick}
               className="border border-gray-300 rounded-md py-3 px-10 text-xl mb-6 hover:bg-gray-100 transition bg-white"
             >
-              Click me
+              {t("Click Me")}
             </button>
 
-            <div className="text-5xl font-bold mb-1">{score} stimulation</div>
+            <div className="text-5xl font-bold mb-1">{score} {t("stimulation")}</div>
             <div className="text-xl text-gray-600">
-              {clicksPerSecond} stimulation per second
+              {clicksPerSecond} {t("stimulation per second")}
             </div>
           </div>
 
@@ -894,17 +886,17 @@ const BoringGame = () => {
                 </div>
                 <span className="text-xs text-center">
                   {movingIconCount < 10
-                    ? "移动图标"
+                    ? t("Moving Icon")
                     : isMovingIconUpgraded
-                      ? "已升级"
-                      : "升级图标"}
+                      ? t("Upgraded")
+                      : t("Upgrade Icon")}
                 </span>
                 <span className="text-xs text-gray-500">
                   {movingIconCount < 10
-                    ? `${UNLOCK_THRESHOLDS.movingIcon}分`
+                    ? `${UNLOCK_THRESHOLDS.movingIcon}${t("points")}`
                     : isMovingIconUpgraded
-                      ? "+5积分/次"
-                      : "2000分"}
+                      ? t("+5 points/hit")
+                      : `2000${t("points")}`}
                 </span>
               </button>
             </div>
@@ -941,9 +933,9 @@ const BoringGame = () => {
                     <path d="M9.297 15.75c-.35.31-.79.48-1.26.48s-.91-.17-1.26-.48c-.5-.44-.75-1.06-.75-1.95s.25-1.51.75-1.95c.35-.31.79-.48 1.26-.48s.91.17 1.26.48c.5.44.75 1.06.75 1.95S9.797 15.31 9.297 15.75zM6.75 8.265c-.5.44-.75 1.06-.75 1.95s.25 1.51.75 1.95c.35.31.79.48 1.26.48s.91-.17 1.26-.48c.5-.44.75-1.06.75-1.95s-.25-1.51-.75-1.95c-.35-.31-.79-.48-1.26-.48S7.1 7.955 6.75 8.265zM10.94 20.31c1.1.49 2.25.74 3.44.74c4.07 0 7.38-3.14 7.38-7 0-3.87-3.31-7-7.38-7s-7.38 3.13-7.38 7c0 2.12.99 4.03 2.53 5.31C10.16 24.54 15 23.35 15 23.35S10.84 19.77 10.94 20.31zM19.76 11.05c0 2.97-2.42 5.38-5.38 5.38s-5.38-2.41-5.38-5.38s2.42-5.38 5.38-5.38S19.76 8.08 19.76 11.05zM5.58 22.39c-.13.12-.28.18-.44.18c-.34 0-.62-.28-.62V13.8h-.02c0-.14.06-.28.16-.37c.35-.32.64-.88.64-1.39s-.29-1.08-.64-1.39c-.1-.09-.16-.23-.16-.37V2.05c0-.34.28-.62.62-.62c.16 0 .31.06.44.18l3.31 3.31c.18.18.18.46 0 .64L5.58 8.84c-.18.18-.18.46 0 .64l3.29 3.29c.18.18.18.46 0 .64L5.58 16.7c-.18.18-.18.46 0 .64L8.87 20.63c.18.18.18.46 0 .64L5.58 22.39z" />
                   </svg>
                 </div>
-                <span className="text-xs text-center">音乐播放</span>
+                <span className="text-xs text-center">{t("Music Player")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.lofiPlayer}分
+                  {UNLOCK_THRESHOLDS.lofiPlayer}{t("points")}
                 </span>
               </button>
             </div>
@@ -984,9 +976,9 @@ const BoringGame = () => {
                     />
                   </svg>
                 </div>
-                <span className="text-xs text-center">新闻滚动</span>
+                <span className="text-xs text-center">{t("News Scroll")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.newsScroller}分
+                  {UNLOCK_THRESHOLDS.newsScroller}{t("points")}
                 </span>
               </button>
             </div>
@@ -1024,9 +1016,9 @@ const BoringGame = () => {
                     <path d="M19 4h-1V2h-2v2h-2V2h-2v2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-4c-.83 0-1.5-.67-1.5-1.5S13.67 6 14.5 6s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
                   </svg>
                 </div>
-                <span className="text-xs text-center">雨声效果</span>
+                <span className="text-xs text-center">{t("Rain ASMR")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.rainEffect}分
+                  {UNLOCK_THRESHOLDS.rainEffect}{t("points")}
                 </span>
               </button>
             </div>
@@ -1067,9 +1059,9 @@ const BoringGame = () => {
                     />
                   </svg>
                 </div>
-                <span className="text-xs text-center">雷雨特效</span>
+                <span className="text-xs text-center">{t("Thunderstorm")}</span>
                 <span className="text-xs text-gray-500">
-                  {UNLOCK_THRESHOLDS.thunderstorm}分
+                  {UNLOCK_THRESHOLDS.thunderstorm}{t("points")}
                 </span>
               </button>
             </div>
@@ -1105,21 +1097,21 @@ const BoringGame = () => {
                 >
                   <Image
                     src="/dragon-ball/1.png"
-                    alt="龙珠"
+                    alt={t("Dragon Ball")}
                     width={isDragonBallUpgraded ? 28 : 32}
                     height={isDragonBallUpgraded ? 28 : 32}
                     className="object-contain"
                   />
                 </div>
-                <span className="text-xs text-center">龙珠</span>
+                <span className="text-xs text-center">{t("Dragon Ball")}</span>
                 <span className="text-xs text-gray-500">
                   {dragonBalls.length < 7
                     ? `${
                         isDragonBallUpgraded
                           ? dragonBallCost * Math.pow(2, dragonBalls.length)
                           : dragonBallCost + dragonBalls.length * 500
-                      }分`
-                    : "已满"}
+                      }${t("points")}`
+                    : t("Full")}
                 </span>
               </button>
             </div>
@@ -1142,8 +1134,8 @@ const BoringGame = () => {
                       <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
                     </svg>
                   </div>
-                  <span className="text-xs text-center">升级龙珠</span>
-                  <span className="text-xs text-gray-500">5000分</span>
+                  <span className="text-xs text-center">{t("Upgrade Dragon Balls (5000 points)").split("(")[0]}</span>
+                  <span className="text-xs text-gray-500">5000{t("points")}</span>
                 </button>
               </div>
             )}
@@ -1158,14 +1150,14 @@ const BoringGame = () => {
                   <div className="w-10 h-10 flex items-center justify-center bg-gradient-to-r from-orange-400 to-yellow-300 rounded-full mb-1 p-1">
                     <Image
                       src="/dragon-ball/7.png"
-                      alt="升级龙珠"
+                      alt={t("Upgraded")}
                       width={28}
                       height={28}
                       className="object-contain"
                     />
                   </div>
-                  <span className="text-xs text-center">已升级</span>
-                  <span className="text-xs text-green-500">有音效</span>
+                  <span className="text-xs text-center">{t("Upgraded")}</span>
+                  <span className="text-xs text-green-500">{t("Sound Effect")}</span>
                 </div>
               </div>
             )}
@@ -1175,7 +1167,7 @@ const BoringGame = () => {
           {unlockedAchievements.length > 0 && (
             <div className="mt-16 w-full max-w-lg">
               <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold">解锁的成就</h2>
+                <h2 className="text-lg font-bold">{t("Unlocked Achievements")}</h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {unlockedAchievements.map((achievement) => (
@@ -1196,7 +1188,7 @@ const BoringGame = () => {
                       onClick={() => handleMintNFT(achievement.id)}
                       className="bg-purple-500 text-white px-3 py-1 text-sm rounded-md"
                     >
-                      铸造NFT
+                      {t("Mint NFT")}
                     </button>
                   </div>
                 ))}
@@ -1208,7 +1200,7 @@ const BoringGame = () => {
           {dragonBalls.length > 0 && (
             <div className="mt-8 w-full max-w-lg">
               <div className="flex justify-between items-center mb-2">
-                <h2 className="text-lg font-bold">龙珠收集</h2>
+                <h2 className="text-lg font-bold">{t("Dragon Ball Count")}</h2>
                 <span className="text-sm text-gray-600">
                   {dragonBalls.length}/7
                 </span>
@@ -1258,4 +1250,4 @@ const BoringGame = () => {
   );
 };
 
-export default BoringGame;
+export default BoringGame; 

@@ -288,10 +288,6 @@ const _decodeContractResponseItem = (
             (item: any) => item.name === enumKey,
           );
           if (enumItemDef && enumItemDef.type) {
-            if (abiType.name === "contracts::YourContract::TransactionState") {
-              return enumKey;
-            }
-
             const processedValue = _decodeContractResponseItem(
               enumValue,
               { type: enumItemDef.type },
@@ -306,10 +302,6 @@ const _decodeContractResponseItem = (
       if (enumKeys.length === 1) {
         const enumKey = enumKeys[0];
         const enumValue = respItem[enumKey];
-
-        if (abiType.name === "contracts::YourContract::TransactionState") {
-          return enumKey;
-        }
 
         const enumVariant = abiType.variants?.find(
           (v: any) => v.name === enumKey,
