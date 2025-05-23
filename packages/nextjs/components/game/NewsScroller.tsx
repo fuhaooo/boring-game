@@ -61,7 +61,7 @@ export const NewsScroller = () => {
 
   // 根据当前语言获取新闻内容
   const getCurrentNews = () => {
-    return language === 'en' ? STARKNET_NEWS_EN : STARKNET_NEWS_ZH;
+    return language === "en" ? STARKNET_NEWS_EN : STARKNET_NEWS_ZH;
   };
 
   // 立即加载新闻并监听语言变化
@@ -91,9 +91,9 @@ export const NewsScroller = () => {
         }`}
       >
         <div className="text-center">
-          {language === 'en' 
-            ? 'Loading StarkNet latest updates...' 
-            : '加载 StarkNet 最新动态...'}
+          {language === "en"
+            ? "Loading StarkNet latest updates..."
+            : "加载 StarkNet 最新动态..."}
         </div>
       </div>
     );
