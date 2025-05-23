@@ -160,14 +160,15 @@ const deployContract = async (
   const { contract, constructorArgs, contractName, options } = params;
 
   try {
-    await deployer.getContractVersion(deployer.address);
+    await provider.getClassHashAt(deployer.address);
+    console.log(yellow("Deployer account found at: "), deployer.address);
   } catch (e) {
-    if (e.toString().includes("Contract not found")) {
+    if (e.toString().includes("Contract not found") || e.toString().includes("Invalid contract address")) {
       const errorMessage = `The wallet you're using to deploy the contract is not deployed in the ${networkName} network.`;
       console.error(red(errorMessage));
       throw new Error(errorMessage);
     } else {
-      console.error(red("Error getting contract version: "), e);
+      console.error(red("Error checking deployer account: "), e);
       throw e;
     }
   }

@@ -12,7 +12,7 @@ import {
 } from "~~/utils/scaffold-stark/contract";
 import { useSendTransaction, useNetwork } from "@starknet-react/core";
 import { notification } from "~~/utils/scaffold-stark";
-import { Contract as StarknetJsContract, Abi } from "starknet";
+import { Abi } from "starknet";
 
 export const useScaffoldWriteContract = <
   TAbi extends Abi,
@@ -57,19 +57,23 @@ export const useScaffoldWriteContract = <
         return;
       }
 
-      // we convert to starknetjs contract instance here since deployed data may be undefined if contract is not deployed
-      const contractInstance = new StarknetJsContract(
-        deployedContractData.abi,
-        deployedContractData.address,
-      );
-
-      const newCalls = deployedContractData
-        ? [contractInstance.populate(functionName, newArgs as any[])]
-        : [];
-
       try {
-        return await sendTxnWrapper(newCalls as any[]);
+        console.log("Contract address:", deployedContractData.address);
+        console.log("Function name:", functionName);
+        console.log("Args:", newArgs);
+
+        // 直接创建调用数据，不使用Contract类
+        const call = {
+          contractAddress: deployedContractData.address,
+          entrypoint: functionName as string,
+          calldata: newArgs ? Object.values(newArgs).map((arg: any) => arg.toString()) : []
+        };
+        
+        console.log("Call:", call);
+
+        return await sendTxnWrapper([call] as any[]);
       } catch (e: any) {
+        console.error("Contract interaction error:", e);
         throw e;
       }
     },

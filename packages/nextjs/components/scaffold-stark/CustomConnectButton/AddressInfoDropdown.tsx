@@ -183,7 +183,7 @@ export const AddressInfoDropdown = ({
             </li>
           ) : null}
 
-          {showBurnerAccounts &&
+          {showBurnerAccounts ? (
             createPortal(
               <>
                 <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
@@ -247,7 +247,8 @@ export const AddressInfoDropdown = ({
                 <div className="backdrop-blur fixed inset-0 z-40"></div>
               </>,
               document.body,
-            )}
+            ) as React.ReactNode
+          ) : null}
 
           {/* TODO: reinstate if needed */}
           {/* {allowedNetworks.length > 1 ? (

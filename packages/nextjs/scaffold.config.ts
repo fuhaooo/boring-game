@@ -13,7 +13,7 @@ export type ScaffoldConfig = {
 };
 
 const scaffoldConfig = {
-  targetNetworks: [chains.devnet],
+  targetNetworks: [chains.sepolia],
   // Only show the Burner Wallet when running on devnet
   onlyLocalBurnerWallet: false,
   rpcProviderUrl: {
@@ -23,7 +23,7 @@ const scaffoldConfig = {
       "",
     sepolia:
       process.env.NEXT_PUBLIC_SEPOLIA_PROVIDER_URL ||
-      process.env.NEXT_PUBLIC_PROVIDER_URL ||
+      "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_8/tWzknPDsIfVPktOLoaq5zFhjp5dRTKmF" ||
       "",
     mainnet:
       process.env.NEXT_PUBLIC_MAINNET_PROVIDER_URL ||

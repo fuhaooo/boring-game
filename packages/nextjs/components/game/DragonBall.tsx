@@ -5,17 +5,31 @@ import Image from "next/image";
 
 interface DragonBallProps {
   ballNumber: number;
-  onCollide: () => void;
+  onCollide: (points?: number) => void;
+  isUpgraded?: boolean;
 }
 
-export const DragonBall = ({ ballNumber, onCollide }: DragonBallProps) => {
+export const DragonBall = ({ ballNumber, onCollide, isUpgraded = false }: DragonBallProps) => {
   const [position, setPosition] = useState({ x: 100, y: 100 });
   const [velocity, setVelocity] = useState({ x: Math.random() * 2 - 1, y: Math.random() * 2 - 1 });
   const animationRef = useRef<number | null>(null);
-  const collisionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastCollisionTimeRef = useRef<number>(0);
   const onCollideRef = useRef(onCollide); // 存储最新的回调函数
   const pendingCollisionRef = useRef(false); // 跟踪是否有待处理的碰撞
+  const collisionAudioRef = useRef<HTMLAudioElement | null>(null);
+  
+  // 初始化音效
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      collisionAudioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2023/12/09/audio_37d2c0e795.mp3');
+    }
+    return () => {
+      if (collisionAudioRef.current) {
+        collisionAudioRef.current.pause();
+        collisionAudioRef.current = null;
+      }
+    }
+  }, []);
   
   // 更新回调函数引用
   useEffect(() => {
@@ -27,7 +41,7 @@ export const DragonBall = ({ ballNumber, onCollide }: DragonBallProps) => {
     const handlePendingCollision = () => {
       if (pendingCollisionRef.current) {
         pendingCollisionRef.current = false;
-        onCollideRef.current();
+        onCollideRef.current(100);
       }
     };
     
@@ -45,10 +59,17 @@ export const DragonBall = ({ ballNumber, onCollide }: DragonBallProps) => {
     // 限制碰撞触发频率，至少间隔500ms
     if (now - lastCollisionTimeRef.current > 500) {
       lastCollisionTimeRef.current = now;
+      
+      // 只有在已升级状态下才播放碰撞音效
+      if (isUpgraded && collisionAudioRef.current) {
+        collisionAudioRef.current.currentTime = 0;
+        collisionAudioRef.current.play().catch(err => console.error("音频播放失败:", err));
+      }
+      
       // 标记有待处理的碰撞，但不直接调用回调
       pendingCollisionRef.current = true;
     }
-  }, []);
+  }, [isUpgraded]);
   
   // 初始化随机位置和速度
   useEffect(() => {
@@ -73,14 +94,6 @@ export const DragonBall = ({ ballNumber, onCollide }: DragonBallProps) => {
       x: randomSpeedX * directionX, 
       y: randomSpeedY * directionY 
     });
-    
-    // 清理函数
-    return () => {
-      if (collisionTimeoutRef.current) {
-        const timeout = collisionTimeoutRef.current; // 在清理函数中先保存引用
-        clearTimeout(timeout);
-      }
-    };
   }, []);
   
   // 龙珠动画效果
@@ -155,18 +168,23 @@ export const DragonBall = ({ ballNumber, onCollide }: DragonBallProps) => {
         transition: 'transform 1s ease-in-out'
       }}
     >
-      <div className="w-20 h-20 relative">
-        <Image 
-          src={`/dragon-ball/${ballNumber}.png`}
-          alt={`${ballNumber}星龙珠`}
-          width={80}
-          height={80}
-          className="drop-shadow-lg"
-          priority
-        />
+      <div className={`w-20 h-20 relative ${isUpgraded ? 'animate-pulse' : ''}`}>
+        <div className={`w-full h-full rounded-full flex items-center justify-center
+                      ${isUpgraded ? 'bg-gradient-to-r from-orange-400 to-yellow-300 p-1' : ''}`}>
+          <Image 
+            src={`/dragon-ball/${ballNumber}.png`}
+            alt={`${ballNumber}星龙珠`}
+            width={isUpgraded ? 75 : 80}
+            height={isUpgraded ? 75 : 80}
+            className="drop-shadow-lg"
+            priority
+          />
+        </div>
         
         {/* 光晕效果 */}
-        <div className="absolute inset-0 w-20 h-20 bg-yellow-400 rounded-full opacity-20 animate-ping" style={{ animationDuration: '3s' }}></div>
+        <div className={`absolute inset-0 w-20 h-20 rounded-full opacity-20 animate-ping
+                       ${isUpgraded ? 'bg-orange-400' : 'bg-yellow-400'}`} 
+             style={{ animationDuration: isUpgraded ? '1.5s' : '3s' }}></div>
       </div>
     </div>
   );

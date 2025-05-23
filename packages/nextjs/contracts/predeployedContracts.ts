@@ -10,6 +10,10 @@ import {
   universalErc20Abi,
 } from "../utils/Constants";
 
+// 使用本地变量确保Sepolia网络使用正确的STRK地址和classHash
+const sepoliaStrkAddress = "0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d";
+const sepoliaStrkClassHash = "0x06a05ef9f6c911bf1130c9cc4f0f252d72d5adfc44b356a6c629ffd8dcdabeee";
+
 const preDeployedContracts = {
   devnet: {
     Strk: {
@@ -20,9 +24,9 @@ const preDeployedContracts = {
   },
   sepolia: {
     Strk: {
-      address: universalStrkAddress,
+      address: sepoliaStrkAddress,
       abi: universalErc20Abi,
-      classHash: sepoliaMainnetStrkClassHash,
+      classHash: sepoliaStrkClassHash,
     },
   },
   mainnet: {

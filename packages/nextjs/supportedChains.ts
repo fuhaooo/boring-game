@@ -2,6 +2,10 @@ import * as chains from "@starknet-react/chains";
 
 const rpcUrlDevnet =
   process.env.NEXT_PUBLIC_DEVNET_PROVIDER_URL || "http://127.0.0.1:5050";
+  
+const rpcUrlSepolia =
+  process.env.NEXT_PUBLIC_SEPOLIA_PROVIDER_URL || "https://starknet-sepolia.g.alchemy.com/starknet/version/rpc/v0_8/tWzknPDsIfVPktOLoaq5zFhjp5dRTKmF";
+  
 // devnet with mainnet network ID
 const mainnetFork = {
   id: BigInt("0x534e5f4d41494e"),
@@ -37,4 +41,17 @@ const devnet = {
   },
 } as const satisfies chains.Chain;
 
-export const supportedChains = { ...chains, devnet, mainnetFork };
+// 自定义Sepolia配置，使用更稳定的RPC
+const sepolia = {
+  ...chains.sepolia,
+  rpcUrls: {
+    default: {
+      http: [],
+    },
+    public: {
+      http: [rpcUrlSepolia],
+    },
+  },
+} as const satisfies chains.Chain;
+
+export const supportedChains = { ...chains, devnet, mainnetFork, sepolia };

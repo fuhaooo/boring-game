@@ -12,18 +12,33 @@ interface IconData {
 }
 
 interface MovingIconProps {
-  onCollide: () => void;
+  onCollide: (points?: number) => void;
   iconCount: number;
+  isUpgraded?: boolean;
 }
 
-export const MovingIcon = ({ onCollide, iconCount }: MovingIconProps) => {
+export const MovingIcon = ({ onCollide, iconCount, isUpgraded = false }: MovingIconProps) => {
   const [icons, setIcons] = useState<IconData[]>([]);
   const [windowSize, setWindowSize] = useState({ width: 0, height: 0 });
   const iconSize = 50;
-  const collisionRef = useRef<(() => void) | null>(null);
+  const collisionRef = useRef<((points?: number) => void) | null>(null);
   const animationRef = useRef<number | null>(null);
   const prevIconCountRef = useRef(iconCount);
   const iconsRef = useRef<IconData[]>([]);
+  const collisionAudioRef = useRef<HTMLAudioElement | null>(null);
+  
+  // 初始化音效
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      collisionAudioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2023/12/09/audio_37d2c0e795.mp3');
+    }
+    return () => {
+      if (collisionAudioRef.current) {
+        collisionAudioRef.current.pause();
+        collisionAudioRef.current = null;
+      }
+    }
+  }, []);
   
   // 保存最新的状态值到ref
   useEffect(() => {
@@ -115,9 +130,18 @@ export const MovingIcon = ({ onCollide, iconCount }: MovingIconProps) => {
         
         // 如果发生碰撞，触发回调
         if (collided && collisionRef.current) {
+          // 只有在已升级状态下才播放碰撞音效
+          if (isUpgraded && collisionAudioRef.current) {
+            collisionAudioRef.current.currentTime = 0;
+            collisionAudioRef.current.play().catch(err => console.error("音频播放失败:", err));
+          }
+          
           // 使用setTimeout避免在渲染期间更新父组件状态
           setTimeout(() => {
-            if (collisionRef.current) collisionRef.current();
+            if (collisionRef.current) {
+              // 如果已升级，每次碰撞增加5积分，否则增加1积分
+              collisionRef.current(isUpgraded ? 5 : 1);
+            }
           }, 0);
         }
         
@@ -130,7 +154,7 @@ export const MovingIcon = ({ onCollide, iconCount }: MovingIconProps) => {
         };
       })
     );
-  }, [windowSize, iconSize]);
+  }, [windowSize, iconSize, isUpgraded]);
   
   // 使用requestAnimationFrame实现更平滑的动画
   useEffect(() => {
@@ -187,14 +211,17 @@ export const MovingIcon = ({ onCollide, iconCount }: MovingIconProps) => {
             transform: `translate3d(0, 0, 0)` // 启用GPU加速
           }}
         >
-          <Image 
-            src="/sn-symbol-gradient.png" 
-            alt="StarkNet Symbol" 
-            width={iconSize} 
-            height={iconSize}
-            className="rounded-full drop-shadow-md"
-            priority
-          />
+          <div className={`w-full h-full rounded-full flex items-center justify-center
+                       ${isUpgraded ? 'bg-gradient-to-r from-purple-500 to-pink-500 animate-pulse p-1' : ''}`}>
+            <Image 
+              src="/sn-symbol-gradient.png" 
+              alt="StarkNet Symbol" 
+              width={iconSize} 
+              height={iconSize}
+              className="rounded-full drop-shadow-md"
+              priority
+            />
+          </div>
         </div>
       ))}
     </>
