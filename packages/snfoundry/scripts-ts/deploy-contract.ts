@@ -144,8 +144,8 @@ const findContractFile = (
  * @example
  * ///Example usage of deployContract function
  * await deployContract({
- *   contract: "YourContract",
- *   contractName: "YourContractExportName",
+ *   contract: "BoringGame",
+ *   contractName: "BoringGameExportName",
  *   constructorArgs: { owner: deployer.address },
  *   options: { maxFee: BigInt(1000000000000) }
  * });

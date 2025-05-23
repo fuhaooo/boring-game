@@ -13,8 +13,8 @@ import { green } from "./helpers/colorize-log";
  * const deployScript = async (): Promise<void> => {
  *   await deployContract(
  *     {
- *       contract: "YourContract",
- *       contractName: "YourContractExportName",
+ *       contract: "BoringGame",
+ *       contractName: "BoringGameExportName",
  *       constructorArgs: {
  *         owner: deployer.address,
  *       },
@@ -29,8 +29,8 @@ import { green } from "./helpers/colorize-log";
  * const deployScript = async (): Promise<void> => {
  *   await deployContract(
  *     {
- *       contract: "YourContract",
- *       contractName: "YourContractExportName",
+ *       contract: "BoringGame",
+ *       contractName: "BoringGameExportName",
  *       options: {
  *         maxFee: BigInt(1000000000000)
  *       }
@@ -43,7 +43,7 @@ import { green } from "./helpers/colorize-log";
  */
 const deployScript = async (): Promise<void> => {
   await deployContract({
-    contract: "YourContract",
+    contract: "BoringGame",
     constructorArgs: {
       owner: deployer.address,
     },

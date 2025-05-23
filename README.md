@@ -1,20 +1,63 @@
-# 🏗 Scaffold-Stark
+# 🎮 Boring Game
 
 <h4 align="center">
-  <a href="https://docs.scaffoldstark.com/">Documentation</a> |
-  <a href="https://scaffoldstark.com/">Website</a> |
-  <a href="https://scaffold-stark-demo.vercel.app/debug">Demo</a>
+  <a href="#">Play Demo</a> |
+  <a href="#">Documentation</a> |
+  <a href="#">Discord</a>
 </h4>
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on Starknet blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+🧪 An experimental tap game built on Starknet blockchain that explores the paradox of finding meaning in mundane interactions. What starts as a "boring" clicking game gradually evolves into a rich, multi-sensory experience that challenges our relationship with digital stimulation and achievement.
 
 ⚙️ Built using NextJS, Starknet.js, Scarb, Starknet-React, Starknet Foundry.
 
-- ✅ **Contract Fast Reload**: Your frontend auto-adapts to your smart contracts as you deploy them.
-- 🪝 [**Custom hooks**](https://docs.scaffoldstark.com/hooks/): Collection of React hooks wrapper around [starknet-react](https://starknet-react.com/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldstark.com/components): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Prefunded Account**: Quickly test your application with a burner wallet and prefunded accounts.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with Starknet network.
+## 🌟 Game Philosophy
+
+**Boring Game** is more than just a tap game—it's a social experiment disguised as entertainment. The core philosophy revolves around several key concepts:
+
+### 🧘 **Stress Relief Through Simplicity**
+- Start with pure, meditative clicking
+- Gradual introduction of ASMR elements (rain sounds, lo-fi music, ambient effects)
+- Create a digital zen garden where repetitive actions become therapeutic
+
+### 🔍 **Progressive Discovery**
+- Hidden easter eggs and achievements reward curious players
+- Each milestone unlocks new sensory layers and interactive elements
+- The game grows with you, revealing complexity beneath apparent simplicity
+
+### 🌊 **Sensory Overload Exploration**
+- Intentionally pushes boundaries from minimalism to maximum stimulation
+- Players experience the full spectrum from digital silence to sensory saturation
+- Questions: When does enhancement become overwhelming? Where's your comfort zone?
+
+### 🎭 **Social Experiment Mechanics**
+- Anonymous data collection on player behavior patterns
+- How long do players engage with "boring" content?
+- What elements drive retention vs. abandonment?
+- Achievement psychology: Do NFT rewards change behavior?
+
+### 💎 **Blockchain Achievement System**
+- Permanent NFT records of your exploration journey
+- Achievements become collectible proof of your experience
+- Community aspect: Compare and share your sensory tolerance levels
+
+### 🤔 **The Boredom Paradox**
+The game deliberately embraces the concept of "boredom" to explore deeper questions:
+- Can repetitive digital actions be meditative rather than mindless?
+- How do we define "meaningful" interaction in digital spaces?
+- What happens when we remove traditional game objectives and just... exist?
+
+---
+
+## 🎯 Game Features
+
+- ✅ **Progressive Sensory Layers**: From silent clicks to full ASMR immersion
+- 🎵 **Dynamic Audio Experience**: Lo-fi music, rain effects, thunderstorms with spatial audio
+- 🐉 **Dragon Ball Collection**: Mystical elements that add RPG-like progression
+- 🏆 **NFT Achievement System**: Mint your milestones as permanent blockchain records
+- 📰 **Real-time News Integration**: Stay connected to the Starknet ecosystem while you play
+- ⚡ **Moving Elements**: Bouncing icons and animated sprites create visual stimulation
+- 🎨 **Responsive Design**: Seamless experience across all devices
+- 🔐 **Wallet Integration**: Connect with various Starknet wallet providers
 
 ![Debug Contracts tab](./packages/nextjs/public/debug-image.png)
 
@@ -49,17 +92,15 @@ To install `starkup`, run the following command:
 curl --proto '=https' --tlsv1.2 -sSf https://sh.starkup.sh | sh
 ```
 
-#### 1.2 Create your project
+#### 1.2 Clone and setup the project
 
-Open a terminal and run the following command:
+Open a terminal and run the following commands:
 
 ```bash
-npx create-stark@latest
-cd my-dapp-example
+git clone https://github.com/your-username/boring-game.git
+cd boring-game
 yarn install
 ```
-
-Now you have a new project with the basic structure.
 
 #### 1.3 Install Starknet Devnet using ASDF Fast Install
 
@@ -71,13 +112,13 @@ We are almost done, now we need to install `Starknet Devnet`. First let's regist
 asdf plugin add starknet-devnet
 ```
 
-Now open your new created project. Since we have the required dependencies listed on a `.tool-versions` file, simply running the below command on the root folder will install `starknet-devnet`(and other dependencies such as `scarb` and `starknet-foundry`) with the version SPECIFIED on the `.tool-versions` file (not necessarily the latest):
+Now open your project folder. Since we have the required dependencies listed on a `.tool-versions` file, simply running the below command on the root folder will install `starknet-devnet`(and other dependencies such as `scarb` and `starknet-foundry`) with the version SPECIFIED on the `.tool-versions` file (not necessarily the latest):
 
 ```bash
 asdf install
 ```
 
-Now you are ready!!!. You can jump to [Quickstart 1](#quickstart-1-deploying-a-smart-contract-to-starknet-devnet) to start developing your dapp.
+Now you are ready to start your boring journey! 🎮
 
 #### 1.4 Troubleshooting
 
@@ -87,7 +128,7 @@ Now you are ready!!!. You can jump to [Quickstart 1](#quickstart-1-deploying-a-s
 
 #### Scarb version
 
-To ensure the proper functioning of scaffold-stark, your `Scarb` version must be `2.11.4`. To accomplish this, first check Scarb version:
+To ensure the proper functioning of Boring Game, your `Scarb` version must be `2.11.4`. To accomplish this, first check Scarb version:
 
 ```sh
 scarb --version
@@ -103,7 +144,7 @@ Otherwise, you can install Scarb `2.11.4` following the [instructions](https://d
 
 #### Starknet Foundry version
 
-To ensure the proper functioning of the tests on scaffold-stark, your `Starknet Foundry` version must be `0.41.0`. To accomplish this, first check your `Starknet Foundry` version:
+To ensure the proper functioning of the tests on Boring Game, your `Starknet Foundry` version must be `0.41.0`. To accomplish this, first check your `Starknet Foundry` version:
 
 ```sh
 snforge --version
@@ -119,7 +160,7 @@ Otherwise, you can install Starknet Foundry `0.41.0` following the [instructions
 
 #### Starknet-devnet version
 
-To ensure the proper functioning of scaffold-stark, your `starknet-devnet` version must be `0.4.0`. To accomplish this, first check your `starknet-devnet` version:
+To ensure the proper functioning of Boring Game, your `starknet-devnet` version must be `0.4.0`. To accomplish this, first check your `starknet-devnet` version:
 
 ```sh
 starknet-devnet --version
@@ -139,10 +180,10 @@ As an alternative to installing the tools locally (Scarb, Starknet Foundry, Star
 
 1. Install [Docker Desktop](https://www.docker.com/get-started/)
 2. Install [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
-3. Create a new project folder.
+3. Clone the project folder.
 
-- `npx create-stark@latest`
-- `cd my-dapp-example`
+- `git clone https://github.com/your-username/boring-game.git`
+- `cd boring-game`
 
 4. Check your project folder contains a `devcontainer.json` file. This file is used to set up the environment:
 
@@ -160,7 +201,7 @@ To start using the Docker-based setup:
 
 > Once inside the container, you can start working with all the tools and dependencies pre-configured.
 
-Now you are ready!!!
+Now you are ready to experience the boredom!!!
 
 ## Compatible versions
 
@@ -170,19 +211,13 @@ Now you are ready!!!
 - Cairo - v2.11.4
 - Rpc - v0.8.0
 
-## Quickstart 1: Deploying a Smart Contract to Starknet-Devnet
+## 🚀 Quick Start: Running Boring Game Locally
 
-To get started with Scaffold-Stark, follow the steps below:
+To get started with Boring Game, follow the steps below:
 
-1. Install the latest version of Scaffold-Stark
+1. Make sure you've completed the installation steps above.
 
-```bash
-npx create-stark@latest
-cd my-dapp-example
-yarn install
-```
-
-2. Run a local network in the first terminal.
+2. Run a local Starknet network in the first terminal:
 
 ```bash
 yarn chain
@@ -192,29 +227,29 @@ yarn chain
 
 This command starts a local Starknet network using Devnet. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `scaffold.config.ts` for your nextjs app.
 
-3. On a second terminal, deploy the sample contract:
+3. On a second terminal, deploy the game contract:
 
 ```bash
 yarn deploy
 ```
 
-This command deploys a sample smart contract to the local network. The contract is located in `packages/snfoundry/contracts/src` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/snfoundry/scripts-ts/deploy.ts` to deploy the contract to the network. You can also customize the deploy script.
+This command deploys the Boring Game smart contract to the local network. The contract is located in `packages/snfoundry/contracts/src` and handles score tracking, achievement unlocking, and NFT minting. The `yarn deploy` command uses the deploy script located in `packages/snfoundry/scripts-ts/deploy.ts`.
 
-By default `Scaffold-Stark` takes the first prefunded account from `starknet-devnet` as a deployer address,
+By default, Boring Game takes the first prefunded account from `starknet-devnet` as the deployer address.
 
-4. On a third terminal, start your NextJS app:
+4. On a third terminal, start your game interface:
 
 ```bash
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page.
+Visit your game at: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page, and start your boring journey on the main game page.
 
 5. Check your environment variables. We have a `yarn postinstall` script that will create `.env` files based on the `.env.example` files provided. If the environment variables don't exist, you can manually create a `.env` file from the `.env.example` to get the app running!
 
 > ⚠️ **IMPORTANT**: Never commit your private keys or sensitive environment variables to version control. The `.env` files are included in `.gitignore` by default, but always double-check before pushing your changes.
 
-## Quickstart 2: Deploying a Smart Contract to Sepolia Testnet
+## 🌐 Deploying to Sepolia Testnet
 
 <details>
 
@@ -228,55 +263,33 @@ Find the `packages/snfoundry/.env` file and fill the env variables related to Se
 
 Find the `packages/nextjs/scaffold.config.ts` file and change the `targetNetworks` to `[chains.sepolia]`.
 
-![chall-0-scaffold-config](./packages/nextjs/public/scaffold-config.png)
-
 4. Get some testnet tokens.
 
-You will need to get some `STRK` Sepolia tokens to deploy your contract to Sepolia testnet.
+You will need to get some `STRK` Sepolia tokens to deploy your contract to Sepolia testnet and to play the game (1 STRK required to start).
 
 > Some popular faucets are [Starknet Faucet](https://starknet-faucet.vercel.app/) and [Blastapi Starknet Sepolia STRK](https://blastapi.io/faucets/starknet-sepolia-strk)
 
-4. Open a terminal, deploy the sample contract to Sepolia testnet:
+4. Open a terminal, deploy the game contract to Sepolia testnet:
 
 ```bash
 yarn deploy --network sepolia
 ```
 
-5. On a second terminal, start your NextJS app:
+5. On a second terminal, start your game interface:
 
 ```bash
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page.
+Visit your game at: `http://localhost:3000`. You can now play Boring Game on Sepolia testnet and mint real NFTs!
 
 </details>
 
-## Setup RPC specific version
+## Network Configuration
 
 <details>
 
-To ensure the proper functioning of the scaffold-stark with Testnet or Mainnet, your RPC version must be `0.8.0`. This repository contains `.env.example` files, where we provided the default RPC URL for the Starknet Testnet: `RPC_URL_SEPOLIA=https://starknet-sepolia.public.blastapi.io/rpc/v0_8`. Let's verify this RPC version is `0.8.x` by calling a `POST` request in an API platform like `Postman` or `Insommia` . Your API endpoint should be `https://starknet-sepolia.public.blastapi.io/rpc/v0_8` and the body should be:
-
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "starknet_specVersion",
-  "id": 1
-}
-```
-
-You have to paste the endpoint and body in the API platform and click on the `Send` button. If the response is `0.8.x`, then you are good to go. Otherwise, you have to get the correct RPC URL endpoint.
-
-![rpc-version](./packages/nextjs/public/rpc-version.png)
-
-</details>
-
-## Network Configuration Centralization
-
-<details>
-
-By default, Network settings are centralized in `scaffold.config.ts` with all RPC URLs defined in the `rpcProviderUrl` object. We strongly recommend to use environment variables to configure the networks, otherwise the framework will choose a random provider for you.
+By default, Network settings are centralized in `scaffold.config.ts` with all RPC URLs defined in the `rpcProviderUrl` object. We strongly recommend using environment variables to configure the networks.
 
 **How to Change Networks:**
 
@@ -291,39 +304,37 @@ Set these in your `.env` file:
 - `NEXT_PUBLIC_SEPOLIA_PROVIDER_URL`
 - `NEXT_PUBLIC_MAINNET_PROVIDER_URL`
 
-Configuration uses these variables with fallbacks:
-
-```typescript
-"devnet": process.env.NEXT_PUBLIC_DEVNET_PROVIDER_URL || process.env.NEXT_PUBLIC_PROVIDER_URL || "",
-"sepolia": process.env.NEXT_PUBLIC_SEPOLIA_PROVIDER_URL || process.env.NEXT_PUBLIC_PROVIDER_URL || "",
-"mainnet": process.env.NEXT_PUBLIC_MAINNET_PROVIDER_URL || process.env.NEXT_PUBLIC_PROVIDER_URL || ""
-```
-
 </details>
 
-## CLI Usage
+## 🎮 How to Play
+
+1. **Connect Your Wallet**: Click on the wallet connection button in the top-right corner
+2. **Start the Game**: Pay 1 STRK token to begin your boring journey
+3. **Click and Explore**: Start clicking the "Click Me" button to earn points
+4. **Unlock Features**: Reach point thresholds to unlock new sensory elements:
+   - 50 points: Moving Icons with collision physics
+   - 150 points: Lo-fi Music Player for ambient focus
+   - 300 points: Live News Scroller with Starknet updates
+   - 500 points: Rain ASMR for deeper relaxation
+   - 800 points: Thunderstorm Effects for full immersion
+   - 1000+ points: Dragon Ball Collection mini-game
+5. **Collect Achievements**: Unlock special milestones and mint them as NFTs
+6. **Experience the Journey**: From silence to sensory overload—find your perfect balance
+
+## 🛠️ Development Commands
 
 <details>
-Depending on your package manager, substitute the word `COMMAND` with the appropiate one from the list.
 
-```bash
-yarn COMMAND
-npm run COMMAND
-```
-
-This repo prefer yarn as package manager.
-
-Commands:
+Commands for developers working on Boring Game:
 
 | Command          | Description                                                                               |
 | ---------------- | ----------------------------------------------------------------------------------------- |
 | format:check     | (Read only) Batch checks for format inconsistencies for the nextjs and snfoundry codebase |
-| next:check-types | Compile typscript project                                                                 |
+| next:check-types | Compile typescript project                                                                 |
 | next:lint        | Runs next lint                                                                            |
 | prepare          | Install husky's git hooks                                                                 |
-| usage            | Show this text                                                                            |
 
-### CLI Smart Contracts
+### Smart Contract Commands
 
 | Command         | Description                                                                         |
 | --------------- | ----------------------------------------------------------------------------------- |
@@ -334,36 +345,71 @@ Commands:
 | deploy:no-reset | Deploys contract to the configured network without discarding previous deployments. |
 | verify          | Verify Smart Contracts with Walnut                                                  |
 
-### CLI Frontend
+### Frontend Commands
 
 | Command     | Description                                  |
 | ----------- | -------------------------------------------- |
-| start       | Starts the frontend server                   |
+| start       | Starts the game frontend server             |
 | test:nextjs | Runs the nextjs tests                        |
 | vercel      | Deploys app to vercel                        |
 | vercel:yolo | Force deploy app to vercel (ignoring errors) |
 
-## **What's next**
+## **Customization Guide**
 
-- Edit your smart contract `YourContract.cairo` in `packages/snfoundry/contracts/src`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/snfoundry/script-ts/deploy.ts`
-- Edit your smart contract tests in `packages/snfoundry/contracts/src/test`. To run tests use `yarn test`
-- You can write unit tests for your Next.js app! Run them with one the following scripts below.
-  - `yarn test:nextjs` to run regular tests with watch mode
-  - `yarn test:nextjs run` to run regular tests without watch mode
-  - `yarn test:nextjs run --coverage` to run regular tests without watch mode with coverage
+- Edit the game smart contract `BoringGame.cairo` in `packages/snfoundry/contracts/src`
+- Modify the game interface at `packages/nextjs/app/page.tsx` and `packages/nextjs/app/game/page.tsx`
+- Customize deployment scripts in `packages/snfoundry/scripts-ts/deploy.ts`
+- Add new tests in `packages/snfoundry/contracts/src/test`
+- Run tests with `yarn test`
+- Frontend unit tests: `yarn test:nextjs`
 
 </details>
 
-## Documentation
+## 🧪 The Experiment
 
-Visit our [docs](https://docs.scaffoldstark.com/) to learn how to start building with Scaffold-Stark.
+Boring Game serves as a unique social experiment in the web3 space:
 
-To know more about its features, check out our [website](https://scaffoldstark.com)
+### Research Questions
+- How do users interact with "purposeless" blockchain applications?
+- What role does gamification play in crypto adoption?
+- Can repetitive digital actions serve therapeutic purposes?
+- How does the promise of NFT rewards influence behavior?
+- At what point does sensory enhancement become overwhelming?
 
-## Contributing to Scaffold-Stark
+### Data Collection (Anonymous)
+- Session duration and return rate patterns
+- Feature unlock progression speeds
+- Sensory preference clustering
+- Achievement completion rates
+- NFT minting behavior
 
-We welcome contributions to Scaffold-Stark!
+### Community Aspects
+- Share your sensory overload tolerance on social media
+- Compare achievement NFT collections
+- Participate in community discussions about digital wellness
+- Contribute to the experiment by simply playing
 
-Please see [CONTRIBUTING.MD](https://github.com/Scaffold-Stark/scaffold-stark-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-Stark.
+## 🤝 Contributing
+
+We welcome contributions to Boring Game! Whether you want to:
+- Add new sensory elements or ASMR features
+- Improve the achievement system
+- Enhance the smart contract functionality
+- Contribute to the social experiment research
+- Fix bugs or improve performance
+
+Please feel free to submit issues and pull requests.
+
+## 📜 License
+
+MIT License - Feel free to use, modify, and distribute as you see fit.
+
+---
+
+## 🎭 Final Thoughts
+
+In a world obsessed with engagement metrics and dopamine hits, Boring Game asks a simple question: What if we slowed down? What if we found meaning in the mundane? What if the most profound digital experience was simply... being present with boredom?
+
+Start your boring journey today. You might be surprised by what you discover.
+
+**Remember: The game is as boring or as exciting as you make it.** 🌟

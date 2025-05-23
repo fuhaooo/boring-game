@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 
 // 丰富的StarkNet相关新闻
 const STARKNET_NEWS = [
@@ -27,6 +28,8 @@ const STARKNET_NEWS = [
 ];
 
 export const NewsScroller = () => {
+  const { resolvedTheme } = useTheme();
+  const isDarkMode = resolvedTheme === "dark";
   const [news, setNews] = useState<string[]>([]);
   const [isHovering, setIsHovering] = useState(false);
 
@@ -49,7 +52,9 @@ export const NewsScroller = () => {
   // 如果新闻还没加载，显示加载中
   if (news.length === 0) {
     return (
-      <div className="w-full bg-gray-100 rounded-md p-2 overflow-hidden">
+      <div className={`w-full rounded-md p-2 overflow-hidden ${
+        isDarkMode ? 'bg-base-300 text-base-content' : 'bg-gray-100 text-gray-900'
+      }`}>
         <div className="text-center">加载 StarkNet 最新动态...</div>
       </div>
     );
@@ -60,7 +65,9 @@ export const NewsScroller = () => {
 
   return (
     <div
-      className="w-full bg-gray-100 rounded-md p-2 overflow-hidden"
+      className={`w-full rounded-md p-2 overflow-hidden ${
+        isDarkMode ? 'bg-base-300 text-base-content' : 'bg-gray-100 text-gray-900'
+      }`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
