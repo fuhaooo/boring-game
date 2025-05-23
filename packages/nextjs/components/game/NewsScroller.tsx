@@ -2,40 +2,71 @@
 
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import { useLanguage } from "~~/hooks/useLanguage";
 
-// 丰富的StarkNet相关新闻
-const STARKNET_NEWS = [
-  "StarkNet TVL 突破 2 亿美元，创历史新高",
-  "Layer 2 活动量持续上升，StarkNet 日交易量增长 30%",
-  "最新 DeFi 协议在 StarkNet 上线，TVL 迅速攀升",
-  "StarkNet 推出新的开发者工具包，简化 dApp 构建流程",
-  "重大更新：StarkNet 即将发布新版本，性能提升 50%",
-  "NFT 交易量在 StarkNet 生态中呈爆发式增长",
-  "著名 DAO 宣布迁移至 StarkNet，看好其扩容能力",
-  "StarkNet 基金会宣布 1000 万美元生态补助计划",
-  "Starkware 发布 Cairo 2.0，提升开发效率",
-  "StarkNet 链上游戏用户激增，游戏 DApp 交易量创新高",
-  "以太坊核心开发者称赞 StarkNet ZK-Rollup 技术",
-  "StarkNet 生态代币 STRK 价格突破历史高点",
-  "知名交易所宣布支持 StarkNet 原生代币存款和提款",
-  "StarkNet 跨链通信协议上线，连接多个主流区块链",
-  "开发者报告：StarkNet 应用部署成本降低 40%",
-  "StarkNet 年度开发者大会将在巴黎举行，门票售罄",
-  "知名去中心化交易所在 StarkNet 部署，用户体验大幅提升",
-  "StarkNet 钱包月活用户突破 100 万，社区持续增长",
-  "StarkNet 与 Layer 1 集成更深，提升数据可用性",
-  "游戏巨头宣布在 StarkNet 构建 Web3 游戏",
+// 中文StarkNet相关新闻
+const STARKNET_NEWS_ZH = [
+  "StarkNet TVL 突破 6.29 亿美元，成为最大 ZK-Rollup 网络",
+  "Layer 2 去中心化进程加速，StarkNet 安全性显著提升",
+  "最新收益协议 Forge Yields Alpha 上线，吸引用户增长",
+  "StarkNet 推出空投检查工具，奖励早期贡献者，吸引新用户",
+  "重大更新：StarkNet 集成比特币，连接以太坊与 BTC",
+  "StarkNet 生态项目激增，2024 年增长 168%",
+  "StarkNet 基金会公布 STRK 质押 v2 计划，提升网络安全",
+  "StarkNet Stack 公开上线，开发者可定制 ZK 链",
+  "StarkNet 与 Alt Layer 合作，简化 Rollup 部署",
+  "STRK 代币解锁即将来临，市场关注流动性变化",
+  "以太坊与比特币开发者看好 StarkNet 执行层能力",
+  "StarkNet 生态代币 STRK 或因新功能迎来价格波动",
+  "知名钱包 Xverse 支持 StarkNet，推动比特币 DeFi",
+  "StarkNet 跨链桥接能力增强，连接多链生态",
+  "开发者报告：StarkNet 部署成本持续优化",
+  "StarkNet 社区活动升温，开发者参与度创新高",
+  "StarkNet 去中心化交易所优化用户体验",
+  "StarkNet 用户基础扩大，生态活跃度攀升",
+  "StarkNet 加深与 Layer 1 的集成，提升数据效率",
+  "区块链技术巨头关注 StarkNet 的 ZK 潜力",
+];
+
+// 英文StarkNet相关新闻
+const STARKNET_NEWS_EN = [
+  "StarkNet TVL reaches $629 million, becomes largest ZK-Rollup network",
+  "Layer 2 decentralization accelerates, StarkNet security significantly improved",
+  "Latest yield protocol Forge Yields Alpha launches, attracting user growth",
+  "StarkNet launches airdrop checker tool, rewards early contributors, attracts new users",
+  "Major update: StarkNet integrates Bitcoin, connecting Ethereum with BTC",
+  "StarkNet ecosystem projects surge, 168% growth in 2024",
+  "StarkNet Foundation announces STRK staking v2 plan, enhancing network security",
+  "StarkNet Stack goes public, developers can customize ZK chains",
+  "StarkNet partners with Alt Layer, simplifying Rollup deployment",
+  "STRK token unlock approaching, market focuses on liquidity changes",
+  "Ethereum and Bitcoin developers optimistic about StarkNet execution layer",
+  "StarkNet ecosystem token STRK may see price volatility due to new features",
+  "Popular wallet Xverse supports StarkNet, promoting Bitcoin DeFi",
+  "StarkNet cross-chain bridging capabilities enhanced, connecting multi-chain ecosystems",
+  "Developer report: StarkNet deployment costs continuously optimized",
+  "StarkNet community activities heat up, developer participation reaches new highs",
+  "StarkNet decentralized exchanges optimize user experience",
+  "StarkNet user base expands, ecosystem activity climbs",
+  "StarkNet deepens integration with Layer 1, improving data efficiency",
+  "Blockchain technology giants focus on StarkNet's ZK potential",
 ];
 
 export const NewsScroller = () => {
   const { resolvedTheme } = useTheme();
+  const { t, language } = useLanguage();
   const isDarkMode = resolvedTheme === "dark";
   const [news, setNews] = useState<string[]>([]);
   const [isHovering, setIsHovering] = useState(false);
 
-  // 立即加载新闻
+  // 根据当前语言获取新闻内容
+  const getCurrentNews = () => {
+    return language === 'en' ? STARKNET_NEWS_EN : STARKNET_NEWS_ZH;
+  };
+
+  // 立即加载新闻并监听语言变化
   useEffect(() => {
-    setNews(STARKNET_NEWS);
+    setNews(getCurrentNews());
 
     // 新闻轮换
     const interval = setInterval(() => {
@@ -47,15 +78,23 @@ export const NewsScroller = () => {
     }, 10000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [language]); // 添加language依赖
 
   // 如果新闻还没加载，显示加载中
   if (news.length === 0) {
     return (
-      <div className={`w-full rounded-md p-2 overflow-hidden ${
-        isDarkMode ? 'bg-base-300 text-base-content' : 'bg-gray-100 text-gray-900'
-      }`}>
-        <div className="text-center">加载 StarkNet 最新动态...</div>
+      <div
+        className={`w-full rounded-md p-2 overflow-hidden ${
+          isDarkMode
+            ? "bg-base-300 text-base-content"
+            : "bg-gray-100 text-gray-900"
+        }`}
+      >
+        <div className="text-center">
+          {language === 'en' 
+            ? 'Loading StarkNet latest updates...' 
+            : '加载 StarkNet 最新动态...'}
+        </div>
       </div>
     );
   }
@@ -66,7 +105,9 @@ export const NewsScroller = () => {
   return (
     <div
       className={`w-full rounded-md p-2 overflow-hidden ${
-        isDarkMode ? 'bg-base-300 text-base-content' : 'bg-gray-100 text-gray-900'
+        isDarkMode
+          ? "bg-base-300 text-base-content"
+          : "bg-gray-100 text-gray-900"
       }`}
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}

@@ -733,7 +733,9 @@ const BoringGame = () => {
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center min-h-screen p-4 relative ${isDarkMode ? 'bg-base-100' : 'bg-slate-50'}`}>
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen p-4 relative ${isDarkMode ? "bg-base-100" : "bg-slate-50"}`}
+    >
       {/* STRK授权弹窗 */}
       <ApprovalModal />
 
@@ -797,7 +799,9 @@ const BoringGame = () => {
             {t("Start Game")} (1 STRK)
           </button>
 
-          <div className={`mt-8 max-w-2xl p-6 rounded-lg shadow ${isDarkMode ? 'bg-base-200 text-base-content' : 'bg-white text-gray-900'}`}>
+          <div
+            className={`mt-8 max-w-2xl p-6 rounded-lg shadow ${isDarkMode ? "bg-base-200 text-base-content" : "bg-white text-gray-900"}`}
+          >
             <h3 className="text-xl font-semibold mb-3">{t("Game Guide")}</h3>
             <ul className="list-disc pl-6 space-y-2">
               <li>{t('Click "Start Game" button requires 1 STRK token')}</li>
@@ -886,18 +890,22 @@ const BoringGame = () => {
             <button
               onClick={handleClick}
               className={`border rounded-md py-3 px-10 text-xl mb-6 transition ${
-                isDarkMode 
-                  ? 'border-gray-600 bg-base-200 text-base-content hover:bg-base-300' 
-                  : 'border-gray-300 bg-white text-gray-900 hover:bg-gray-100'
+                isDarkMode
+                  ? "border-gray-600 bg-base-200 text-base-content hover:bg-base-300"
+                  : "border-gray-300 bg-white text-gray-900 hover:bg-gray-100"
               }`}
             >
               {t("Click Me")}
             </button>
 
-            <div className={`text-5xl font-bold mb-1 ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>
+            <div
+              className={`text-5xl font-bold mb-1 ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+            >
               {score} {t("stimulation")}
             </div>
-            <div className={`text-xl ${isDarkMode ? 'text-base-content opacity-80' : 'text-gray-600'}`}>
+            <div
+              className={`text-xl ${isDarkMode ? "text-base-content opacity-80" : "text-gray-600"}`}
+            >
               {clicksPerSecond} {t("stimulation per second")}
             </div>
           </div>
@@ -909,8 +917,8 @@ const BoringGame = () => {
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 score >= UNLOCK_THRESHOLDS.movingIcon ||
                 unlockedFeatures.movingIcon
-                  ? isDarkMode 
-                    ? "border-gray-600 bg-base-200" 
+                  ? isDarkMode
+                    ? "border-gray-600 bg-base-200"
                     : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
@@ -946,14 +954,18 @@ const BoringGame = () => {
                     className="rounded-full"
                   />
                 </div>
-                <span className={`text-xs text-center ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
                   {movingIconCount < 10
                     ? t("Moving Icon")
                     : isMovingIconUpgraded
                       ? t("Upgraded")
                       : t("Upgrade Icon")}
                 </span>
-                <span className={`text-xs ${isDarkMode ? 'text-base-content opacity-60' : 'text-gray-500'}`}>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
                   {movingIconCount < 10
                     ? `${UNLOCK_THRESHOLDS.movingIcon}${t("points")}`
                     : isMovingIconUpgraded
@@ -967,8 +979,8 @@ const BoringGame = () => {
             <div
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 availableComponents.lofiPlayer
-                  ? isDarkMode 
-                    ? "border-gray-600 bg-base-200" 
+                  ? isDarkMode
+                    ? "border-gray-600 bg-base-200"
                     : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
@@ -999,8 +1011,14 @@ const BoringGame = () => {
                     <path d="M9.297 15.75c-.35.31-.79.48-1.26.48s-.91-.17-1.26-.48c-.5-.44-.75-1.06-.75-1.95s.25-1.51.75-1.95c.35-.31.79-.48 1.26-.48s.91.17 1.26.48c.5.44.75 1.06.75 1.95S9.797 15.31 9.297 15.75zM6.75 8.265c-.5.44-.75 1.06-.75 1.95s.25 1.51.75 1.95c.35.31.79.48 1.26.48s.91-.17 1.26-.48c.5-.44.75-1.06.75-1.95s-.25-1.51-.75-1.95c-.35-.31-.79-.48-1.26-.48S7.1 7.955 6.75 8.265zM10.94 20.31c1.1.49 2.25.74 3.44.74c4.07 0 7.38-3.14 7.38-7 0-3.87-3.31-7-7.38-7s-7.38 3.13-7.38 7c0 2.12.99 4.03 2.53 5.31C10.16 24.54 15 23.35 15 23.35S10.84 19.77 10.94 20.31zM19.76 11.05c0 2.97-2.42 5.38-5.38 5.38s-5.38-2.41-5.38-5.38s2.42-5.38 5.38-5.38S19.76 8.08 19.76 11.05zM5.58 22.39c-.13.12-.28.18-.44.18c-.34 0-.62-.28-.62V13.8h-.02c0-.14.06-.28.16-.37c.35-.32.64-.88.64-1.39s-.29-1.08-.64-1.39c-.1-.09-.16-.23-.16-.37V2.05c0-.34.28-.62.62-.62c.16 0 .31.06.44.18l3.31 3.31c.18.18.18.46 0 .64L5.58 8.84c-.18.18-.18.46 0 .64l3.29 3.29c.18.18.18.46 0 .64L5.58 16.7c-.18.18-.18.46 0 .64L8.87 20.63c.18.18.18.46 0 .64L5.58 22.39z" />
                   </svg>
                 </div>
-                <span className={`text-xs text-center ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>{t("Music Player")}</span>
-                <span className={`text-xs ${isDarkMode ? 'text-base-content opacity-60' : 'text-gray-500'}`}>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {t("Music Player")}
+                </span>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
                   {UNLOCK_THRESHOLDS.lofiPlayer}
                   {t("points")}
                 </span>
@@ -1011,8 +1029,8 @@ const BoringGame = () => {
             <div
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 availableComponents.newsScroller
-                  ? isDarkMode 
-                    ? "border-gray-600 bg-base-200" 
+                  ? isDarkMode
+                    ? "border-gray-600 bg-base-200"
                     : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
@@ -1047,8 +1065,14 @@ const BoringGame = () => {
                     />
                   </svg>
                 </div>
-                <span className={`text-xs text-center ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>{t("News Scroll")}</span>
-                <span className={`text-xs ${isDarkMode ? 'text-base-content opacity-60' : 'text-gray-500'}`}>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {t("News Scroll")}
+                </span>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
                   {UNLOCK_THRESHOLDS.newsScroller}
                   {t("points")}
                 </span>
@@ -1059,8 +1083,8 @@ const BoringGame = () => {
             <div
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 availableComponents.rainEffect
-                  ? isDarkMode 
-                    ? "border-gray-600 bg-base-200" 
+                  ? isDarkMode
+                    ? "border-gray-600 bg-base-200"
                     : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
@@ -1092,8 +1116,14 @@ const BoringGame = () => {
                     <path d="M19 4h-1V2h-2v2h-2V2h-2v2H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm0-4c-.83 0-1.5-.67-1.5-1.5S13.67 6 14.5 6s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" />
                   </svg>
                 </div>
-                <span className={`text-xs text-center ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>{t("Rain ASMR")}</span>
-                <span className={`text-xs ${isDarkMode ? 'text-base-content opacity-60' : 'text-gray-500'}`}>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {t("Rain ASMR")}
+                </span>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
                   {UNLOCK_THRESHOLDS.rainEffect}
                   {t("points")}
                 </span>
@@ -1104,8 +1134,8 @@ const BoringGame = () => {
             <div
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 availableComponents.thunderstorm
-                  ? isDarkMode 
-                    ? "border-gray-600 bg-base-200" 
+                  ? isDarkMode
+                    ? "border-gray-600 bg-base-200"
                     : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
@@ -1140,8 +1170,14 @@ const BoringGame = () => {
                     />
                   </svg>
                 </div>
-                <span className={`text-xs text-center ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>{t("Thunderstorm")}</span>
-                <span className={`text-xs ${isDarkMode ? 'text-base-content opacity-60' : 'text-gray-500'}`}>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {t("Thunderstorm")}
+                </span>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
                   {UNLOCK_THRESHOLDS.thunderstorm}
                   {t("points")}
                 </span>
@@ -1152,8 +1188,8 @@ const BoringGame = () => {
             <div
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 availableComponents.dragonBall
-                  ? isDarkMode 
-                    ? "border-gray-600 bg-base-200" 
+                  ? isDarkMode
+                    ? "border-gray-600 bg-base-200"
                     : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
@@ -1189,8 +1225,14 @@ const BoringGame = () => {
                     className="object-contain"
                   />
                 </div>
-                <span className={`text-xs text-center ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>{t("Dragon Ball")}</span>
-                <span className={`text-xs ${isDarkMode ? 'text-base-content opacity-60' : 'text-gray-500'}`}>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {t("Dragon Ball")}
+                </span>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
                   {dragonBalls.length < 7
                     ? `${
                         isDragonBallUpgraded
@@ -1204,7 +1246,9 @@ const BoringGame = () => {
 
             {/* 龙珠升级选项 - 只在完成龙珠任务后显示 */}
             {hasCompletedDragonBallQuest && !isDragonBallUpgraded && (
-              <div className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 border-orange-300 ${isDarkMode ? 'bg-base-200' : 'bg-white'}`}>
+              <div
+                className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 border-orange-300 ${isDarkMode ? "bg-base-200" : "bg-white"}`}
+              >
                 <button
                   onClick={upgradeDragonBall}
                   disabled={score < 5000}
@@ -1220,10 +1264,14 @@ const BoringGame = () => {
                       <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z" />
                     </svg>
                   </div>
-                  <span className={`text-xs text-center ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>
+                  <span
+                    className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                  >
                     {t("Upgrade Dragon Balls (5000 points)").split("(")[0]}
                   </span>
-                  <span className={`text-xs ${isDarkMode ? 'text-base-content opacity-60' : 'text-gray-500'}`}>
+                  <span
+                    className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                  >
                     5000{t("points")}
                   </span>
                 </button>
@@ -1246,7 +1294,11 @@ const BoringGame = () => {
                       className="object-contain"
                     />
                   </div>
-                  <span className={`text-xs text-center ${isDarkMode ? 'text-gray-900' : 'text-gray-900'}`}>{t("Upgraded")}</span>
+                  <span
+                    className={`text-xs text-center ${isDarkMode ? "text-gray-900" : "text-gray-900"}`}
+                  >
+                    {t("Upgraded")}
+                  </span>
                   <span className="text-xs text-green-500">
                     {t("Sound Effect")}
                   </span>
@@ -1259,7 +1311,9 @@ const BoringGame = () => {
           {unlockedAchievements.length > 0 && (
             <div className="mt-16 w-full max-w-lg">
               <div className="flex justify-between items-center mb-4">
-                <h2 className={`text-lg font-bold ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>
+                <h2
+                  className={`text-lg font-bold ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
                   {t("Unlocked Achievements")}
                 </h2>
               </div>
@@ -1268,9 +1322,9 @@ const BoringGame = () => {
                   <div
                     key={achievement.id}
                     className={`border-2 rounded-lg p-4 flex flex-col items-center ${
-                      isDarkMode 
-                        ? 'border-gray-600 bg-base-200 text-base-content' 
-                        : 'border-gray-200 bg-white text-gray-900'
+                      isDarkMode
+                        ? "border-gray-600 bg-base-200 text-base-content"
+                        : "border-gray-200 bg-white text-gray-900"
                     }`}
                   >
                     <div className="text-2xl mb-2">
@@ -1279,7 +1333,9 @@ const BoringGame = () => {
                     <h3 className="font-semibold text-sm">
                       {achievement.name}
                     </h3>
-                    <p className={`text-xs mb-2 ${isDarkMode ? 'text-base-content opacity-80' : 'text-gray-600'}`}>
+                    <p
+                      className={`text-xs mb-2 ${isDarkMode ? "text-base-content opacity-80" : "text-gray-600"}`}
+                    >
                       {achievement.description}
                     </p>
                     <button
@@ -1298,12 +1354,20 @@ const BoringGame = () => {
           {dragonBalls.length > 0 && (
             <div className="mt-8 w-full max-w-lg">
               <div className="flex justify-between items-center mb-2">
-                <h2 className={`text-lg font-bold ${isDarkMode ? 'text-base-content' : 'text-gray-900'}`}>{t("Dragon Ball Count")}</h2>
-                <span className={`text-sm ${isDarkMode ? 'text-base-content opacity-80' : 'text-gray-600'}`}>
+                <h2
+                  className={`text-lg font-bold ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {t("Dragon Ball Count")}
+                </h2>
+                <span
+                  className={`text-sm ${isDarkMode ? "text-base-content opacity-80" : "text-gray-600"}`}
+                >
                   {dragonBalls.length}/7
                 </span>
               </div>
-              <div className={`flex gap-2 p-3 rounded-lg justify-center ${isDarkMode ? 'bg-base-300' : 'bg-gray-100'}`}>
+              <div
+                className={`flex gap-2 p-3 rounded-lg justify-center ${isDarkMode ? "bg-base-300" : "bg-gray-100"}`}
+              >
                 {Array.from({ length: 7 }, (_, i) => i + 1).map((ball) => {
                   const collected = dragonBalls.includes(ball);
                   const ballColors: { [key: number]: string } = {
@@ -1320,7 +1384,11 @@ const BoringGame = () => {
                     <div
                       key={ball}
                       className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        collected ? ballColors[ball] : isDarkMode ? "bg-gray-600" : "bg-gray-300"
+                        collected
+                          ? ballColors[ball]
+                          : isDarkMode
+                            ? "bg-gray-600"
+                            : "bg-gray-300"
                       } ${collected ? "animate-pulse" : ""}`}
                     >
                       <span
