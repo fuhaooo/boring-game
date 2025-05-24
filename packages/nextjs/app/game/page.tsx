@@ -666,7 +666,7 @@ const BoringGame = () => {
     audio.volume = 0.3;
     audio.load(); // 预加载
     setClickAudio(audio);
-    
+
     return () => {
       // 清理
       if (clickAudio) {
@@ -681,15 +681,17 @@ const BoringGame = () => {
     if (gameStarted) {
       // 根据是否升级决定增加的分数
       const pointsToAdd = isClickUpgraded ? 2 : 1;
-      
+
       setScore((prev) => prev + pointsToAdd);
       setTotalClicks((prev) => prev + pointsToAdd);
-      
+
       // 如果已升级，播放音效
       if (isClickUpgraded && clickAudio) {
         // 重置并播放
         clickAudio.currentTime = 0;
-        clickAudio.play().catch(err => console.error("Error playing audio:", err));
+        clickAudio
+          .play()
+          .catch((err) => console.error("Error playing audio:", err));
       }
     }
   };
@@ -1074,11 +1076,11 @@ const BoringGame = () => {
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 score >= 200 || isClickUpgraded
                   ? isDarkMode
-                    ? isClickUpgraded 
-                      ? "border-green-400 bg-base-200" 
+                    ? isClickUpgraded
+                      ? "border-green-400 bg-base-200"
                       : "border-gray-600 bg-base-200"
-                    : isClickUpgraded 
-                      ? "border-green-400 bg-white" 
+                    : isClickUpgraded
+                      ? "border-green-400 bg-white"
                       : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
@@ -1094,15 +1096,19 @@ const BoringGame = () => {
                 onClick={purchaseClickUpgrade}
                 disabled={score < 200 || isClickUpgraded}
                 className={`w-full h-full flex flex-col items-center justify-center p-2 ${
-                  score < 200 && !isClickUpgraded ? "opacity-50 cursor-not-allowed" : ""
+                  score < 200 && !isClickUpgraded
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
                 }`}
               >
-                <div className={`w-10 h-10 flex items-center justify-center ${isClickUpgraded ? 'bg-green-100' : 'bg-yellow-100'} rounded-full mb-1`}>
+                <div
+                  className={`w-10 h-10 flex items-center justify-center ${isClickUpgraded ? "bg-green-100" : "bg-yellow-100"} rounded-full mb-1`}
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className={`w-6 h-6 ${isClickUpgraded ? 'text-green-600' : 'text-yellow-600'}`}
+                    className={`w-6 h-6 ${isClickUpgraded ? "text-green-600" : "text-yellow-600"}`}
                   >
                     <path d="M8 12.052c1.995 0 3.5-1.505 3.5-3.5s-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5 1.505 3.5 3.5 3.5zM9 13H7c-2.757 0-5 2.243-5 5v1h12v-1c0-2.757-2.243-5-5-5zm11.895-4.553l-2.543 2.105.951 3.448-3.175-1.164L12.953 15l.951-3.448-2.543-2.104 3.346-.287L15.953 6l1.245 3.161 3.697.286z" />
                   </svg>
