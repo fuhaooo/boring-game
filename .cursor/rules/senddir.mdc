@@ -1,0 +1,5 @@
+---
+description: Trigger "ls" at end of conversation (for manual control)
+globs: 
+alwaysApply: false
+---

@@ -52,8 +52,8 @@ const NFT_IMAGE_URL =
   "https://blush-rainy-constrictor-734.mypinata.cloud/ipfs/bafybeiciojjygr67dngemgpp3us5dvy7gpze3weuw2qqeeh4lfmpxizrru";
 
 const BoringGame = () => {
-  const { address } = useAccount();
   const { t } = useLanguage();
+  const { address } = useAccount();
   const { resolvedTheme } = useTheme();
   const isDarkMode = resolvedTheme === "dark";
   const [score, setScore] = useState(0);
@@ -67,6 +67,8 @@ const BoringGame = () => {
   const [totalClicks, setTotalClicks] = useState(0); // 总点击次数
   const [lastClickTime, setLastClickTime] = useState(Date.now());
   const [isMovingIconUpgraded, setIsMovingIconUpgraded] = useState(false); // 是否已升级移动图标
+  const [isClickUpgraded, setIsClickUpgraded] = useState(false); // 新增：Click升级状态
+  const [clickAudio, setClickAudio] = useState<HTMLAudioElement | null>(null); // 音效对象
 
   // STRK授权相关状态
   const [checkingAllowance, setCheckingAllowance] = useState(false);
@@ -657,11 +659,38 @@ const BoringGame = () => {
     }
   };
 
+  // 预加载音效
+  useEffect(() => {
+    // 创建音频对象并预加载
+    const audio = new Audio("/sounds/click.mp3");
+    audio.volume = 0.3;
+    audio.load(); // 预加载
+    setClickAudio(audio);
+    
+    return () => {
+      // 清理
+      if (clickAudio) {
+        clickAudio.pause();
+        clickAudio.src = "";
+      }
+    };
+  }, []);
+
   // 点击按钮增加分数
   const handleClick = () => {
     if (gameStarted) {
-      setScore((prev) => prev + 1);
-      setTotalClicks((prev) => prev + 1);
+      // 根据是否升级决定增加的分数
+      const pointsToAdd = isClickUpgraded ? 2 : 1;
+      
+      setScore((prev) => prev + pointsToAdd);
+      setTotalClicks((prev) => prev + pointsToAdd);
+      
+      // 如果已升级，播放音效
+      if (isClickUpgraded && clickAudio) {
+        // 重置并播放
+        clickAudio.currentTime = 0;
+        clickAudio.play().catch(err => console.error("Error playing audio:", err));
+      }
     }
   };
 
@@ -729,6 +758,17 @@ const BoringGame = () => {
     if (score >= UNLOCK_THRESHOLDS.thunderstorm) {
       setScore((prev) => prev - UNLOCK_THRESHOLDS.thunderstorm);
       setHasThunderstorm(true);
+    }
+  };
+
+  // 购买Click升级
+  const purchaseClickUpgrade = () => {
+    // 检查积分是否足够
+    if (score >= 200 && !isClickUpgraded) {
+      // 扣除积分
+      setScore((prev) => prev - 200);
+      // 设置为已升级
+      setIsClickUpgraded(true);
     }
   };
 
@@ -891,8 +931,12 @@ const BoringGame = () => {
               onClick={handleClick}
               className={`border rounded-md py-3 px-10 text-xl mb-6 transition ${
                 isDarkMode
-                  ? "border-gray-600 bg-base-200 text-base-content hover:bg-base-300"
-                  : "border-gray-300 bg-white text-gray-900 hover:bg-gray-100"
+                  ? isClickUpgraded
+                    ? "border-green-400 bg-green-700 text-white hover:bg-green-600"
+                    : "border-gray-600 bg-base-200 text-base-content hover:bg-base-300"
+                  : isClickUpgraded
+                    ? "border-green-400 bg-green-500 text-white hover:bg-green-400"
+                    : "border-gray-300 bg-white text-gray-900 hover:bg-gray-100"
               }`}
             >
               {t("Click Me")}
@@ -1021,6 +1065,57 @@ const BoringGame = () => {
                 >
                   {UNLOCK_THRESHOLDS.lofiPlayer}
                   {t("points")}
+                </span>
+              </button>
+            </div>
+
+            {/* Click升级购买选项 */}
+            <div
+              className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
+                score >= 200 || isClickUpgraded
+                  ? isDarkMode
+                    ? isClickUpgraded 
+                      ? "border-green-400 bg-base-200" 
+                      : "border-gray-600 bg-base-200"
+                    : isClickUpgraded 
+                      ? "border-green-400 bg-white" 
+                      : "border-gray-200 bg-white"
+                  : isDarkMode
+                    ? "border-gray-700 bg-base-300 opacity-60"
+                    : "border-gray-200 bg-gray-50 opacity-60"
+              }`}
+            >
+              {isClickUpgraded && (
+                <div className="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs z-10">
+                  1
+                </div>
+              )}
+              <button
+                onClick={purchaseClickUpgrade}
+                disabled={score < 200 || isClickUpgraded}
+                className={`w-full h-full flex flex-col items-center justify-center p-2 ${
+                  score < 200 && !isClickUpgraded ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                <div className={`w-10 h-10 flex items-center justify-center ${isClickUpgraded ? 'bg-green-100' : 'bg-yellow-100'} rounded-full mb-1`}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className={`w-6 h-6 ${isClickUpgraded ? 'text-green-600' : 'text-yellow-600'}`}
+                  >
+                    <path d="M8 12.052c1.995 0 3.5-1.505 3.5-3.5s-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5 1.505 3.5 3.5 3.5zM9 13H7c-2.757 0-5 2.243-5 5v1h12v-1c0-2.757-2.243-5-5-5zm11.895-4.553l-2.543 2.105.951 3.448-3.175-1.164L12.953 15l.951-3.448-2.543-2.104 3.346-.287L15.953 6l1.245 3.161 3.697.286z" />
+                  </svg>
+                </div>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {isClickUpgraded ? t("Upgraded Click") : t("Upgrade Click")}
+                </span>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
+                  {isClickUpgraded ? t("+2 points/click") : "200" + t("points")}
                 </span>
               </button>
             </div>

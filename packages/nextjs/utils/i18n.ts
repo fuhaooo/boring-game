@@ -65,6 +65,9 @@ export const translations = {
     // Game page - Purchase options
     "Moving Icon": "Moving Icon",
     "Upgrade Icon": "Upgrade Icon",
+    "Upgrade Click": "Upgrade Click",
+    "Upgraded Click": "Upgraded Click",
+    "+2 points/click": "+2 points/click",
     Upgraded: "Upgraded",
     points: "points",
     "+5 points/hit": "+5 points/hit",
@@ -178,6 +181,9 @@ export const translations = {
     // Game page - Purchase options
     "Moving Icon": "移动图标",
     "Upgrade Icon": "升级图标",
+    "Upgrade Click": "升级点击",
+    "Upgraded Click": "已升级点击",
+    "+2 points/click": "+2积分/次点击",
     Upgraded: "已升级",
     points: "分",
     "+5 points/hit": "+5积分/次",
