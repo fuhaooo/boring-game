@@ -757,8 +757,8 @@ const BoringGame = () => {
   // 点击按钮增加分数
   const handleClick = () => {
     if (gameStarted) {
-      // 根据是否升级决定增加的分数
-      const pointsToAdd = isClickUpgraded ? 2 : 1;
+      // 根据Click Up等级决定增加的分数
+      const pointsToAdd = clickUpgradeLevel === 2 ? 3 : (isClickUpgraded ? 2 : 1);
 
       setScore((prev) => prev + pointsToAdd);
       setTotalClicks((prev) => prev + pointsToAdd);
@@ -770,6 +770,35 @@ const BoringGame = () => {
         clickAudio
           .play()
           .catch((err) => console.error("Error playing audio:", err));
+      }
+
+      // 如果是2级升级，添加动画效果
+      if (clickUpgradeLevel === 2) {
+        const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
+        // 使用更安全的方式获取Click Me按钮
+        const clickMeButton = document.querySelector('button[data-click-me="true"]');
+        
+        if (clickMeButton) {
+          const buttonRect = clickMeButton.getBoundingClientRect();
+          // 在按钮上方随机位置显示动画
+          const x = buttonRect.left + buttonRect.width/2 + (Math.random() * 40 - 20);
+          const y = buttonRect.top - 20;
+          
+          const newAnimation = {
+            id: nextAnimationId,
+            x,
+            y,
+            color: randomColor
+          };
+          
+          setClickAnimations(prev => [...prev, newAnimation]);
+          setNextAnimationId(prev => prev + 1);
+          
+          // 2秒后移除动画
+          setTimeout(() => {
+            setClickAnimations(prev => prev.filter(anim => anim.id !== newAnimation.id));
+          }, 2000);
+        }
       }
     }
   };
@@ -844,11 +873,15 @@ const BoringGame = () => {
   // 购买Click升级
   const purchaseClickUpgrade = () => {
     // 检查积分是否足够
-    if (score >= 200 && !isClickUpgraded) {
-      // 扣除积分
+    if (!isClickUpgraded && score >= 200) {
+      // 购买第一级升级
       setScore((prev) => prev - 200);
-      // 设置为已升级
       setIsClickUpgraded(true);
+      setClickUpgradeLevel(1);
+    } else if (isClickUpgraded && clickUpgradeLevel === 1 && score >= 1500) {
+      // 购买第二级升级
+      setScore((prev) => prev - 1500);
+      setClickUpgradeLevel(2);
     }
   };
 
@@ -919,6 +952,11 @@ const BoringGame = () => {
       }, 5000);
     }
   };
+
+  // 添加新的状态变量用于跟踪Click Up等级
+  const [clickUpgradeLevel, setClickUpgradeLevel] = useState(0); // 0表示未升级，1表示1级，2表示2级
+  const [clickAnimations, setClickAnimations] = useState<{id: number; x: number; y: number; color: string}[]>([]);
+  const [nextAnimationId, setNextAnimationId] = useState(0);
 
   return (
     <div
@@ -1099,6 +1137,7 @@ const BoringGame = () => {
           {/* 点击按钮和计分区域 */}
           <div className="text-center mb-12 mt-16">
             <button
+              data-click-me="true"
               onClick={handleClick}
               className={`border rounded-md py-3 px-10 text-xl mb-6 transition ${
                 isDarkMode
@@ -1217,13 +1256,13 @@ const BoringGame = () => {
                 className="w-full h-full flex flex-col items-center justify-center p-2"
               >
                 <div className="w-10 h-10 flex items-center justify-center bg-indigo-100 rounded-full mb-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 24 24" 
+                    fill="currentColor" 
                     className="w-6 h-6 text-indigo-600"
                   >
-                    <path d="M9.297 15.75c-.35.31-.79.48-1.26.48s-.91-.17-1.26-.48c-.5-.44-.75-1.06-.75-1.95s.25-1.51.75-1.95c.35-.31.79-.48 1.26-.48s.91.17 1.26.48c.5.44.75 1.06.75 1.95S9.797 15.31 9.297 15.75zM6.75 8.265c-.5.44-.75 1.06-.75 1.95s.25 1.51.75 1.95c.35.31.79.48 1.26.48s.91-.17 1.26-.48c.5-.44.75-1.06.75-1.95s-.25-1.51-.75-1.95c-.35-.31-.79-.48-1.26-.48S7.1 7.955 6.75 8.265zM10.94 20.31c1.1.49 2.25.74 3.44.74c4.07 0 7.38-3.14 7.38-7 0-3.87-3.31-7-7.38-7s-7.38 3.13-7.38 7c0 2.12.99 4.03 2.53 5.31C10.16 24.54 15 23.35 15 23.35S10.84 19.77 10.94 20.31zM19.76 11.05c0 2.97-2.42 5.38-5.38 5.38s-5.38-2.41-5.38-5.38s2.42-5.38 5.38-5.38S19.76 8.08 19.76 11.05zM5.58 22.39c-.13.12-.28.18-.44.18c-.34 0-.62-.28-.62V13.8h-.02c0-.14.06-.28.16-.37c.35-.32.64-.88.64-1.39s-.29-1.08-.64-1.39c-.1-.09-.16-.23-.16-.37V2.05c0-.34.28-.62.62-.62c.16 0 .31.06.44.18l3.31 3.31c.18.18.18.46 0 .64L5.58 8.84c-.18.18-.18.46 0 .64l3.29 3.29c.18.18.18.46 0 .64L5.58 16.7c-.18.18-.18.46 0 .64L8.87 20.63c.18.18.18.46 0 .64L5.58 22.39z" />
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
                   </svg>
                 </div>
                 <span
@@ -1245,52 +1284,61 @@ const BoringGame = () => {
               className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
                 score >= 200 || isClickUpgraded
                   ? isDarkMode
-                    ? isClickUpgraded
-                      ? "border-green-400 bg-base-200"
-                      : "border-gray-600 bg-base-200"
-                    : isClickUpgraded
-                      ? "border-green-400 bg-white"
-                      : "border-gray-200 bg-white"
+                    ? "border-gray-600 bg-base-200"
+                    : "border-gray-200 bg-white"
                   : isDarkMode
                     ? "border-gray-700 bg-base-300 opacity-60"
                     : "border-gray-200 bg-gray-50 opacity-60"
-              }`}
+              } ${isClickUpgraded ? "border-green-400 bg-gradient-to-r from-green-50 to-emerald-50" : ""}`}
             >
               {isClickUpgraded && (
-                <div className="absolute -top-1 -right-1 bg-green-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs z-10">
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs z-10">
                   1
                 </div>
               )}
               <button
                 onClick={purchaseClickUpgrade}
-                disabled={score < 200 || isClickUpgraded}
-                className={`w-full h-full flex flex-col items-center justify-center p-2 ${
-                  score < 200 && !isClickUpgraded
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }`}
+                disabled={
+                  (clickUpgradeLevel === 0 && score < 200) || 
+                  (clickUpgradeLevel === 1 && score < 1500) || 
+                  clickUpgradeLevel === 2
+                }
+                className="w-full h-full flex flex-col items-center justify-center p-2"
               >
                 <div
-                  className={`w-10 h-10 flex items-center justify-center ${isClickUpgraded ? "bg-green-100" : "bg-yellow-100"} rounded-full mb-1`}
+                  className={`w-10 h-10 flex items-center justify-center rounded-full mb-1 
+                  ${clickUpgradeLevel === 2 
+                    ? "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-1" 
+                    : clickUpgradeLevel === 1 
+                      ? "bg-gradient-to-r from-green-400 to-emerald-500 p-1" 
+                      : "bg-green-100"}`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     fill="currentColor"
-                    className={`w-6 h-6 ${isClickUpgraded ? "text-green-600" : "text-yellow-600"}`}
+                    className={`w-6 h-6 ${clickUpgradeLevel > 0 ? "text-white" : "text-green-600"}`}
                   >
-                    <path d="M8 12.052c1.995 0 3.5-1.505 3.5-3.5s-1.505-3.5-3.5-3.5-3.5 1.505-3.5 3.5 1.505 3.5 3.5 3.5zM9 13H7c-2.757 0-5 2.243-5 5v1h12v-1c0-2.757-2.243-5-5-5zm11.895-4.553l-2.543 2.105.951 3.448-3.175-1.164L12.953 15l.951-3.448-2.543-2.104 3.346-.287L15.953 6l1.245 3.161 3.697.286z" />
+                    <path d="M13.64,21.97C13.14,22.21 12.54,22 12.31,21.5L10.13,16.76L7.62,18.78C7.45,18.92 7.24,19 7,19A1,1 0 0,1 6,18V3A1,1 0 0,1 7,2C7.24,2 7.47,2.09 7.64,2.23L7.65,2.22L19.14,11.86C19.57,12.22 19.62,12.85 19.27,13.27C19.12,13.45 18.91,13.57 18.7,13.61L15.54,14.23L17.74,18.96C18,19.46 17.76,20.05 17.26,20.28L13.64,21.97Z" />
                   </svg>
                 </div>
                 <span
                   className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
                 >
-                  {isClickUpgraded ? t("Upgraded Click") : t("Upgrade Click")}
+                  {clickUpgradeLevel === 2 
+                    ? t("Click Up Level 2") 
+                    : clickUpgradeLevel === 1 
+                      ? (score >= 1500 ? t("Upgrade to Level 2") : t("Click Up")) 
+                      : t("Upgrade Click")}
                 </span>
                 <span
                   className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
                 >
-                  {isClickUpgraded ? t("+2 points/click") : "200" + t("points")}
+                  {clickUpgradeLevel === 2 
+                    ? t("+3 points/click") 
+                    : clickUpgradeLevel === 1 
+                      ? (score >= 1500 ? "1500" + t("points") : t("+2 points/click"))
+                      : "200" + t("points")}
                 </span>
               </button>
             </div>
@@ -1739,6 +1787,47 @@ const BoringGame = () => {
           onClose={() => setShowNotification(false)}
         />
       )}
+
+      {/* Click Me 点击动画效果 */}
+      {clickAnimations.map(anim => (
+        <div
+          key={anim.id}
+          className="fixed pointer-events-none animate-float-up"
+          style={{
+            left: `${anim.x}px`,
+            top: `${anim.y}px`,
+            color: anim.color,
+            fontWeight: 'bold',
+            fontSize: '1.25rem',
+            textShadow: '0px 0px 3px rgba(0, 0, 0, 0.5)',
+            zIndex: 9999,
+            opacity: 0,
+            animation: 'float-up 2s ease-out',
+          }}
+        >
+          +3
+        </div>
+      ))}
+
+      <style jsx global>{`
+        @keyframes float-up {
+          0% {
+            transform: translateY(0);
+            opacity: 1;
+          }
+          80% {
+            opacity: 0.5;
+          }
+          100% {
+            transform: translateY(-50px);
+            opacity: 0;
+          }
+        }
+        
+        .animate-float-up {
+          animation: float-up 2s ease-out forwards;
+        }
+      `}</style>
     </div>
   );
 };
