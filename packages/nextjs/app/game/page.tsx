@@ -758,7 +758,7 @@ const BoringGame = () => {
   const handleClick = () => {
     if (gameStarted) {
       // 根据Click Up等级决定增加的分数
-      const pointsToAdd = clickUpgradeLevel === 2 ? 3 : (isClickUpgraded ? 2 : 1);
+      const pointsToAdd = clickUpgradeLevel === 2 ? 3 : isClickUpgraded ? 2 : 1;
 
       setScore((prev) => prev + pointsToAdd);
       setTotalClicks((prev) => prev + pointsToAdd);
@@ -776,27 +776,32 @@ const BoringGame = () => {
       if (clickUpgradeLevel === 2) {
         const randomColor = `hsl(${Math.floor(Math.random() * 360)}, 100%, 50%)`;
         // 使用更安全的方式获取Click Me按钮
-        const clickMeButton = document.querySelector('button[data-click-me="true"]');
-        
+        const clickMeButton = document.querySelector(
+          'button[data-click-me="true"]',
+        );
+
         if (clickMeButton) {
           const buttonRect = clickMeButton.getBoundingClientRect();
           // 在按钮上方随机位置显示动画
-          const x = buttonRect.left + buttonRect.width/2 + (Math.random() * 40 - 20);
+          const x =
+            buttonRect.left + buttonRect.width / 2 + (Math.random() * 40 - 20);
           const y = buttonRect.top - 20;
-          
+
           const newAnimation = {
             id: nextAnimationId,
             x,
             y,
-            color: randomColor
+            color: randomColor,
           };
-          
-          setClickAnimations(prev => [...prev, newAnimation]);
-          setNextAnimationId(prev => prev + 1);
-          
+
+          setClickAnimations((prev) => [...prev, newAnimation]);
+          setNextAnimationId((prev) => prev + 1);
+
           // 2秒后移除动画
           setTimeout(() => {
-            setClickAnimations(prev => prev.filter(anim => anim.id !== newAnimation.id));
+            setClickAnimations((prev) =>
+              prev.filter((anim) => anim.id !== newAnimation.id),
+            );
           }, 2000);
         }
       }
@@ -955,7 +960,9 @@ const BoringGame = () => {
 
   // 添加新的状态变量用于跟踪Click Up等级
   const [clickUpgradeLevel, setClickUpgradeLevel] = useState(0); // 0表示未升级，1表示1级，2表示2级
-  const [clickAnimations, setClickAnimations] = useState<{id: number; x: number; y: number; color: string}[]>([]);
+  const [clickAnimations, setClickAnimations] = useState<
+    { id: number; x: number; y: number; color: string }[]
+  >([]);
   const [nextAnimationId, setNextAnimationId] = useState(0);
 
   return (
@@ -1256,10 +1263,10 @@ const BoringGame = () => {
                 className="w-full h-full flex flex-col items-center justify-center p-2"
               >
                 <div className="w-10 h-10 flex items-center justify-center bg-indigo-100 rounded-full mb-1">
-                  <svg 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 24 24" 
-                    fill="currentColor" 
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
                     className="w-6 h-6 text-indigo-600"
                   >
                     <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" />
@@ -1299,19 +1306,21 @@ const BoringGame = () => {
               <button
                 onClick={purchaseClickUpgrade}
                 disabled={
-                  (clickUpgradeLevel === 0 && score < 200) || 
-                  (clickUpgradeLevel === 1 && score < 1500) || 
+                  (clickUpgradeLevel === 0 && score < 200) ||
+                  (clickUpgradeLevel === 1 && score < 1500) ||
                   clickUpgradeLevel === 2
                 }
                 className="w-full h-full flex flex-col items-center justify-center p-2"
               >
                 <div
                   className={`w-10 h-10 flex items-center justify-center rounded-full mb-1 
-                  ${clickUpgradeLevel === 2 
-                    ? "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-1" 
-                    : clickUpgradeLevel === 1 
-                      ? "bg-gradient-to-r from-green-400 to-emerald-500 p-1" 
-                      : "bg-green-100"}`}
+                  ${
+                    clickUpgradeLevel === 2
+                      ? "bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 p-1"
+                      : clickUpgradeLevel === 1
+                        ? "bg-gradient-to-r from-green-400 to-emerald-500 p-1"
+                        : "bg-green-100"
+                  }`}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -1325,19 +1334,23 @@ const BoringGame = () => {
                 <span
                   className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
                 >
-                  {clickUpgradeLevel === 2 
-                    ? t("Click Up Level 2") 
-                    : clickUpgradeLevel === 1 
-                      ? (score >= 1500 ? t("Upgrade to Level 2") : t("Click Up")) 
+                  {clickUpgradeLevel === 2
+                    ? t("Click Up Level 2")
+                    : clickUpgradeLevel === 1
+                      ? score >= 1500
+                        ? t("Upgrade to Level 2")
+                        : t("Click Up")
                       : t("Upgrade Click")}
                 </span>
                 <span
                   className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
                 >
-                  {clickUpgradeLevel === 2 
-                    ? t("+3 points/click") 
-                    : clickUpgradeLevel === 1 
-                      ? (score >= 1500 ? "1500" + t("points") : t("+2 points/click"))
+                  {clickUpgradeLevel === 2
+                    ? t("+3 points/click")
+                    : clickUpgradeLevel === 1
+                      ? score >= 1500
+                        ? "1500" + t("points")
+                        : t("+2 points/click")
                       : "200" + t("points")}
                 </span>
               </button>
@@ -1789,7 +1802,7 @@ const BoringGame = () => {
       )}
 
       {/* Click Me 点击动画效果 */}
-      {clickAnimations.map(anim => (
+      {clickAnimations.map((anim) => (
         <div
           key={anim.id}
           className="fixed pointer-events-none animate-float-up"
@@ -1797,12 +1810,12 @@ const BoringGame = () => {
             left: `${anim.x}px`,
             top: `${anim.y}px`,
             color: anim.color,
-            fontWeight: 'bold',
-            fontSize: '1.25rem',
-            textShadow: '0px 0px 3px rgba(0, 0, 0, 0.5)',
+            fontWeight: "bold",
+            fontSize: "1.25rem",
+            textShadow: "0px 0px 3px rgba(0, 0, 0, 0.5)",
             zIndex: 9999,
             opacity: 0,
-            animation: 'float-up 2s ease-out',
+            animation: "float-up 2s ease-out",
           }}
         >
           +3
@@ -1823,7 +1836,7 @@ const BoringGame = () => {
             opacity: 0;
           }
         }
-        
+
         .animate-float-up {
           animation: float-up 2s ease-out forwards;
         }
