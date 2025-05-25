@@ -20,7 +20,7 @@ export const AchievementNotification = ({
   onClose,
 }: AchievementNotificationProps) => {
   const { t } = useLanguage();
-  
+
   useEffect(() => {
     // 自动关闭通知
     const timer = setTimeout(() => {

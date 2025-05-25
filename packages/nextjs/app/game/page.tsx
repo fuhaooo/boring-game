@@ -54,7 +54,8 @@ const NFT_IMAGE_URL =
   "https://blush-rainy-constrictor-734.mypinata.cloud/ipfs/bafybeiciojjygr67dngemgpp3us5dvy7gpze3weuw2qqeeh4lfmpxizrru";
 
 // Bubble Wrap NFT 图片地址
-const BUBBLE_WRAP_NFT_URL = "https://blush-rainy-constrictor-734.mypinata.cloud/ipfs/bafybeibmrg4bkr6hlknpm56pz5ny23kpdlxeey44gcopdjzpkxdtnznr2e";
+const BUBBLE_WRAP_NFT_URL =
+  "https://blush-rainy-constrictor-734.mypinata.cloud/ipfs/bafybeibmrg4bkr6hlknpm56pz5ny23kpdlxeey44gcopdjzpkxdtnznr2e";
 
 const BoringGame = () => {
   const { t } = useLanguage();
@@ -77,7 +78,9 @@ const BoringGame = () => {
 
   // Bubble Wrap 游戏相关状态
   const [hasBubbleWrap, setHasBubbleWrap] = useState(false); // 是否已购买Bubble Wrap游戏
-  const [bubbleWrapCompletedLevels, setBubbleWrapCompletedLevels] = useState<number[]>([]); // 已完成的关卡
+  const [bubbleWrapCompletedLevels, setBubbleWrapCompletedLevels] = useState<
+    number[]
+  >([]); // 已完成的关卡
   const [showBubbleWrapNFT, setShowBubbleWrapNFT] = useState(false); // 是否显示NFT奖励
 
   // STRK授权相关状态
@@ -191,7 +194,7 @@ const BoringGame = () => {
       const provider = new RpcProvider({
         nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno",
       });
-      
+
       const erc20Contract = new Contract(
         universalErc20Abi,
         STRK_ADDRESS,
@@ -209,7 +212,7 @@ const BoringGame = () => {
         address,
         boringGameAddress,
       ]);
-      
+
       const allowance = result.toString();
       console.log("Current allowance:", allowance);
 
@@ -227,10 +230,10 @@ const BoringGame = () => {
     } catch (error) {
       console.error("Failed to check allowance:", error);
       setCheckingAllowance(false);
-      
+
       // 如果是网络错误或RPC错误，我们假设需要授权
       setNeedsApproval(true);
-      
+
       // 显示更具体的错误信息
       if (error instanceof Error) {
         if (error.message.includes("Failed to fetch")) {
@@ -241,7 +244,7 @@ const BoringGame = () => {
           notification.error(`检查授权状态失败: ${error.message}`);
         }
       }
-      
+
       return false;
     }
   };
@@ -477,9 +480,10 @@ const BoringGame = () => {
     if (!showNFTPreview || selectedNFTId === null) return null;
 
     const achievement = ACHIEVEMENTS.find((a) => a.id === selectedNFTId);
-    
+
     // 根据成就ID选择NFT图片
-    const nftImageUrl = selectedNFTId === 5 ? BUBBLE_WRAP_NFT_URL : NFT_IMAGE_URL;
+    const nftImageUrl =
+      selectedNFTId === 5 ? BUBBLE_WRAP_NFT_URL : NFT_IMAGE_URL;
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -853,7 +857,7 @@ const BoringGame = () => {
     if (score >= UNLOCK_THRESHOLDS.bubbleWrap) {
       setScore((prev) => prev - UNLOCK_THRESHOLDS.bubbleWrap);
       setHasBubbleWrap(true);
-      
+
       // 如果是第一次购买，同时解锁该功能
       if (!unlockedFeatures.bubbleWrap) {
         setUnlockedFeatures((prev) => ({
@@ -870,14 +874,16 @@ const BoringGame = () => {
       if (!prev.includes(level)) {
         // 添加级别到已完成列表
         const newCompletedLevels = [...prev, level];
-        
+
         // 级别奖励点数: 级别1给50点，级别2给100点，以此类推
         const levelReward = level * 50;
-        setScore(prevScore => prevScore + levelReward);
-        
+        setScore((prevScore) => prevScore + levelReward);
+
         // 显示奖励通知
-        notification.success(t("Level completed! You earned") + ` ${levelReward} ` + t("points"));
-        
+        notification.success(
+          t("Level completed! You earned") + ` ${levelReward} ` + t("points"),
+        );
+
         return newCompletedLevels;
       }
       return prev;
@@ -888,17 +894,24 @@ const BoringGame = () => {
   const handleBubbleWrapAllLevelsComplete = () => {
     // 解锁"气泡之神"成就
     const bubbleMasterAchievement = ACHIEVEMENTS.find((a) => a.id === 5);
-    if (bubbleMasterAchievement && !unlockedAchievements.some((a) => a.id === 5)) {
+    if (
+      bubbleMasterAchievement &&
+      !unlockedAchievements.some((a) => a.id === 5)
+    ) {
       setUnlockedAchievements((prev) => [...prev, bubbleMasterAchievement]);
       setCurrentAchievement(bubbleMasterAchievement);
       setShowNotification(true);
-      
+
       // 完成所有级别的额外奖励：500点
       const completionBonus = 500;
-      setScore(prevScore => prevScore + completionBonus);
-      
+      setScore((prevScore) => prevScore + completionBonus);
+
       // 显示完成所有级别的奖励通知
-      notification.success(t("All levels completed! You earned") + ` ${completionBonus} ` + t("bonus points"));
+      notification.success(
+        t("All levels completed! You earned") +
+          ` ${completionBonus} ` +
+          t("bonus points"),
+      );
 
       // 自动关闭通知
       setTimeout(() => {
@@ -982,7 +995,7 @@ const BoringGame = () => {
             >
               {t("Start Game")} (1 STRK)
             </button>
-            
+
             <button
               onClick={async () => {
                 const success = await startGameDirectly();
@@ -1619,39 +1632,47 @@ const BoringGame = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* 使用Set来确保每个成就ID只显示一次 */}
-                {Array.from(new Set(unlockedAchievements.map(a => a.id))).map((achievementId) => {
-                  const achievement = unlockedAchievements.find(a => a.id === achievementId);
-                  if (!achievement) return null;
-                  
-                  return (
-                    <div
-                      key={achievement.id}
-                      className={`border-2 rounded-lg p-4 flex flex-col items-center ${
-                        isDarkMode
-                          ? "border-gray-600 bg-base-200 text-base-content"
-                          : "border-gray-200 bg-white text-gray-900"
-                      }`}
-                    >
-                      <div className="text-2xl mb-2">
-                        {achievement.id === 4 ? "🐉" : achievement.id === 5 ? "🫧" : "🏆"}
+                {Array.from(new Set(unlockedAchievements.map((a) => a.id))).map(
+                  (achievementId) => {
+                    const achievement = unlockedAchievements.find(
+                      (a) => a.id === achievementId,
+                    );
+                    if (!achievement) return null;
+
+                    return (
+                      <div
+                        key={achievement.id}
+                        className={`border-2 rounded-lg p-4 flex flex-col items-center ${
+                          isDarkMode
+                            ? "border-gray-600 bg-base-200 text-base-content"
+                            : "border-gray-200 bg-white text-gray-900"
+                        }`}
+                      >
+                        <div className="text-2xl mb-2">
+                          {achievement.id === 4
+                            ? "🐉"
+                            : achievement.id === 5
+                              ? "🫧"
+                              : "🏆"}
+                        </div>
+                        <h3 className="font-semibold text-sm">
+                          {achievement.name}
+                        </h3>
+                        <p
+                          className={`text-xs mb-2 ${isDarkMode ? "text-base-content opacity-80" : "text-gray-600"}`}
+                        >
+                          {achievement.description}
+                        </p>
+                        <button
+                          onClick={() => handleMintNFT(achievement.id)}
+                          className="bg-purple-500 text-white px-3 py-1 text-sm rounded-md"
+                        >
+                          {t("Mint NFT")}
+                        </button>
                       </div>
-                      <h3 className="font-semibold text-sm">
-                        {achievement.name}
-                      </h3>
-                      <p
-                        className={`text-xs mb-2 ${isDarkMode ? "text-base-content opacity-80" : "text-gray-600"}`}
-                      >
-                        {achievement.description}
-                      </p>
-                      <button
-                        onClick={() => handleMintNFT(achievement.id)}
-                        className="bg-purple-500 text-white px-3 py-1 text-sm rounded-md"
-                      >
-                        {t("Mint NFT")}
-                      </button>
-                    </div>
-                  );
-                })}
+                    );
+                  },
+                )}
               </div>
             </div>
           )}

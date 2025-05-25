@@ -1,25 +1,28 @@
 /* museomoderno-regular - latin */
 @font-face {
-  font-family: 'MuseoModerno';
+  font-family: "MuseoModerno";
   font-style: normal;
   font-weight: 400;
-  src: local(''),
-    url('fonts/museomoderno-v7-latin-regular.woff2') format('woff2'),
+  src:
+    local(""),
+    url("fonts/museomoderno-v7-latin-regular.woff2") format("woff2"),
     /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('fonts/museomoderno-v7-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url("fonts/museomoderno-v7-latin-regular.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 /* museomoderno-700 - latin */
 @font-face {
-  font-family: 'MuseoModerno';
+  font-family: "MuseoModerno";
   font-style: normal;
   font-weight: 700;
-  src: local(''), url('fonts/museomoderno-v7-latin-700.woff2') format('woff2'),
+  src:
+    local(""),
+    url("fonts/museomoderno-v7-latin-700.woff2") format("woff2"),
     /* Chrome 26+, Opera 23+, Firefox 39+ */
-      url('fonts/museomoderno-v7-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+      url("fonts/museomoderno-v7-latin-700.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 * {
-  font-family: 'MuseoModerno', cursive;
+  font-family: "MuseoModerno", cursive;
   -webkit-tap-highlight-color: transparent;
   -webkit-user-select: none;
   user-select: none;
@@ -66,7 +69,9 @@ button {
   line-height: 1;
   vertical-align: middle;
   cursor: pointer;
-  box-shadow: inset 0 5px 0 #fff, 0 5px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    inset 0 5px 0 #fff,
+    0 5px rgba(0, 0, 0, 0.05);
   color: inherit;
   margin-bottom: 0.5em;
   min-width: 6em;
@@ -103,7 +108,7 @@ button.glowing {
   }
 }
 button.glowing:before {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   background-color: #fff;
@@ -133,14 +138,17 @@ button:active {
 .bubble {
   display: inline-block;
   background: transparent no-repeat center;
-  background-image: url(assets/prepop.svg),
+  background-image:
+    url(assets/prepop.svg),
     radial-gradient(
       closest-side,
       rgba(0, 0, 0, 0),
       rgba(0, 0, 0, 0.05) 70%,
       rgba(255, 255, 255, 0) 80%
     );
-  box-shadow: inset 0 0 6px #fff, 2px 2px 4px #fff,
+  box-shadow:
+    inset 0 0 6px #fff,
+    2px 2px 4px #fff,
     4px 4px 12px rgba(0, 0, 0, 0.25);
   width: 50px;
   height: 50px;
@@ -151,7 +159,8 @@ button:active {
 }
 .bubble:active,
 .bubble.pop {
-  background-image: url(assets/popped.svg),
+  background-image:
+    url(assets/popped.svg),
     radial-gradient(closest-side, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.1));
 }
 @keyframes fallin {
@@ -233,18 +242,24 @@ button:active {
 }
 @keyframes animbg {
   0% {
-    background-position: 0 0, calc(10 * 2px) calc(10 * 2px);
+    background-position:
+      0 0,
+      calc(10 * 2px) calc(10 * 2px);
   }
   100% {
-    background-position: calc(10 * 2px) calc(10 * 2px),
+    background-position:
+      calc(10 * 2px) calc(10 * 2px),
       calc(20 * 2px) calc(20 * 2px);
   }
 }
 .dialog {
-  background-image: radial-gradient(#fff 2px, transparent 2px),
+  background-image:
+    radial-gradient(#fff 2px, transparent 2px),
     radial-gradient(#fff 2px, transparent 2px);
   background-size: calc(20 * 2px) calc(20 * 2px);
-  background-position: 0 0, calc(10 * 2px) calc(10 * 2px);
+  background-position:
+    0 0,
+    calc(10 * 2px) calc(10 * 2px);
   z-index: 1;
   position: fixed;
   left: 0;
@@ -288,7 +303,7 @@ button:active {
 #post-level:after {
   pointer-events: none;
   z-index: -1;
-  content: '';
+  content: "";
   position: absolute;
   top: 50%;
   left: 50%;
@@ -311,21 +326,21 @@ button:active {
 .dialog label > * {
   pointer-events: none;
 }
-.dialog input[type='checkbox'] {
+.dialog input[type="checkbox"] {
   opacity: 0;
   position: absolute;
 }
-.dialog input[type='checkbox'] ~ span {
+.dialog input[type="checkbox"] ~ span {
   opacity: 0.7;
 }
-.dialog input[type='checkbox'] ~ span:before {
+.dialog input[type="checkbox"] ~ span:before {
   display: inline-block;
   margin-right: 0.3em;
-  content: '☑️';
+  content: "☑️";
 }
-.dialog input[type='checkbox']:checked ~ span {
+.dialog input[type="checkbox"]:checked ~ span {
   opacity: 1;
 }
-.dialog input[type='checkbox']:checked ~ span:before {
-  content: '✅';
+.dialog input[type="checkbox"]:checked ~ span:before {
+  content: "✅";
 }
