@@ -27,6 +27,11 @@ const nextConfig = {
         hostname: "img.starkurabu.com",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "blush-rainy-constrictor-734.mypinata.cloud",
+        pathname: "/**",
+      },
     ],
   },
   typescript: {

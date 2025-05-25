@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useLanguage } from "~~/hooks/useLanguage";
 
 interface Achievement {
   id: number;
@@ -18,6 +19,8 @@ export const AchievementNotification = ({
   achievement,
   onClose,
 }: AchievementNotificationProps) => {
+  const { t } = useLanguage();
+  
   useEffect(() => {
     // 自动关闭通知
     const timer = setTimeout(() => {
@@ -32,7 +35,7 @@ export const AchievementNotification = ({
       <div className="flex items-center gap-3">
         <div className="text-3xl">🏆</div>
         <div>
-          <h3 className="font-bold">成就解锁!</h3>
+          <h3 className="font-bold">{t("Achievement unlocked!")}</h3>
           <p>
             {achievement.name}: {achievement.description}
           </p>

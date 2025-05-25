@@ -14,6 +14,7 @@ import {
   AchievementNotification,
   DragonBall,
   Toothless,
+  BubbleWrap,
 } from "~~/components/game";
 import Image from "next/image";
 import { notification } from "~~/utils/scaffold-stark";
@@ -39,6 +40,7 @@ const UNLOCK_THRESHOLDS = {
   rainEffect: 500,
   thunderstorm: 800,
   dragonBall: 1000, // 添加龙珠解锁门槛
+  bubbleWrap: 3000, // 添加气泡包装纸解锁门槛
 };
 
 // 导入STRK代币常量
@@ -50,6 +52,9 @@ const APPROVE_SELECTOR =
 // 导入NFT预览图片地址
 const NFT_IMAGE_URL =
   "https://blush-rainy-constrictor-734.mypinata.cloud/ipfs/bafybeiciojjygr67dngemgpp3us5dvy7gpze3weuw2qqeeh4lfmpxizrru";
+
+// Bubble Wrap NFT 图片地址
+const BUBBLE_WRAP_NFT_URL = "https://blush-rainy-constrictor-734.mypinata.cloud/ipfs/bafybeibmrg4bkr6hlknpm56pz5ny23kpdlxeey44gcopdjzpkxdtnznr2e";
 
 const BoringGame = () => {
   const { t } = useLanguage();
@@ -69,6 +74,11 @@ const BoringGame = () => {
   const [isMovingIconUpgraded, setIsMovingIconUpgraded] = useState(false); // 是否已升级移动图标
   const [isClickUpgraded, setIsClickUpgraded] = useState(false); // 新增：Click升级状态
   const [clickAudio, setClickAudio] = useState<HTMLAudioElement | null>(null); // 音效对象
+
+  // Bubble Wrap 游戏相关状态
+  const [hasBubbleWrap, setHasBubbleWrap] = useState(false); // 是否已购买Bubble Wrap游戏
+  const [bubbleWrapCompletedLevels, setBubbleWrapCompletedLevels] = useState<number[]>([]); // 已完成的关卡
+  const [showBubbleWrapNFT, setShowBubbleWrapNFT] = useState(false); // 是否显示NFT奖励
 
   // STRK授权相关状态
   const [checkingAllowance, setCheckingAllowance] = useState(false);
@@ -98,6 +108,7 @@ const BoringGame = () => {
     rainEffect: false,
     thunderstorm: false,
     dragonBall: false, // 添加龙珠解锁状态
+    bubbleWrap: false, // 添加气泡包装纸解锁状态
   });
 
   // 实时根据分数显示可用组件
@@ -114,6 +125,8 @@ const BoringGame = () => {
       unlockedFeatures.thunderstorm || score >= UNLOCK_THRESHOLDS.thunderstorm,
     dragonBall:
       unlockedFeatures.dragonBall || score >= UNLOCK_THRESHOLDS.dragonBall, // 添加龙珠可用状态
+    bubbleWrap:
+      unlockedFeatures.bubbleWrap || score >= UNLOCK_THRESHOLDS.bubbleWrap, // 添加气泡包装纸可用状态
   };
   const [unlockedAchievements, setUnlockedAchievements] = useState<
     Achievement[]
@@ -128,6 +141,12 @@ const BoringGame = () => {
       id: 4,
       name: t("I have seen a dragon"),
       description: t("Collect all 7 dragon balls"),
+      requirement: 0,
+    },
+    {
+      id: 5,
+      name: t("Bubble God"),
+      description: t("Complete all 5 levels of Bubble Wrap game"),
       requirement: 0,
     },
   ];
@@ -159,7 +178,10 @@ const BoringGame = () => {
 
   // 检查STRK授权状态
   const checkAllowance = async () => {
-    if (!address) return false;
+    if (!address) {
+      console.log("No wallet address found");
+      return false;
+    }
 
     try {
       setCheckingAllowance(true);
@@ -169,6 +191,7 @@ const BoringGame = () => {
       const provider = new RpcProvider({
         nodeUrl: "https://free-rpc.nethermind.io/sepolia-juno",
       });
+      
       const erc20Contract = new Contract(
         universalErc20Abi,
         STRK_ADDRESS,
@@ -179,12 +202,16 @@ const BoringGame = () => {
       const boringGameAddress =
         "0x3e4aa5993cc45e05bd5ffa6789d883e1632e4a5df73caec16d8e4010c517719";
 
+      console.log("Checking allowance for:", address, "->", boringGameAddress);
+
       // 调用allowance函数检查授权金额
       const result = await erc20Contract.call("allowance", [
         address,
         boringGameAddress,
       ]);
+      
       const allowance = result.toString();
+      console.log("Current allowance:", allowance);
 
       // 需要授权的最小金额(1 STRK + 一些额外空间)
       const minAllowance = BigInt("2000000000000000000"); // 2 STRK
@@ -195,13 +222,27 @@ const BoringGame = () => {
       setNeedsApproval(!hasEnoughAllowance);
       setCheckingAllowance(false);
 
+      console.log("Has enough allowance:", hasEnoughAllowance);
       return hasEnoughAllowance;
     } catch (error) {
       console.error("Failed to check allowance:", error);
       setCheckingAllowance(false);
-      // 如果错误，假设已经授权 - 因为用户表示已经授权完毕
-      setNeedsApproval(false);
-      return true;
+      
+      // 如果是网络错误或RPC错误，我们假设需要授权
+      setNeedsApproval(true);
+      
+      // 显示更具体的错误信息
+      if (error instanceof Error) {
+        if (error.message.includes("Failed to fetch")) {
+          notification.error("网络连接失败，请检查网络状态");
+        } else if (error.message.includes("User rejected")) {
+          notification.error("用户拒绝了请求");
+        } else {
+          notification.error(`检查授权状态失败: ${error.message}`);
+        }
+      }
+      
+      return false;
     }
   };
 
@@ -258,9 +299,8 @@ const BoringGame = () => {
         return false;
       }
 
-      // 直接跳过授权检查，用户表示已经完成授权
-      // const hasAllowance = await checkAllowance();
-      const hasAllowance = true;
+      // 重新启用授权检查
+      const hasAllowance = await checkAllowance();
 
       if (!hasAllowance) {
         // 显示授权弹窗
@@ -285,6 +325,35 @@ const BoringGame = () => {
       console.error("Failed to start game:", error);
       notification.error(
         "Failed to start game, please ensure your wallet has authorized STRK tokens",
+      );
+      return false;
+    }
+  };
+
+  // 跳过授权检查直接开始游戏
+  const startGameDirectly = async () => {
+    try {
+      if (!address) {
+        notification.error("Please connect your wallet first");
+        return false;
+      }
+
+      // 提示用户将支付1 STRK
+      notification.info(
+        "Initiating transaction, you will pay 1 STRK to start the game",
+      );
+
+      const result = await startGameTx();
+
+      if (result) {
+        notification.success("Game started! Transaction submitted");
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Failed to start game:", error);
+      notification.error(
+        "Failed to start game, please check your STRK balance and authorization",
       );
       return false;
     }
@@ -408,6 +477,9 @@ const BoringGame = () => {
     if (!showNFTPreview || selectedNFTId === null) return null;
 
     const achievement = ACHIEVEMENTS.find((a) => a.id === selectedNFTId);
+    
+    // 根据成就ID选择NFT图片
+    const nftImageUrl = selectedNFTId === 5 ? BUBBLE_WRAP_NFT_URL : NFT_IMAGE_URL;
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -419,7 +491,7 @@ const BoringGame = () => {
           <div className="flex flex-col items-center mb-4">
             <div className="w-80 h-64 overflow-hidden rounded-lg shadow-md mb-4">
               <Image
-                src={NFT_IMAGE_URL}
+                src={nftImageUrl}
                 alt={achievement?.name || t("NFT Preview")}
                 width={320}
                 height={256}
@@ -512,6 +584,8 @@ const BoringGame = () => {
         score >= UNLOCK_THRESHOLDS.thunderstorm,
       dragonBall:
         unlockedFeatures.dragonBall || score >= UNLOCK_THRESHOLDS.dragonBall,
+      bubbleWrap:
+        unlockedFeatures.bubbleWrap || score >= UNLOCK_THRESHOLDS.bubbleWrap,
     };
 
     // 只有当真正有变化时才更新状态
@@ -774,6 +848,65 @@ const BoringGame = () => {
     }
   };
 
+  // 购买Bubble Wrap游戏
+  const purchaseBubbleWrap = () => {
+    if (score >= UNLOCK_THRESHOLDS.bubbleWrap) {
+      setScore((prev) => prev - UNLOCK_THRESHOLDS.bubbleWrap);
+      setHasBubbleWrap(true);
+      
+      // 如果是第一次购买，同时解锁该功能
+      if (!unlockedFeatures.bubbleWrap) {
+        setUnlockedFeatures((prev) => ({
+          ...prev,
+          bubbleWrap: true,
+        }));
+      }
+    }
+  };
+
+  // 处理Bubble Wrap级别完成
+  const handleBubbleWrapLevelComplete = (level: number) => {
+    setBubbleWrapCompletedLevels((prev) => {
+      if (!prev.includes(level)) {
+        // 添加级别到已完成列表
+        const newCompletedLevels = [...prev, level];
+        
+        // 级别奖励点数: 级别1给50点，级别2给100点，以此类推
+        const levelReward = level * 50;
+        setScore(prevScore => prevScore + levelReward);
+        
+        // 显示奖励通知
+        notification.success(t("Level completed! You earned") + ` ${levelReward} ` + t("points"));
+        
+        return newCompletedLevels;
+      }
+      return prev;
+    });
+  };
+
+  // 处理Bubble Wrap所有级别完成
+  const handleBubbleWrapAllLevelsComplete = () => {
+    // 解锁"气泡之神"成就
+    const bubbleMasterAchievement = ACHIEVEMENTS.find((a) => a.id === 5);
+    if (bubbleMasterAchievement && !unlockedAchievements.some((a) => a.id === 5)) {
+      setUnlockedAchievements((prev) => [...prev, bubbleMasterAchievement]);
+      setCurrentAchievement(bubbleMasterAchievement);
+      setShowNotification(true);
+      
+      // 完成所有级别的额外奖励：500点
+      const completionBonus = 500;
+      setScore(prevScore => prevScore + completionBonus);
+      
+      // 显示完成所有级别的奖励通知
+      notification.success(t("All levels completed! You earned") + ` ${completionBonus} ` + t("bonus points"));
+
+      // 自动关闭通知
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 5000);
+    }
+  };
+
   return (
     <div
       className={`flex flex-col items-center justify-center min-h-screen p-4 relative ${isDarkMode ? "bg-base-100" : "bg-slate-50"}`}
@@ -828,18 +961,41 @@ const BoringGame = () => {
               <Toothless />
             </div>
           )}
+
+          {/* Bubble Wrap游戏 - 购买后显示 */}
+          {hasBubbleWrap && (
+            <BubbleWrap
+              onLevelComplete={handleBubbleWrapLevelComplete}
+              onAllLevelsComplete={handleBubbleWrapAllLevelsComplete}
+            />
+          )}
         </>
       )}
 
       {/* 主要游戏内容 */}
       {!gameStarted ? (
         <div className="flex flex-col items-center">
-          <button
-            onClick={handleStartGame}
-            className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
-          >
-            {t("Start Game")} (1 STRK)
-          </button>
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={handleStartGame}
+              className="bg-gradient-to-r from-purple-500 to-blue-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition duration-300"
+            >
+              {t("Start Game")} (1 STRK)
+            </button>
+            
+            <button
+              onClick={async () => {
+                const success = await startGameDirectly();
+                if (success) {
+                  setGameStarted(true);
+                  setLastClickTime(Date.now());
+                }
+              }}
+              className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition duration-300 text-sm"
+            >
+              {t("Start Game (Skip Check)")} (1 STRK)
+            </button>
+          </div>
 
           <div
             className={`mt-8 max-w-2xl p-6 rounded-lg shadow ${isDarkMode ? "bg-base-200 text-base-content" : "bg-white text-gray-900"}`}
@@ -1406,6 +1562,49 @@ const BoringGame = () => {
                 </div>
               </div>
             )}
+
+            {/* Bubble Wrap游戏购买选项 */}
+            <div
+              className={`relative rounded-lg overflow-hidden w-24 h-24 border-2 ${
+                availableComponents.bubbleWrap
+                  ? isDarkMode
+                    ? "border-gray-600 bg-base-200"
+                    : "border-gray-200 bg-white"
+                  : isDarkMode
+                    ? "border-gray-700 bg-base-300 opacity-60"
+                    : "border-gray-200 bg-gray-50 opacity-60"
+              }`}
+            >
+              {hasBubbleWrap && (
+                <div className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs z-10">
+                  1
+                </div>
+              )}
+              <button
+                onClick={purchaseBubbleWrap}
+                disabled={
+                  !availableComponents.bubbleWrap ||
+                  score < UNLOCK_THRESHOLDS.bubbleWrap ||
+                  hasBubbleWrap
+                }
+                className="w-full h-full flex flex-col items-center justify-center p-2"
+              >
+                <div className="w-10 h-10 flex items-center justify-center bg-pink-100 rounded-full mb-1">
+                  <span className="text-2xl">🫧</span>
+                </div>
+                <span
+                  className={`text-xs text-center ${isDarkMode ? "text-base-content" : "text-gray-900"}`}
+                >
+                  {t("Bubble Wrap")}
+                </span>
+                <span
+                  className={`text-xs ${isDarkMode ? "text-base-content opacity-60" : "text-gray-500"}`}
+                >
+                  {UNLOCK_THRESHOLDS.bubbleWrap}
+                  {t("points")}
+                </span>
+              </button>
+            </div>
           </div>
 
           {/* 解锁的成就区域 */}
@@ -1419,34 +1618,40 @@ const BoringGame = () => {
                 </h2>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {unlockedAchievements.map((achievement) => (
-                  <div
-                    key={achievement.id}
-                    className={`border-2 rounded-lg p-4 flex flex-col items-center ${
-                      isDarkMode
-                        ? "border-gray-600 bg-base-200 text-base-content"
-                        : "border-gray-200 bg-white text-gray-900"
-                    }`}
-                  >
-                    <div className="text-2xl mb-2">
-                      {achievement.id === 4 ? "🐉" : "🏆"}
+                {/* 使用Set来确保每个成就ID只显示一次 */}
+                {Array.from(new Set(unlockedAchievements.map(a => a.id))).map((achievementId) => {
+                  const achievement = unlockedAchievements.find(a => a.id === achievementId);
+                  if (!achievement) return null;
+                  
+                  return (
+                    <div
+                      key={achievement.id}
+                      className={`border-2 rounded-lg p-4 flex flex-col items-center ${
+                        isDarkMode
+                          ? "border-gray-600 bg-base-200 text-base-content"
+                          : "border-gray-200 bg-white text-gray-900"
+                      }`}
+                    >
+                      <div className="text-2xl mb-2">
+                        {achievement.id === 4 ? "🐉" : achievement.id === 5 ? "🫧" : "🏆"}
+                      </div>
+                      <h3 className="font-semibold text-sm">
+                        {achievement.name}
+                      </h3>
+                      <p
+                        className={`text-xs mb-2 ${isDarkMode ? "text-base-content opacity-80" : "text-gray-600"}`}
+                      >
+                        {achievement.description}
+                      </p>
+                      <button
+                        onClick={() => handleMintNFT(achievement.id)}
+                        className="bg-purple-500 text-white px-3 py-1 text-sm rounded-md"
+                      >
+                        {t("Mint NFT")}
+                      </button>
                     </div>
-                    <h3 className="font-semibold text-sm">
-                      {achievement.name}
-                    </h3>
-                    <p
-                      className={`text-xs mb-2 ${isDarkMode ? "text-base-content opacity-80" : "text-gray-600"}`}
-                    >
-                      {achievement.description}
-                    </p>
-                    <button
-                      onClick={() => handleMintNFT(achievement.id)}
-                      className="bg-purple-500 text-white px-3 py-1 text-sm rounded-md"
-                    >
-                      {t("Mint NFT")}
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           )}

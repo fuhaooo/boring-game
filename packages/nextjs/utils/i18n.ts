@@ -13,6 +13,7 @@ export const translations = {
     "Boring Game Title": "Boring Game",
     "A simple Starknet based game": "A simple Starknet-based game",
     "Start Game": "Start Game",
+    "Start Game (Skip Check)": "Start Game (Skip Check)",
     "Use the": "Use the",
     "Debug Contracts Page": "Debug Contracts",
     "page to test smart contract functionality.":
@@ -70,6 +71,7 @@ export const translations = {
     "+2 points/click": "+2 points/click",
     Upgraded: "Upgraded",
     points: "points",
+    score_points: "points",
     "+5 points/hit": "+5 points/hit",
     "Music Player": "Music Player",
     "News Scroll": "News Scroll",
@@ -108,15 +110,47 @@ export const translations = {
     // Achievements
     "I have seen a dragon": "I have seen a dragon",
     "Collect all 7 dragon balls": "Collect all 7 dragon balls",
+    "Bubble Master": "Bubble Master",
+    "Bubble God": "Bubble God",
+    "Complete all 5 levels of Bubble Wrap game": "Complete all 5 levels of Bubble Wrap game",
+
+    // Bubble Wrap Game
+    "Bubble Wrap": "Bubble Wrap",
+    "Bubble Wrap Game": "Bubble Wrap Game",
+    "Level": "Level",
+    "popped": "popped",
+    "bubbles": "bubbles",
+    "Upgrade": "Upgrade",
+    "Level Complete": "Level Complete",
+    "You completed level": "You completed level",
+    "All levels completed! NFT achievement unlocked!": "All levels completed! NFT achievement unlocked!",
+    "Retry Level": "Retry Level",
+    "Next Level": "Next Level",
+    "Progress": "Progress",
+    "Reset": "Reset",
+    "Pop all": "Pop all",
+    "bubbles in": "bubbles in",
+    "seconds": "seconds",
+    "Start Level": "Start Level",
+    "Challenge Mode": "Challenge Mode",
+    "Challenge Complete": "Challenge Complete",
+    "Your time": "Your time",
+    "Retry Challenge": "Retry Challenge",
+    "Exit Challenge": "Exit Challenge",
 
     // Unlocked achievements section
     "Unlocked Achievements": "Unlocked Achievements",
     Full: "Full",
     "Sound Effect": "Sound Effect",
+    "Level completed! You earned": "Level completed! You earned",
+    reward_points: "points",
+    "All levels completed! You earned": "All levels completed! You earned",
+    "bonus points": "bonus points",
 
     // Common buttons
     Close: "Close",
     Continue: "Continue",
+    "Achievement unlocked!": "Achievement unlocked!",
   },
   zh: {
     // Header/Navigation
@@ -130,6 +164,7 @@ export const translations = {
     "Boring Game Title": "无聊游戏",
     "A simple Starknet based game": "一个基于 Starknet 的简单游戏",
     "Start Game": "开始游戏",
+    "Start Game (Skip Check)": "开始游戏 (跳过检查)",
     "Use the": "使用",
     "Debug Contracts Page": "调试合约",
     "page to test smart contract functionality.": "页面来测试智能合约功能。",
@@ -186,6 +221,7 @@ export const translations = {
     "+2 points/click": "+2积分/次点击",
     Upgraded: "已升级",
     points: "分",
+    score_points: "积分",
     "+5 points/hit": "+5积分/次",
     "Music Player": "音乐播放",
     "News Scroll": "新闻滚动",
@@ -223,15 +259,47 @@ export const translations = {
     // Achievements
     "I have seen a dragon": "我见过龙",
     "Collect all 7 dragon balls": "集齐7颗龙珠",
+    "Bubble Master": "气泡大师",
+    "Bubble God": "气泡之神",
+    "Complete all 5 levels of Bubble Wrap game": "完成气泡包装纸游戏的全部5个级别",
+
+    // Bubble Wrap Game
+    "Bubble Wrap": "气泡包装纸",
+    "Bubble Wrap Game": "气泡包装纸游戏",
+    "Level": "级别",
+    "popped": "已爆破",
+    "bubbles": "个气泡",
+    "Upgrade": "升级",
+    "Level Complete": "级别完成",
+    "You completed level": "你完成了级别",
+    "All levels completed! NFT achievement unlocked!": "全部级别完成！NFT成就已解锁！",
+    "Retry Level": "重试级别",
+    "Next Level": "下一级别",
+    "Progress": "进度",
+    "Reset": "重置",
+    "Pop all": "爆破全部",
+    "bubbles in": "个气泡，限时",
+    "seconds": "秒",
+    "Start Level": "开始级别",
+    "Challenge Mode": "挑战模式",
+    "Challenge Complete": "挑战完成",
+    "Your time": "你的用时",
+    "Retry Challenge": "重试挑战",
+    "Exit Challenge": "退出挑战",
 
     // Unlocked achievements section
     "Unlocked Achievements": "解锁的成就",
     Full: "已满",
     "Sound Effect": "有音效",
+    "Level completed! You earned": "级别完成！你获得了",
+    reward_points: "点数",
+    "All levels completed! You earned": "所有级别已完成！你获得了",
+    "bonus points": "额外奖励点数",
 
     // Common buttons
     Close: "关闭",
     Continue: "继续",
+    "Achievement unlocked!": "成就解锁！",
   },
 } as const;
 
