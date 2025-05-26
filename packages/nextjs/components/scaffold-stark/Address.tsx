@@ -68,7 +68,7 @@ export const Address = ({
 
   const isValidHexAddress = (value: string): boolean => {
     if (!value) return false;
-    
+
     if (value.toLowerCase() === "0x") {
       value = "0x0";
     }
