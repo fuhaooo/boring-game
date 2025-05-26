@@ -157,6 +157,53 @@ export const translations = {
     Close: "Close",
     Continue: "Continue",
     "Achievement unlocked!": "Achievement unlocked!",
+
+    // Home page story sections
+    "Digital Overwhelm Era": "Digital Overwhelm Era",
+    "We live in an era of constant stimulation and fragmented attention.": "We live in an era of constant stimulation and fragmented attention.",
+    "Social media, notifications, and endless content consume our mental bandwidth.": "Social media, notifications, and endless content consume our mental bandwidth.",
+    "When did we lose the ability to simply... exist?": "When did we lose the ability to simply... exist?",
+
+    "The Problem with Fun": "The Problem with Fun",
+    "Traditional games demand constant engagement and dopamine hits.": "Traditional games demand constant engagement and dopamine hits.",
+    "They exploit our psychology rather than nurture our wellbeing.": "They exploit our psychology rather than nurture our wellbeing.",
+    "What if games could be meditative instead of addictive?": "What if games could be meditative instead of addictive?",
+
+    "Our Solution": "Our Solution",
+    "Boring Game flips the script on digital interaction.": "Boring Game flips the script on digital interaction.",
+    "Start with silence, discover meaning in repetition.": "Start with silence, discover meaning in repetition.",
+    "Experience the journey from minimal to maximal stimulation.": "Experience the journey from minimal to maximal stimulation.",
+
+    "Why Blockchain": "Why Blockchain",
+    "Your journey deserves permanent recognition.": "Your journey deserves permanent recognition.",
+    "Achievements become NFTs - proof of your exploration.": "Achievements become NFTs - proof of your exploration.",
+    "Decentralized experiences that truly belong to you.": "Decentralized experiences that truly belong to you.",
+
+    "Innovation Features": "Innovation Features",
+    "Progressive sensory unlocking system": "Progressive sensory unlocking system",
+    "ASMR-driven audio experiences": "ASMR-driven audio experiences",
+    "Component upgrade mechanics": "Component upgrade mechanics",
+    "Bubble wrap relaxation module": "Bubble wrap relaxation module",
+    "Real-time Starknet news integration": "Real-time Starknet news integration",
+
+    "Technical Innovation": "Technical Innovation",
+    "Built on Starknet for scalable blockchain gaming.": "Built on Starknet for scalable blockchain gaming.",
+    "Spatial audio and dynamic soundscapes.": "Spatial audio and dynamic soundscapes.",
+    "Smart contract-based achievement system.": "Smart contract-based achievement system.",
+    "Modular component architecture for endless expansion.": "Modular component architecture for endless expansion.",
+
+    "Roadmap": "Roadmap",
+    "Community-driven component development": "Community-driven component development",
+    "Advanced behavioral analytics dashboard": "Advanced behavioral analytics dashboard",
+    "Multiplayer boredom sessions": "Multiplayer boredom sessions",
+    "Integration with DeFi protocols": "Integration with DeFi protocols",
+    "Expanding the Boredomverse ecosystem": "Expanding the Boredomverse ecosystem",
+
+    "Ready to Start": "Ready to Start",
+    "This is not just a game. It's a mirror.": "This is not just a game. It's a mirror.",
+    "Discover what boredom reveals about yourself.": "Discover what boredom reveals about yourself.",
+    "Enter the Boredomverse": "Enter the Boredomverse",
+    "Scroll down to start falling": "Scroll down to start falling",
   },
   zh: {
     // Header/Navigation
@@ -312,6 +359,53 @@ export const translations = {
     Close: "关闭",
     Continue: "继续",
     "Achievement unlocked!": "成就解锁！",
+
+    // Home page story sections
+    "Digital Overwhelm Era": "数字过载时代",
+    "We live in an era of constant stimulation and fragmented attention.": "我们生活在一个持续刺激和注意力碎片化的时代。",
+    "Social media, notifications, and endless content consume our mental bandwidth.": "社交媒体、通知推送和无尽的内容消耗着我们的心智带宽。",
+    "When did we lose the ability to simply... exist?": "我们何时失去了简单存在的能力？",
+
+    "The Problem with Fun": "娱乐的问题",
+    "Traditional games demand constant engagement and dopamine hits.": "传统游戏要求持续的参与度和多巴胺刺激。",
+    "They exploit our psychology rather than nurture our wellbeing.": "它们利用我们的心理而非滋养我们的福祉。",
+    "What if games could be meditative instead of addictive?": "如果游戏可以是冥想式的而非成瘾性的会怎样？",
+
+    "Our Solution": "我们的解决方案",
+    "Boring Game flips the script on digital interaction.": "无聊游戏颠覆了数字交互的模式。",
+    "Start with silence, discover meaning in repetition.": "从静默开始，在重复中发现意义。",
+    "Experience the journey from minimal to maximal stimulation.": "体验从极简到极致刺激的旅程。",
+
+    "Why Blockchain": "为什么选择区块链",
+    "Your journey deserves permanent recognition.": "你的旅程值得永久的认可。",
+    "Achievements become NFTs - proof of your exploration.": "成就变成NFT——探索之旅的证明。",
+    "Decentralized experiences that truly belong to you.": "真正属于你的去中心化体验。",
+
+    "Innovation Features": "创新功能",
+    "Progressive sensory unlocking system": "渐进式感官解锁系统",
+    "ASMR-driven audio experiences": "ASMR驱动的音频体验",
+    "Component upgrade mechanics": "组件升级机制",
+    "Bubble wrap relaxation module": "气泡膜放松模块",
+    "Real-time Starknet news integration": "实时Starknet新闻集成",
+
+    "Technical Innovation": "技术创新",
+    "Built on Starknet for scalable blockchain gaming.": "基于Starknet构建的可扩展区块链游戏。",
+    "Spatial audio and dynamic soundscapes.": "空间音频和动态音景。",
+    "Smart contract-based achievement system.": "基于智能合约的成就系统。",
+    "Modular component architecture for endless expansion.": "模块化组件架构，支持无限扩展。",
+
+    "Roadmap": "路线图",
+    "Community-driven component development": "社区驱动的组件开发",
+    "Advanced behavioral analytics dashboard": "高级行为分析仪表板",
+    "Multiplayer boredom sessions": "多人无聊会话",
+    "Integration with DeFi protocols": "与DeFi协议集成",
+    "Expanding the Boredomverse ecosystem": "扩展无聊宇宙生态系统",
+
+    "Ready to Start": "准备开始",
+    "This is not just a game. It's a mirror.": "这不仅仅是一个游戏。它是一面镜子。",
+    "Discover what boredom reveals about yourself.": "发现无聊揭示的真实自我。",
+    "Enter the Boredomverse": "进入无聊宇宙",
+    "Scroll down to start falling": "向下滚动开始坠落",
   },
 } as const;
 

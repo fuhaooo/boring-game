@@ -54,7 +54,7 @@ export const Address = ({
   const checkSumAddress = useMemo(() => {
     if (!address) return undefined;
 
-    if (address.toLowerCase() === "0x") {
+    if (address?.toLowerCase() === "0x") {
       return "0x0";
     }
 
@@ -67,6 +67,8 @@ export const Address = ({
   );
 
   const isValidHexAddress = (value: string): boolean => {
+    if (!value) return false;
+    
     if (value.toLowerCase() === "0x") {
       value = "0x0";
     }
